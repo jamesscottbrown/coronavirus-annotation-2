@@ -1,0 +1,125 @@
+:root {
+    --youtube-red: #FE0900;
+    --ui-gray: gray;
+    --video-height:500px;
+    --top-margin:50px;
+    --sidbar-width:20%;
+  }
+  
+  body {
+    height: 100%;   
+    margin: 0px;  /*removes default style*/
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  html {
+    height: 100%;
+  
+    h2{
+      color: var(--ui-gray);
+    }
+  }
+
+#sign-in-header{
+    text-align: center;
+}
+
+div{
+   // outline: black solid 1px;
+}
+
+#wrapper{
+    margin-top:50px;
+    overflow-y: hidden;
+    height: calc(100vh - 60px);
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    position:fixed;
+    grid-template-areas: "side1 main side2";
+}
+
+#top-bar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    width:100%;
+    height:50px;
+    border-bottom: 1px solid #E8E8E8;
+    color: var(--ui-gray);
+    background: #fff;
+    padding: 10px;
+    box-shadow: 1px 2px 3px #ccc;
+    z-index: 5000;
+}
+
+#main{
+    grid-area: main;
+    height: calc(100vh - 60px);
+    position: relative;
+    margin-top:20px;
+}
+
+#left-sidebar{
+    position:fixed;
+    left:0px;
+    top:60px;
+    height:calc(100vh - 70px);
+    padding: 1rem 0 0 0;
+    grid-area: side1;
+    overflow-y: scroll;
+}
+
+#right-sidebar{
+    position:fixed;
+    right:0px;
+    top:60px;
+    height:calc(100vh - 70px);
+    grid-area: side2;
+    overflow-y: scroll;
+}
+
+#video-controls{
+  position: absolute;
+}
+
+#video-controls div{
+  display:inline;
+}
+
+#video-container{
+  position: relative;
+  background-color: red;
+  width:100%;
+  height:auto;
+}
+
+video, canvas, #interaction{
+  border-radius: 4px;
+  position: absolute;
+  top:0;
+  left:0;
+}
+
+#video-controls div.progress-bar{
+  display: block;
+  height:16px;
+  padding:2px;
+  border: 2px solid black;
+  border-radius: 15px;
+  margin-top:10px;
+}
+
+#video-controls div.progress-bar div{
+  width: 0;
+  height:12px;
+  background-color: #4d4949;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+video::-webkit-media-controls {
+  display:none !important;
+}
+
