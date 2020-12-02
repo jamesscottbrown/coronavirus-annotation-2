@@ -7,7 +7,7 @@ from flask import (
     session
 )
 from app.core.auth import login_required
-#from firebase_config import firebase
+#pythofrom firebase_config import firebase
 
 mod = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 

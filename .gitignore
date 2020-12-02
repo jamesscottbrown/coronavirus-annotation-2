@@ -5,4 +5,4 @@ app.db
 app/static/bundle.css
 app/static/bundle.js
 .env
-firebase_data.json
+app/static/assets/firebase_data.json

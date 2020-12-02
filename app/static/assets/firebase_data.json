@@ -1,14 +1,4 @@
 [{
-  "type": "service_account",
-  "project_id": "coronavirus-anno-two",
-  "private_key_id": "650884499930af55a0bc33e10a811bcfb841a9e8",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDX7S+B2O9LfizX\naDPYDymFuULFhF02M01fpV6W4vdflxPCxnP2PN/n1s2Cu/qf+Eus6CjkMN3PbmSy\n6gFr3HzTNRGmUQswdvdVlLpuqteItw7CqYvuVzRKE6bA2U10DsnEyMLr/u6FXhjs\n47G7EG2cLVbxqs7YrIM/fwyfmuhUxbsereTcV/xzeL822IMEmY/MeCPfukwrGHno\nStlW2r0atPX42IEnZJgAmmEpkdnxeZfwhOf7yFmA8DAqFd93kNjwsDo85AmUHBFN\nsjTjza9nAxfK/PbgyT6Txcy1Li3xG2dPQ73GU5cQhUw5uAdfBaniFB9NMa4lYigg\nJHiTxWLVAgMBAAECggEABT77u7+hxreEzuH2+n2Z0GgpHWPjIN07uMJriyZuBKpG\nvmF0cUvW08rl+NJo2yic7BFC5xJh3TeNJkSlrrFvbfE44c3PxAhr524i3mvzqxxp\ndSTJ48tGF7OlBkPxTAvM7qVDCRlLQb3AxMaea5FRXG1EksAH4P9F/A2x6JHKqb6N\nqHDRDSTVHUXKuDg5yorFjXhxvMderX8fVf7HWOqxN4iWNIP5h+hhlL/O8UFkzh5r\ni/hk/AvgczQDPPDNbRnicR822Xqr6doXUHqY17MPCKkhvl6RBaP7knsHXBTlVCfj\nq4vR1zdKxOdQAR04TA7m9KDowajv4jxWeDOgkHVACQKBgQDymZJbSE9vdLgebdGZ\ngwmYLlzZDLE275iBXJnGmESe19ACANtQ4qBCdSmwLuRzikKOa9IXup0KlrWhA2Z2\nnKJ4Vt9cDE8yTBAYC51Dxmv+BAG19KwPg8Rg5tIRD7AsPubraX6FlWh9xaa8rSAV\nyWRg/P4xXg5p0zNLgDsLjKCueQKBgQDj2nHqxn8VZiX1y5Fr2sjT2HhE9dOr0r6U\nuSx0v3bdjT7zY7jZoLTSIJSN608iOyAZfkbbmVajgw4St0JNavBhUsRKpObGZVkU\nnpWDYDN4weDhS1pyhjfCJewAR/+b1Z8mAwik6XiWJVrG8wOE2nOUxwqxgqlPJVSS\nVqlaXSZQPQKBgQCgsRyCnkkPmI6EiVV2i5eFV+BkXMXdj6LCvSWWqDF7zZOYYBzl\nXNeubZDphIYKCiC/2adV1GRFKUKxnmD2XBY6A8D7ZaPnuv5GDxtiU0IhBWJkteZq\neGtRjFLEvlGBXUDz2fLWZPrLpGonO72u8LEulSWCaby+WAj4D74Mjl+4cQKBgGVT\nR0V4cBs8CbV8iXbFHHnY0eMYzsCiP04z6qkgW+O6ZDwoJJPi+4ZWJrnV4qL+WA/+\nL9SIJBciuKdqB3oWDD+7Zr8rBdVETJD21NZPeZRB45dMwzQaq8ESzBhz7B+Ip/Vn\nc/iiOpXKlsvSVcZGvw9yVDcMO+6OU0WgdD9THS6hAoGAbUmpJKF24NQyYdq4aQXf\nmSecUKGnjbCyuvbrbX8j5CogvfkWo73xbzTITHBDCGRxgzuQm9SItVNAtdKYDcl3\naPIZMAVdvqP8czUtAfYbqEfynwtoUOWh3DW3TujYxekpor/SvzT29VY1uPgPlpTB\nid6NieNFgDWcxG3G1ZuErow=\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-xtpve@coronavirus-anno-two.iam.gserviceaccount.com",
-  "client_id": "115408727980513176959",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xtpve%40coronavirus-anno-two.iam.gserviceaccount.com",
   "apiKey": "AIzaSyCNhwXTzwui01o6HPwM7W0_8lG1JMkhMUg",
   "authDomain": "coronavirus-anno-two.firebaseapp.com",
   "databaseURL": "https://coronavirus-anno-two.firebaseio.com",
@@ -17,5 +7,4 @@
   "messagingSenderId": "632575175956",
   "appId": "1:632575175956:web:39364f6d52e14a68892601",
   "measurementId": "G-MF3LEVKHZM"
-
   }]

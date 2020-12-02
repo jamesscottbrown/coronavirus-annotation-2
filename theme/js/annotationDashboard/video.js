@@ -26,11 +26,9 @@ function initializeVideo() {
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`)
 }
 
-export function formatVidPlayer(div, isInteractive){
-
-    let videoSelection = d3.select(div).select('video');
+export function formatVidPlayer(isInteractive){
   
-    let video = videoSelection.node();
+    let video = document.getElementById("video");
     video.muted = true;
 
     Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
@@ -40,9 +38,13 @@ export function formatVidPlayer(div, isInteractive){
     });
   
     video.oncanplay = function(){
+
+      console.log("ready state", video.readyState)
       if (video.readyState >= 3) {
   
         canPlay = true;
+
+        console.log("is  this reaching?")
   
         if(isInteractive){
 
