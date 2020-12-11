@@ -43,8 +43,6 @@ export function formatVidPlayer(isInteractive){
       if (video.readyState >= 3) {
   
         canPlay = true;
-
-        console.log("is  this reaching?")
   
         if(isInteractive){
 
@@ -96,12 +94,13 @@ export function formatVidPlayer(isInteractive){
 
     video.addEventListener('timeupdate', updateTimeElapsed);
     video.addEventListener('loadedmetadata', initializeVideo);
-
+    
+    d3.select('#interaction').on('click', ()=> togglePlay());
     d3.select('#video-controls').select('.play-pause').on('click', ()=> togglePlay());
     d3.select('.progress-bar').on('click', progressClicked);
 
 
-  }
+}
 function updateTimeElapsed() {
   let time = formatTime(Math.round(document.getElementById('video').currentTime));
   let timeElapsed = document.getElementById('time-elapsed');
@@ -109,19 +108,16 @@ function updateTimeElapsed() {
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
   d3.select('.progress-bar-fill').style('width', scaleVideoTime(document.getElementById('video').currentTime)+'px');
 }
-
 function progressClicked(mouse){
   console.log(mouse);
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
   updateTimeElapsed();
 }
-
 function scaleVideoTime(currentTime, invert){
   let duration = document.getElementById('video').duration;
   let scale = d3.scaleLinear().range([0, video.videoWidth]).domain([0, duration]);
   return invert ? scale.invert(currentTime) : scale(currentTime);
 }
-
 export function playButtonChange(){
   let div = d3.select('#video-controls').select('.play-pause');
   if(div.classed('play')){
