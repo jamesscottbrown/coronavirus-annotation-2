@@ -21,6 +21,7 @@ Werkzeug = "==1.0.1"
 zipp = "==3.4.0"
 Pyrebase4 = "==4.4.1"
 python-dotenv = "*"
+gunicorn = "*"
 
 [dev-packages]
 
@@ -29,3 +30,5 @@ python_version = "3.8"
 
 [scripts]
 serve = "python run.py"
+deploy = "gunicorn --bind 0.0.0.0:5000 wsgi"
+
