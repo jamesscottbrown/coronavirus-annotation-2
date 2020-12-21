@@ -6,3 +6,6 @@ app/static/bundle.css
 app/static/bundle.js
 .env
 firebase_data.json
+
+.env.prod
+
