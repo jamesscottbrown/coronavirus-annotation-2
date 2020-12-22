@@ -25,6 +25,8 @@ init();
 
 async function init(){
 
+    console.log('this should show up');
+
     let config = await d3.json("../static/assets/firebase_data.json");
     fbConfig.push(config[0]);
     let anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i)=> {

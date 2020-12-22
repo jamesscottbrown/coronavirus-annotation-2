@@ -12,8 +12,23 @@
   </head>
   <body>
     <div id="wrapper">
-      <div id="top-bar"><div id="user"></div></div>
-      <div id="left-sidebar"></div>
+      <div id="top-bar">
+        <div id="user"></div> 
+        <div id="toggle-wrap">
+          <span>Sort by questions</span>
+          <div  id="toggle"><!-- Rounded switch -->
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label></div>
+        </div>
+       
+        <div class="add-comment"><button class="btn btn-outline-secondary btn-sm" value="off">Add Comment</button></div>
+      </div>
+      <div id="left-sidebar">
+        <div class="top"></div>
+        <div class="sel-anno-wrap"></div>
+        <div class="anno-wrap"></div></div>
       <div id="main">
         <div id="video-wrap">
           <div id="video-controls">
@@ -33,11 +48,17 @@
           <video controls class="video" id="video" preload="metadata">
             <source src="{{url_for('static', filename='assets/entryComp_ver2_credit_110920.mp4')}}" type="video/mp4">
           </video>
-          <canvas></canvas>
+          <canvas  id="canvas"></canvas>
           <div id="interaction"></div>
         </div>
       </div>
-      <div id="right-sidebar"></div>
+      <div id="right-sidebar">
+        <div id="comment-wrap">
+          <div class="top"></div>
+          <div class="selected-comm-wrap"></div>
+          <div class="general-comm-wrap"></div>
+        </div>
+      </div>
     </div>
 
 
