@@ -1,7 +1,7 @@
 {
   "name": "coronavirus-annotation-two",
   "version": "1.0.0",
-  "description": "",
+  "description": "Second Iteration of the Coronavirus Annotation Tool",
   "scripts": {
     "build": "node_modules/.bin/webpack --config webpack.config.js --mode=production",
     "watch": "node_modules/.bin/webpack --config webpack.config.js --mode=development -w",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/janmarkuslanger/clean-flask.git"
+    "url": "git+https://github.com/visdesignlab/coronavirus-annotation-2.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/janmarkuslanger/clean-flask/issues"
+    "url": "https://github.com/visdesignlab/coronavirus-annotation-2/issues"
   },
-  "homepage": "https://github.com/janmarkuslanger/clean-flask#readme",
+  "homepage": "https://github.com/visdesignlab/coronavirus-annotation-2#readme",
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-runtime": "^7.12.1",
