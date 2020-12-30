@@ -1,4 +1,25 @@
-import * as d3 from 'd3';
+export const endDrawTime = 84;
+
+export const structureSelected = {
+  selected: false,
+  structure: null,
+  annotations: null,
+  comments: null
+}
+
+export function structureSelectedToggle(datum){
+  structureSelected.structure = datum;
+
+  if(datum === null){
+    structureSelected.annotations = null;
+    structureSelected.comments = null;
+    structureSelected.selected = false;
+  }else{
+    structureSelected.selected = true;
+  }
+}
+
+export const doodleKeeper = [];
 
 export const colorDictionary = {
   'blue': {'code':[0, 0, 255], 'structure': ['Cell Membrane']},
@@ -37,7 +58,6 @@ function check(pull){
 }
 
 export function clearCanvas(){
-  console.log('is this working?',canvas)
   let cxt =  canvas.getContext('2d');
   cxt.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -45,8 +65,6 @@ export async function loadPngForFrame(){
 
   let video = document.getElementById('video');
   let pullFrame = (Math.floor((video.currentTime) * 29.8941176));
-
-  console.log(video.currentTime, pullFrame)
 
   let pathImg = '../static/assets/stills/120120_entry_flat/entry_flat'; 
     //The path to the image that we want to add
@@ -77,7 +95,13 @@ export async function loadPngForFrame(){
 }
   
 export function drawFrameOnPause(video) {
-  let imgObj = loadPngForFrame();
+  
+  if(video.currentTime < endDrawTime){
+    let imgObj = loadPngForFrame();
+  }else{
+    console.log('credits are playing');
+  }
+  
 }
 
 export function colorChecker(code){
@@ -128,8 +152,6 @@ export function colorChecker(code){
 
     let newData = Object.assign({}, currentImageData);
     newData.data = Uint8ClampedArray.from([...currentImageData.data]);
-
-    console.log('hover color',hoverColor)
   
       for(let i = 0; i < newData.data.length; i = i + 4){
         

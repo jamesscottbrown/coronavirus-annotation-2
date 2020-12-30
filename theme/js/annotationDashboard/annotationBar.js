@@ -24,7 +24,7 @@ export function clearAnnotationSidebar(){
     annoWrap.select('.anno-wrap').selectAll('*').remove();
 }
 
-export async function updateAnnotationSidebar(data, stackedData, videoTime){
+export async function updateAnnotationSidebar(data, stackedData){
 
     let annoType = annoTypes();
     ///start drawing annotation 
@@ -78,3 +78,14 @@ export async function updateAnnotationSidebar(data, stackedData, videoTime){
     if(stackedData != null) annoDiv.style('opacity', 0.3);
 
 }
+
+export function highlightAnnotationbar(currentTime){
+
+    let annos = d3.selectAll('#left-sidebar').select('.anno-wrap').selectAll('div.anno');
+    let test = Array.from(new Set(annos.data().map(m=> m.seconds[0]))).filter(f=> f <= currentTime);
+
+    let selectedAnno = annos.filter(f=> f.seconds[0] == test[test.length - 1]).classed('selected', true);
+    selectedAnno.nodes()[0].scrollIntoView({behavior: "smooth"});
+}
+
+

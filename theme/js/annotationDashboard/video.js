@@ -1,20 +1,21 @@
 import * as d3 from 'd3';
 import { annotationData } from '..';
 import { dataKeeper, formatAnnotationTime, formatTime } from '../dataManager';
-import { addStructureLabelFromButton, removeStructureLabelFromButton, goBackButton } from './topbar'
-import { clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, getCoordColor, makeNewImageData, parseArray } from './imageDataUtil';
-import { drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar } from './commentBar';
-import { updateAnnotationSidebar } from './annotationBar';
+import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar'
+import { clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, makeNewImageData, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
+import { drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar, highlightCommentBoxes, renderCommentDisplayStructure, renderStructureKnowns } from './commentBar';
+import { highlightAnnotationbar, updateAnnotationSidebar } from './annotationBar';
+import { highlightTimelineBars } from './timeline';
+import firebase from 'firebase/app';
+import 'firebase/storage';
 
 let canPlay;
-let structureClicked = false;
 
 const currentColorCodes = [];
 
+
 const canvas = document.getElementById('canvas');
 canvas.setAttribute('pointer-events', 'none');
-
-
 
 function resizeVideoElements(){
   let video = document.getElementById('video');
@@ -56,6 +57,13 @@ export function formatVidPlayer(isInteractive){
         canPlay = true;
         resizeVideoElements();
         drawFrameOnPause(video);
+
+            
+      d3.select('#interaction').on('click', (event)=> mouseClickVideo(d3.pointer(event), video))
+          .on('mousemove', (event)=> mouseMoveVideo(d3.pointer(event), video));
+
+      d3.select('#video-controls').select('.play-pause').on('click', ()=> togglePlay());
+      d3.select('.progress-bar').on('click', progressClicked);
     
       } else {
         video.addEventListener('canplay', canPlay = true);
@@ -64,12 +72,6 @@ export function formatVidPlayer(isInteractive){
 
     video.addEventListener('timeupdate', updateTimeElapsed);
     video.addEventListener('loadedmetadata', initializeVideo);
-    
-    d3.select('#interaction').on('click', (event)=> mouseClickVideo(d3.pointer(event), video))
-                             .on('mousemove', (event)=> mouseMoveVideo(d3.pointer(event), video));
-
-    d3.select('#video-controls').select('.play-pause').on('click', ()=> togglePlay());
-    d3.select('.progress-bar').on('click', progressClicked);
 
 }
 function updateTimeElapsed() {
@@ -80,8 +82,12 @@ function updateTimeElapsed() {
   d3.select('.progress-bar-fill').style('width', scaleVideoTime(document.getElementById('video').currentTime)+'px');
 }
 function progressClicked(mouse){
-
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
+  updateTimeElapsed();
+}
+
+export function commentClicked(event, d){
+  document.getElementById('video').currentTime = d.videoTime;
   updateTimeElapsed();
 }
 function scaleVideoTime(currentTime, invert){
@@ -112,7 +118,6 @@ export function playButtonChange(){
 export function togglePlay() {
   playButtonChange();
   if (video.playing) {
-    console.log('is this  doing it twice');
     video.pause();
     drawFrameOnPause(video);
   } else {
@@ -123,10 +128,11 @@ export function togglePlay() {
 }
 
 export async function mouseMoveVideo(coord, video){
+  
   if(video.playing){
-    console.log('videoPlaying');
-  }else if(structureClicked){
-    console.log('what this do');
+   
+  }else if(structureSelected.selected === true || video.currentTime >= endDrawTime){
+ 
   }else{
 
     let snip = getCoordColor(coord); 
@@ -135,7 +141,6 @@ export async function mouseMoveVideo(coord, video){
       currentColorCodes.push(snip);
       parseArray(snip);
       let structFromDict =  snip === 'orange' && video.currentTime < 17 ? colorDictionary[snip].structure[1].toUpperCase() :  colorDictionary[snip].structure[0].toUpperCase();
-      console.log('structure from dict',structFromDict)
       let structureData =  annotationData[annotationData.length - 1].filter(f=> {
         return f.associated_structures.split(', ').map(m=> m.toUpperCase()).indexOf(structFromDict) > -1;
       });
@@ -149,23 +154,27 @@ export async function mouseMoveVideo(coord, video){
 }
 export async function mouseClickVideo(coord, video){
 
+  let commentData = Object.assign({}, dataKeeper[dataKeeper.length - 1]);
+
   if(video.playing){
-    console.log('is playing');
-    structureClicked = false;
+    structureSelectedToggle(null);    
     togglePlay();
 
   }else{ 
-    
+    /**
+     * VIDEO PAUSED - CLICKED NOT ON STRUCTURE
+     */
     let snip = getCoordColor(coord);
-    console.log('snip', snip);
 
     if(snip === "black" || snip === "unknown"){
-      structureClicked = false;
+     
+      structureSelectedToggle(null);
+     
       togglePlay();
-
-      removeStructureLabelFromButton();
-
-      updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
+      addCommentButton();
+    //  clearRightSidebar();
+      renderCommentDisplayStructure();
+      updateCommentSidebar(commentData);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null)
     
       d3.select('.tooltip')
@@ -173,12 +182,15 @@ export async function mouseClickVideo(coord, video){
             .style("opacity", 0);
 
     }else{
-      structureClicked = true;
-      parseArray(currentImageData, snip);
+      /**
+       * VIDEO PAUSED - CLICKED ON STRUCTURE
+       */
+      structureSelectedToggle(colorDictionary[snip].structure[0]);
+      parseArray(snip);
+    
+      let nestReplies = formatCommentData(Object.assign({}, commentData), null);
 
-      let nestReplies = formatCommentData(dataKeeper[dataKeeper.length -1], null);
-
-      let test = nestReplies.filter((f)=> {
+      structureSelected.comments = nestReplies.filter((f)=> {
         if(colorDictionary[snip].structure[1]){
           return f.comment.toUpperCase().includes(colorDictionary[snip].structure[0].toUpperCase()) || f.comment.toUpperCase().includes(colorDictionary[snip].structure[1].toUpperCase);
         }else{
@@ -186,58 +198,54 @@ export async function mouseClickVideo(coord, video){
         }
       });
 
-      let structureData = annotationData[annotationData.length - 1].filter(f=> {
+      let structureAnnotations = annotationData[annotationData.length - 1].filter(f=> {
         return f.associated_structures.split(', ').map(m=> m.toUpperCase()).indexOf(colorDictionary[snip].structure[0].toUpperCase()) > -1;
       });
 
-      let sortedStructureData = structureData.filter(f=> f.has_unkown === "TRUE").concat(structureData.filter(f=> f.has_unkown === "FALSE"))
-      structureTooltip(structureData, coord, snip, false);
-      let annoWrap = d3.select('#left-sidebar');
+      structureSelected.annotations = structureAnnotations.filter(f=> f.has_unkown === "TRUE").concat(structureAnnotations.filter(f=> f.has_unkown === "FALSE"))
       
-      updateAnnotationSidebar(annotationData[annotationData.length - 1], sortedStructureData, null);
-      annoWrap.select('.top').append('h6').text('   Spike Protein Annotations: ');
-
-      let commentWrap = d3.select('#comment-wrap').select('.top');
-      let genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
-      let selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
-      clearRightSidebar();
+      structureTooltip(structureAnnotations, coord, snip, false);
+      let annoWrap = d3.select('#left-sidebar');
 
       goBackButton();
-      
-      let questions = structureData.filter(f=> f.has_unkown === "TRUE").length + test.filter(f=> f.comment.includes('?')).length;
-      let refs = structureData.filter(f=> f.url != "").length + test.filter(f=> f.comment.includes('http')).length;
+      //clearRightSidebar();
+      renderCommentDisplayStructure();
 
-      commentWrap.append('div').html(`<h4>${colorDictionary[snip].structure[0]}</h4>
-      <span class="badge badge-pill badge-info"><h7>${structureData.length}</h7></span> annotations for this structure. <br>
-      <span class="badge badge-pill badge-danger">${questions}</span> Questions. <br>
-      <span class="badge badge-pill badge-warning">${refs}</span> Refs. <br>
-      <br>
-      <button class="btn btn-outline-secondary add-comment-structure">Add comment for this structure</button> <br>
-      `)
+      let genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
+      let selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
+      let topCommentWrap = d3.select('#comment-wrap').select('.top');
+      //NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
+      updateCommentSidebar(commentData, structureSelected.comments);
+      updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
+      annoWrap.select('.top').append('h6').text('   Spike Protein Annotations: ');
 
-      let stackedData = structureData.filter(f=> f.has_unkown == "TRUE").concat(structureData.filter(f=> f.has_unkown == "FALSE"));
+      renderStructureKnowns(topCommentWrap);
 
-      let testData = formatCommentData(dataKeeper[dataKeeper.length -1], stackedData);
-
-      let annos = commentWrap.selectAll('.anno').data(stackedData).join('div').classed('anno', true);
+      let stackedData = structureSelected.annotations.filter(f=> f.has_unkown == "TRUE").concat(structureSelected.annotations.filter(f=> f.has_unkown == "FALSE"));
+      let annos = topCommentWrap.selectAll('.anno').data(stackedData).join('div').classed('anno', true);
 
       let unknowns = annos.filter(f=> f.has_unkown === 'TRUE');
       unknowns.classed('unknown', true);
 
       selectedComWrap.append('h7').text("Associated Comments: ");
 
-      drawCommentBoxes(test, selectedComWrap);
-   
+      topCommentWrap.node().scrollIntoView();
+      annoWrap.select('.top').node().scrollIntoView();
+
+  //MIGHT BE REPEATING WORK - ALREADY HAVE UPDATE COMMENT SIDEBAR ABOVE
+      drawCommentBoxes(structureSelected.comments, selectedComWrap);
       drawCommentBoxes(nestReplies, genComWrap);
-      genComWrap.selectAll('.memo').style('opacity',  0.3);
+      genComWrap.selectAll('.memo').style('opacity', 0.3);
     }
   }
 }
 function structureTooltip(structureData, coord, snip, hoverBool){
 
-  let nestReplies = formatCommentData(dataKeeper[dataKeeper.length -1], null);
+  let commentData = Object.assign({}, dataKeeper[dataKeeper.length -1]);
 
-      let test = nestReplies.filter((f)=> {
+  let nestReplies = formatCommentData(Object.assign({}, commentData), null);
+
+      let structureComments = nestReplies.filter((f)=> {
         if(colorDictionary[snip].structure[1]){
           return f.comment.toUpperCase().includes(colorDictionary[snip].structure[0].toUpperCase()) || f.comment.toUpperCase().includes(colorDictionary[snip].structure[1].toUpperCase);
         }else{
@@ -246,8 +254,8 @@ function structureTooltip(structureData, coord, snip, hoverBool){
       });
   if(hoverBool){
 
-    let question = structureData.filter(f=> f.has_unkown === "TRUE").length + test.filter(f=> f.comment.includes('?')).length;
-    let refs = structureData.filter(f=> f.url != "").length + test.filter(f=> f.comment.includes('http')).length;
+    let question = structureData.filter(f=> f.has_unkown === "TRUE").length + structureComments.filter(f=> f.comment.includes('?')).length;
+    let refs = structureData.filter(f=> f.url != "").length + structureComments.filter(f=> f.comment.includes('http')).length;
 
     d3.select('.tooltip')
     .style('position', 'absolute')
@@ -274,138 +282,159 @@ function structureTooltip(structureData, coord, snip, hoverBool){
     
 
 }
-export async function updateVideoAnn(data, annoType){
 
-  var storage = firebase.storage();
-  var storageRef = storage.ref();
+function renderPushpinMarks(commentsInTimeframe, svg){
+
+  let pushes = commentsInTimeframe.filter(f => f.commentMark === "push")
+  let pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
+  pushedG.attr('transform', (d)=> `translate(${(960 * d.posLeft)}, ${(540 * d.posTop)})`);
+    
+  let circ = pushedG.selectAll('circle').data(d=> [d]).join('circle')
+  circ.attr('r', 10);
+  
+  circ.attr('cx', d=> {
+    return 0
+  });
+  circ.attr('cy', d=> {
+    return  0;
+  });
+  circ.attr('fill', 'red');
+
+  circ.on('mouseover', (d)=>{
+      let wrap = d3.select('#right-sidebar').select('#comment-wrap');
+      let memoDivs = wrap.selectAll('.memo').filter(f=> f.key === d.key);
+      memoDivs.classed('selected', true);
+      memoDivs.nodes()[0].scrollIntoView({behavior: "smooth"});
+
+  }).on('mouseout', (d)=> {
+      let wrap = d3.select('#right-sidebar').select('#annotation-wrap');
+      let memoDivs = wrap.selectAll('.memo').classed('selected', false);
+  });
+
+  let annotationGroup = pushedG.selectAll('g.annotations').data(d=> [d]).join('g').classed('annotations', true);
+
+  let labelRect = annotationGroup.selectAll('rect').data(d=> [d]).join('rect')
+    .attr('x', 17)
+    .attr('y', -20)
+    .attr('width', 100)
+    .attr('height', 30)
+    .attr('fill', '#fff');
+
+  let annotationText = annotationGroup.selectAll('text').data(d=> [d]).join('text')
+  .text(d=> d.displayName)
+  .classed('annotation-label', true)
+  .attr('x', d=> 22)
+  .attr('y', d=> 0);   
+
+}
+async function renderDoodles(commentsInTimeframe, div){
+  const storageRef = firebase.storage().ref();
+
   let doods = await storageRef.child('images/').listAll();
+
+  let doodles = commentsInTimeframe.filter(f => f.commentMark === "doodle");
+
+  let doodFromStorage = doodles.map(async (dood)=> {
+    let urlDood = await doods.items.filter(f=>f._delegate._location.path_ === `images/${dood.doodleName}`)[0].getDownloadURL();
+    return urlDood;
+  });
+
+  let images = div.selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
+  images.attr('src', d=> d);
+}
+
+export function videoUpdates(data, annoType){
  
   let svgTest = d3.select('#interaction').select('svg')
   let svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
   
   const video = document.querySelector('video');
 
-  let vidDim = d3.select('video').node().getBoundingClientRect();
+  let vidDim = video.getBoundingClientRect();
    
   let interDIV = d3.select('#interaction');
 
-  d3.select('.show-comments').select('.form-check').select('input').on('click', (d, i, n)=> {
-      if(!n[i].checked){
-          d3.select('#interaction').selectAll('*').remove();
+  d3.select('#show-doodle').select('input').on('click', (event, d)=> {
+      if(!event.target.checked){
+       
+          d3.select('#interaction').selectAll('.doodles').remove();
+      }else{
+        let commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map(m=> m[1]).filter(f=> f.replies === "null");
+       
+        let timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
+        let commentsInTimeframe = commentData.filter((f,i)=> {
+            let time = JSON.parse(f.videoTime);
+            if(time.length > 1){
+                return time[0] <= video.currentTime && time[1] >= video.currentTime;
+            }else{
+                return time <= timeRange[1] && time >= timeRange[0];
+            }
+        });
+        renderDoodles(commentsInTimeframe, interDIV);
       }
   });
 
- // updateAnnotationSidebar(data, annoType, 0)
+  d3.select('#show-push').select('input').on('click', (event, d)=> {
+    if(!event.target.checked){
+       d3.select('#interaction').selectAll('.pushed').remove();
+    }else{
+      let commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map(m=> m[1]).filter(f=> f.replies === "null");
+      let timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
+      let commentsInTimeframe = commentData.filter((f,i)=> {
+          let time = JSON.parse(f.videoTime);
+          if(time.length > 1){
+              return time[0] <= video.currentTime && time[1] >= video.currentTime;
+          }else{
+              return time <= timeRange[1] && time >= timeRange[0];
+          }
+      });
 
-video.ontimeupdate = async (event) => {
+      let svgTest = d3.select('#interaction').select('svg');
+      let svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
 
-   let timeRange = [video.currentTime - 1.5, video.currentTime + 1.5];
+      renderPushpinMarks(commentsInTimeframe, svg);
+    }
+});
 
-   updateAnnotationSidebar(data, annoType, video.currentTime);
+  video.ontimeupdate = async (event) => {
 
-   ///END ANNOTATION
-   let annotations = d3.entries(dataKeeper[dataKeeper.length - 1].annotations).map(m=> m.value);
+    let timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
 
-   let annoTest = annotations.filter((f,i)=> {
-       let time = JSON.parse(f.videoTime)
+    highlightTimelineBars(timeRange);
 
-       if(time.length > 1){
-           return time[0] <= video.currentTime && time[1] >= video.currentTime;
-       }else{
-           return time[0] < timeRange[1] && time[0] > timeRange[0];
-       }
-   });
+    let filteredAnnotations = annotationData[annotationData.length - 1]
+        .filter(f=> f.seconds[0] <= timeRange[0] && f.seconds[0] <= timeRange[1]) || (f.seconds[1] <= timeRange[1] && f.seconds[1] >= timeRange[0]);
+    
+    /**
+     * UPDATE AND HIGHLGIHT ANNOTATION BAR
+     */
+    updateAnnotationSidebar(filteredAnnotations, null);
+    highlightAnnotationbar(video.currentTime);
+ 
+   /*
+    COMMENT MANIPULATION HERE
+   */
 
-   let memoCirc = d3.select('#annotation-layer').selectAll('.memo');
-   let memoDivs = d3.select('#comment-sidebar').select('#annotation-wrap').selectAll('.memo');
+    highlightCommentBoxes(timeRange);
 
-   memoCirc.classed('selected', false);
-   memoDivs.classed('selected', false);
-
-   let filtered = memoCirc.filter(f=> f.videoTime < timeRange[1] && f.videoTime > timeRange[0]).classed('selected', true);
-   let selectedMemoDivs = memoDivs.filter(f=> f.videoTime < timeRange[1] && f.videoTime > timeRange[0]).classed('selected', true);
-  
-   let filteredPushes = filtered.filter(f=> {
-       return f.commentMark === 'push';
-   });
-
-   let filteredDoodles = filtered.filter(f=> {
-       return f.commentMark === 'doodle';
-   });
-
-   let doodleData = filteredDoodles.data();
-
-   let test = doodleData.map(async (dood)=> {
-       let urlDood = await doods.items.filter(f=>f.location['path'] === `images/${dood.doodleName}`)[0].getDownloadURL();
-       return urlDood;
-   });
-
-   let annoDoodles = annoTest.filter(f=> f.commentMark === "doodle").map(async (dood)=> {
-       let urlDood = await doods.items.filter(f=>f.location['path'] === `images/${dood.doodleName}`)[0].getDownloadURL();
-       return urlDood;
-   });
-
-   if(d3.select('.show-comments').select('.form-check').select('.form-check-input').node().checked){
+    let commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map(m=> m[1]).filter(f=> f.replies === "null");
+    
+    let commentsInTimeframe = commentData.filter((f,i)=> {
       
-       let images = interDIV.selectAll('.doodles').data(await Promise.all(test)).join('img').classed('doodles', true);
-       images.attr('src', d=> d);
+        let time = JSON.parse(f.videoTime);
+        if(time.length > 1){
+            return time[0] <= video.currentTime && time[1] >= video.currentTime;
+        }else{
+            return time <= timeRange[1] && time >= timeRange[0];
+        }
+    });
 
-       let annoImages = interDIV.selectAll('.anno-doodles').data(await Promise.all(annoDoodles)).join('img').classed('anno-doodles', true);
-       annoImages.attr('src', d=> d);
+    if(d3.select('#show-doodle').select('input').node().checked){
+      renderDoodles(commentsInTimeframe, interDIV);
+    }
 
-       let pushedG = svg.selectAll('g.pushed').data(filteredPushes.data()).join('g').classed('pushed', true);
-       
-       let circ = pushedG.selectAll('circle').data(d=> [d]).join('circle')
-       circ.attr('r', 10);
-       circ.attr('cx', d=> {
-           return `${(vidDim.width * +d.posLeft) + 10}px`;
-       });
-       circ.attr('cy', d=> {
-           return `${(vidDim.height * +d.posTop) + 10}px`;
-       });
-       circ.attr('fill', 'red');
-
-       circ.on('mouseover', (d)=>{
-
-           let wrap = d3.select('#comment-sidebar').select('#annotation-wrap');
-           let memoDivs = wrap.selectAll('.memo').filter(f=> f.key === d.key);
-           memoDivs.classed('selected', true);
-           memoDivs.nodes()[0].scrollIntoView({behavior: "smooth"});
-
-       }).on('mouseout', (d)=> {
-
-           let wrap = d3.select('#comment-sidebar').select('#annotation-wrap');
-           let memoDivs = wrap.selectAll('.memo').classed('selected', false);
-           
-       });
-
-      // d3.select('#comment-sidebar').select('#annotation-wrap').node().scrollTop -= 60;
-
-       if(!selectedMemoDivs.empty()){
-           selectedMemoDivs.nodes()[0].scrollIntoView();
-       }
-
-       let annotationGroup = svg.selectAll('g.annotations').data(annoTest).join('g').classed('annotations', true);
-       let annotationMark = annotationGroup.filter(f=> f.commentMark === 'push').selectAll('circle').data(d=> [d]).join('circle').attr('r', 5).attr('cx', d=> d.posLeft).attr('cy',d=>  d.posTop);
-       let annotationText = annotationGroup.selectAll('text').data(d=> [d]).join('text')
-       .text(d=> d.comment)
-       .classed('annotation-label', true)
-       .attr('x', d=> {
-           if(d.commentMark === 'push'){
-               let noPx = parseInt(d.posLeft.replace(/px/,""));
-               return noPx+10+"px";
-           }else{
-                return '50px'
-           }
-       })
-        .attr('y',d=>  {
-            if(d.commentMark === 'push'){
-               return d.posTop;
-            }else{
-                return '50px'
-            }
-       });            
-   }
-};
-}
-
+    if(d3.select('#show-push').select('input').node().checked){
+      renderPushpinMarks(commentsInTimeframe, svg);
+    }
+  };
+ }

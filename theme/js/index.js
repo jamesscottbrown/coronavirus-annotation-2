@@ -1,11 +1,12 @@
 import firebase from 'firebase/app';
-const { renderUser, addCommentButton, toggleSort } = require("./annotationDashboard/topbar");
+
+const { renderUser, addCommentButton, toggleSort, renderIssueButton } = require("./annotationDashboard/topbar");
 const { dataKeeper, currentUser, formatAnnotationTime } = require("./dataManager");
 const { checkUser, pullDataFromDatabase } = require("./firebaseUtil");
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import * as d3 from 'd3';
-import { formatVidPlayer } from './annotationDashboard/video';
+import { formatVidPlayer, videoUpdates } from './annotationDashboard/video';
 import { updateAnnotationSidebar } from './annotationDashboard/annotationBar';
 
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
@@ -25,8 +26,6 @@ init();
 
 async function init(){
 
-    console.log('this should show up');
-
     let config = await d3.json("../static/assets/firebase_data.json");
     fbConfig.push(config[0]);
     let anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i)=> {
@@ -38,12 +37,13 @@ async function init(){
     if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]);}
 
     checkUser([renderUser]);
+    renderIssueButton(d3.select('#top-bar').select('#user'));
     updateAnnotationSidebar(anno, null, null);
     formatVidPlayer(true);
+    videoUpdates();
 
           // // create a tooltip
     var tooltipTest = d3.select('#main').select('div.tooltip');
-    
     var tooltip = tooltipTest.empty() ? d3.select('#main').append('div').classed('tooltip', true): tooltipTest;
     
     tooltip.style("opacity", 0)
@@ -54,10 +54,8 @@ async function init(){
         .style("border-radius", "5px")
         .style("padding", "5px");
 
-    d3.select('.add-comment').select('button').on('click', (event, d)=> addCommentButton(d, event));
-    d3.select('#toggle').select('input').on('click', (event)=> toggleSort(event));
-   
-    
+    d3.select('#sort-by').select('input').on('click', (event)=> toggleSort(event));
+
 }
 
 
