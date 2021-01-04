@@ -1,7 +1,10 @@
 import * as d3 from 'd3';
+import { select } from 'd3';
 import firebase from 'firebase/app';
+import { annotationData } from '..';
 import { currentUser, dataKeeper, formatVideoTime } from '../dataManager';
-import { checkDatabase, userLoggedIn } from '../firebaseUtil';
+import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
+import { updateAnnotationSidebar } from './annotationBar';
 import { colorDictionary, structureSelected, doodleKeeper } from './imageDataUtil';
 import { commentClicked } from './video';
 
@@ -13,7 +16,7 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
-  console.log('updateCommentSidebar', userLoggedIn);
+ 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
   // clearRightSidebar();
   // renderCommentDisplayStructure();
@@ -40,15 +43,18 @@ function recurse(parent, replyArray, level) {
 }
 
 function replyInputBox(d, i, n, user) {
-  const inputDiv = d3.select(n.parentNode).append('div').classed('text-input-sidebar', true);
-  inputDiv.append('text').text(`${user.displayName}:`);
+  
+  const inputDiv = d3.select(n.parentNode.parentNode).select('.reply-space').append('div').classed('text-input-sidebar', true);
+  inputDiv.append('text').text(`${userLoggedIn.displayName}:`);
   inputDiv.append('textarea').attr('id', 'text-area-id').attr('placeholder', 'Comment Here');
   const submit = inputDiv.append('button').text('Add').classed('btn btn-secondary', true);
 
   submit.on('click', (event) => {
     event.stopPropagation();// user, currentTime, mark, tag, coords, replyTo, quote
-    const dataPush = formatComment2Send(user, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null);
+
+    const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null);
     const ref = firebase.database().ref('comments');
+    d3.select(n.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
     ref.push(dataPush);
   });
 }
@@ -71,14 +77,6 @@ export function formatCommentData(dbRef) {
 
   return nestReplies;
 
-  // }else{
-
-  //     let replyData = unresolved.filter(f=> (f.reply === true));
-  //     let nestReplies = annotations.map((d, i, n)=>{
-  //     return recurse(d, replyData, 0);
-  //     });
-  //     return nestReplies;
-  // }
 }
 
 export function highlightCommentBoxes(timeRange) {
@@ -134,8 +132,9 @@ function downvoteIcon(div, db) {
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
-  console.log('is this reaching', wrap);
+ 
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
+  const db = firebase.database();
 
   const memoDivs = wrap.selectAll('.memo').data(nestedData).join('div').classed('memo', true);
   memoDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
@@ -155,7 +154,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   const typeOf = memoDivs.selectAll('i.fas').data((d) => [d]).join('i').attr('class', (d) => {
     if (d.commentMark === 'push') {
-      return 'fas fa-map-pin';
+      return 'fas fa-map-marker-alt';
     } 
     if (d.commentMark === 'doodle') {
       return 'fas fa-paint-brush';
@@ -186,18 +185,20 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   if (userLoggedIn.loggedInBool) {
     // RESOLVE
-    const resolve = memoDivs.filter((f) => f.uid === currentUser[currentUser.length - 1].uid).selectAll('.resolve-span').data((d) => [d]).join('span')
+    const resolve = memoDivs.filter((f) => f.uid === userLoggedIn.uid).selectAll('.resolve-span').data((d) => [d]).join('span')
       .classed('resolve-span', true)
       .text('Resolve ');
+
     resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
-      .classed('resolve fas fa-check', true);// .text(d=> `${d.displayName}:`);
+      .classed('resolve fas fa-check', true);
+
     resolve.on('click', (d) => {
       db.ref(`comments/${d.key}/resolved`).set('true');
     });
     // REPLY
     const reply = memoDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
       .text('Reply ');
-    reply.selectAll('.reply').data((d) => [d]).join('i').classed('far fa-comment-dots fa-lg reply', true);// .style('float', 'right')//.text('Reply');
+    reply.selectAll('.reply').data((d) => [d]).join('i').classed('fas fa-comment-dots fa-lg reply', true);// .style('float', 'right')//.text('Reply');
 
     reply.on('click', function (event, d) {
       event.stopPropagation();
@@ -209,25 +210,14 @@ export function drawCommentBoxes(nestedData, wrap) {
 
         replyInputBox(d, i, event.target, user);
 
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //     if (user) {
-
-        //         replyInputBox(d, i, event.target, user);
-
-        //         // User is signed in.
-        //     } else {
-        //         console.log("NO USER", user);
-        //         // No user is signed in.
-        //     }
-        // });
       } else {
         d.replyBool = false;
-        d3.select(event.target.parentNode).select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
       }
     });
   }
 
-  var db = firebase.database();
+  memoDivs.selectAll('div.reply-space').data(d=> [d]).join('div').classed('reply-space', true);
 
   memoDivs.on('click', (event, d) => {
     if (event.target.tagName.toLowerCase() === 'textarea'
@@ -250,11 +240,24 @@ export function drawCommentBoxes(nestedData, wrap) {
   questionMemos.classed('question', true);
   const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
+
+  const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
+  qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
+  d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
+
+  const refMemos = memoDivs.filter(f=> {
+    return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
+  refMemos.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
+  //<i class="fas fa-book-open"></i>
+  
+  const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
+  d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
+  
 }
 
 export function recurseDraw(selectDiv) {
   const replyDivs = selectDiv.selectAll('.reply-memo').data((d) => d.replyKeeper).join('div').classed('reply-memo', true);
-  replyDivs.style('margin-left', (d) => `${d.level * 10}px`);
+  replyDivs.style('margin-left', (d) => `${d.level * 3}px`);
 
   replyDivs.each((d, i, n) => {
     replyRender(d3.select(n[i]));
@@ -278,9 +281,9 @@ export function renderStructureKnowns(topCommentWrap) {
 
   topCommentWrap.append('div').classed('found-info', true)
     .html(`<h4>${structureSelected.structure}</h4>
-    <span class="badge badge-pill badge-info"><h7>${structureSelected.annotations.length}</h7></span> annotations for this structure. <br>
+    <span class="badge badge-pill badge-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
     <span class="badge badge-pill badge-danger">${questions}</span> Questions. <br>
-    <span class="badge badge-pill badge-warning">${refs}</span> Refs. <br>
+    <span class="badge badge-pill badge-primary">${refs}</span> Refs. <br>
     <br>
     `);
 
@@ -575,7 +578,7 @@ export function formatPush() {
         pushDiv.style('top', (d) => `${coords[1] - (dims.top - 50)}px`);
         pushDiv.style('left', (d) => `${coords[0]}px`);
         const push = pushDiv.append('div').classed('push', true);
-        push.append('i').classed('fas fa-map-pin', true);
+        push.append('i').classed('fas fa-map-marker-alt fa-3x', true);
       }
     });
 
@@ -633,6 +636,7 @@ export function renderCommentDisplayStructure() {
 }
 
 export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo, quote) {
+ 
   return {
     uid: user.uid,
     displayName: user.displayName,
@@ -671,22 +675,17 @@ export function formatToComment(div, startingTags) {
   const submit = div.append('button').attr('id', 'comment-submit-button').text('Add').classed('btn btn-secondary', true);
   const commentType = 'comments';
 
-  submit.on('click', async (event) => {
-    const user = currentUser[currentUser.length - 1];
-
-    const context = canvas.getContext('2d');
-    const videoDim = document.getElementById('video').getBoundingClientRect();
-
-    // canvas.width = videoDim.width;
-    // canvas.height = videoDim.height;
+  submit.on('click', (event) => {
 
     event.stopPropagation();
+
+    console.log('button clicked');
+   
+    const user = userLoggedIn;
 
     if (d3.select('#text-area-id').node().value != '') {
       const tags = d3.select('.tag-wrap').selectAll('.badge');
       const { currentTime } = document.getElementById('video');
-
-      // d3.select('#interaction').style('pointer-events', 'all');
 
       if (form.node().value === 't2') {
         const vidWidth = +d3.select('#push-div').style('left').split('px')[0] / +d3.select('video').node().getBoundingClientRect().width;
@@ -715,6 +714,11 @@ export function formatToComment(div, startingTags) {
       }
 
       d3.select('.add-comment').select('button').text('Add Comment');
+
+      clearRightSidebar();
+      renderCommentDisplayStructure();
+      checkDatabase([updateCommentSidebar]);
+      updateAnnotationSidebar(annotationData[annotationData.length - 1]);
     } else {
       window.alert('Please add a comment first');
     }
@@ -739,8 +743,6 @@ export function formatTimeControl(div) {
 
   updatePlayButton();
 
-  // d3.select("#play-r").on('click', togglePlay);
-  // d3.select("#pause-r").on('click', togglePlay);
 }
 
 function replyRender(replyDivs) {
@@ -751,11 +753,13 @@ function replyRender(replyDivs) {
     .data((d) => [d])
     .join('text')
     .text((d) => `${d.displayName} replied:`);
+
   replyDivs.selectAll('.comment').data((d) => [d]).join('span').classed('comment', true)
     .selectAll('text')
     .data((d) => [d])
     .join('text')
     .text((d) => d.comment);
+
   replyDivs.selectAll('.post-time').data((d) => [d]).join('span').classed('post-time', true)
     .selectAll('text')
     .data((d) => [d])
@@ -771,10 +775,14 @@ function replyRender(replyDivs) {
   if (userLoggedIn.loggedInBool) {
     const reply = replyDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
       .text('Reply ');
+
+    replyDivs.selectAll('div.reply-space').data(d => [d]).join('div').classed('reply-space', true);
     reply.selectAll('.reply').data((d) => [d]).join('i').classed('far fa-comment-dots reply', true)
       .style('float', 'right');
 
-    const resolve = replyDivs.selectAll('.resolve-span').data((d) => [d]).join('span').classed('resolve-span', true)
+    const resolve = replyDivs.filter(f =>{
+      return f.displayName === userLoggedIn.displayName;
+    }).selectAll('.resolve-span').data((d) => [d]).join('span').classed('resolve-span', true)
       .text('Resolve ');
     resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
       .classed('resolve fas fa-check', true);// .text(d=> `${d.displayName}:`);
@@ -789,21 +797,16 @@ function replyRender(replyDivs) {
       const e = reply.nodes();
       const i = e.indexOf(this);
 
+     
+
       if (!d.replyBool) {
         d.replyBool = true;
         replyInputBox(d, i, event.target, user);
 
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //     if (user) {
-        //         replyInputBox(d, i, event.target, user);
-        //     } else {
-        //         console.log("NO USER", user);
-        //         // No user is signed in.
-        //     }
-        // });
+  
       } else {
         d.replyBool = false;
-        d3.select(event.target.parentNode).select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
       }
     });
   }

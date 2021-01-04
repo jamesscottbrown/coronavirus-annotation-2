@@ -73,26 +73,38 @@ div{
   display:inline-block;
   //width:300px;
   position:absolute;
-  left:10%;
+  left:3%;
   top:10px;
+}
+#toggle-sort-ref-wrap{
+  display:inline-block;
+  //width:300px;
+  position:absolute;
+  left:20%;
+  top:10px;
+}
+
+#toggle-sort-ref-wrap .label .fa-exclamation-circle{
+ margin-left: 0 !important;
+ padding:0;
 }
 
 #toggle-show-wrap{
   display:inline-block;
-  width:400px;
+  width:420px;
   position:absolute;
   left:50%;
   top:10px;
 }
 
-#toggle-show-wrap div, #toggle-sort-wrap div{
-  margin-left:80px;
+#toggle-show-wrap div, #toggle-sort-wrap div, #toggle-sort-ref-wrap di{
+  margin-left:90px;
   display: inline;
  // text-align: end;
   width:190px;
 }
 
-#toggle-show-wrap .label, #toggle-sort-wrap .label{
+#toggle-show-wrap .label, #toggle-sort-wrap .label, #toggle-sort-ref-wrap .label{
   position:absolute;
   left:55px;
   top:6px;
@@ -115,7 +127,7 @@ div{
     padding: 1rem 0 0 0;
     grid-area: side1;
     overflow-y: scroll;
-    max-width: 300px;
+    max-width: 320px;
 }
 
 #left-sidebar .anno-wrap{
@@ -203,6 +215,10 @@ margin-top:10px;
   background-color: red;
 }
 
+.selected-comm-wrap h7{
+  margin:18px;
+}
+
 #right-sidebar{
     position:fixed;
     right:0px;
@@ -210,7 +226,7 @@ margin-top:10px;
     height:calc(100vh - 70px);
     grid-area: side2;
     overflow-y: scroll;
-    max-width:300px;
+    max-width:350px;
 }
 #comment-wrap{
   grid-area: vid;
@@ -225,6 +241,7 @@ margin-top:10px;
 .memo{
   width:calc(100% - 25px);
   min-height:50px;
+  height: fit-content;
   border: 1px solid gray;
   padding:5px;
   cursor: pointer;
@@ -236,12 +253,31 @@ margin-top:10px;
  }
 
  .memo.selected, .anno.selected{
-  background-color: #BBBBBB;
+  background-color: #e2dfdf;
  }
 
- .memo.question{
+ .memo.question, .anno.question, .structure-anno.question, .reply-memo.question{
   border: 1px solid red !important;
  }
+
+ .reply .fa-comment-dots path{
+   fill:#4d4949;
+ }
+
+ .memo.reference, .anno.reference, .structure-anno.reference{
+  border: 1px solid dodgerblue !important;
+ }
+
+ .reply-memo.reference{
+   border-top: 1px solid dodgerblue !important;
+   border-left: 1px solid dodgerblue !important;
+ }
+
+ .fa-book-open path{
+   fill: dodgerblue !important;
+ }
+
+
  .memo .tag-span{
    display:inline-block;
  }
@@ -273,6 +309,18 @@ margin-top:10px;
  
  .memo .upvote-text, .memo .downvote-text{
    font-size: 11px;
+ }
+
+ svg.svg-inline--fa.fa-thumbs-up.fa-w-16.upvote.fa-sm path,
+ svg.svg-inline--fa.fa-thumbs-down.fa-w-16.downvote.fa-sm path,
+ .svg-inline--fa.fa-map-marker-alt.fa-w-12 path,
+ .svg-inline--fa.fa-paint-brush.fa-w-16 path{
+  fill:#6e6a6a !important;
+ }
+
+ .push svg.svg-inline--fa.fa-map-marker-alt.fa-w-12 path,
+ .push svg.svg-inline--fa.fa-paint-brush.fa-w-16 path{
+  fill:#d54444 !important;
  }
  
  .memo button{
@@ -341,13 +389,15 @@ margin-top:10px;
 }
 .add-comment-structure{
   position: absolute;
-  left: 50%;
+  left: 45%;
   top:126px;
   -ms-transform: translate(-50%);
   transform: translate(-50%);
 }
-.fa-exclamation-circle{
-  margin-left:20px;
+.anno .fa-exclamation-circle, .anno .fa-book-open,
+.structure-anno .fa-exclamation-circle, .structure-anno .fa-book-open,
+.memo .fa-exclamation-circle, .memo .fa-book-open{
+  margin-left:10px;
   float:right;
 }
 .fa-exclamation-circle path{
@@ -396,7 +446,7 @@ video, canvas, #interaction, #add-mark, #interaction svg{
   height:16px;
   padding:.2px;
   border: 2px solid black;
-  border-radius: 15px;
+  border-radius: 2px;
   margin-top:10px;
   background-color:#fff;
 }
@@ -406,7 +456,7 @@ video, canvas, #interaction, #add-mark, #interaction svg{
   height:12px;
   background-color: #4d4949;
   display: inline-block;
-  border-radius: 10px;
+  border-radius: 2px;
   float:left;
   margin-bottom:3px;
 }
@@ -446,6 +496,10 @@ video::-webkit-media-controls {
 
 .togg-wrap{
  margin: auto;
+}
+
+.top h6{
+  margin-left: 18px;
 }
 
 .dropdown-content {
@@ -551,11 +605,13 @@ button.btn.dropbtn.dropdown-toggle:active{
 }
 
 #timeline-tooltip{
-  background: white;
+  background: rgba($color: #eaeaea, $alpha: 1);
+  
   border-radius: 4px;
   position:absolute;
   padding:5px;
   text-align: center;
+  font-size: 12px;
 }
 
 .comment-initiated{
@@ -581,6 +637,7 @@ button.btn.dropbtn.dropdown-toggle:active{
 .text-input-sidebar{
   border-left: 1px solid gray;
   padding:5px;
+  font-size: 11px;
 }
 
 .text-input-sidebar textarea{
@@ -728,11 +785,11 @@ toggle
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #737373; // #2196F3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #737373; // #2196F3;
 }
 
 input:checked + .slider:before {

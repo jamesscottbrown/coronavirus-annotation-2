@@ -23,17 +23,27 @@
         <div id="toggle-sort-wrap">
             <div>
               <label class="switch" id="sort-by">
-                <span class="label">Sort by open questions</span>
+                <span class="label">Sort by open questions <i class="fas fa-exclamation-circle"></i></span>
                 <input type="checkbox">
                 <span class="slider round"></span>
               </label>
             </div>
         </div>
 
+        <div id="toggle-sort-ref-wrap">
+          <div>
+            <label class="switch" id="sort-by">
+              <span class="label">Sort by references <i class="fas fa-book-open"></i></span>
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+          </div>
+      </div>
+
         <div id="toggle-show-wrap">
           <div>
             <label class="switch" id="show-doodle">
-              <span class="label">Show drawing</span>
+              <span class="label">Show drawing <i class="fas fa-paint-brush"></i></span>
               <input type="checkbox" checked=true>
               <span class="slider round"></span>
             </label>
@@ -41,7 +51,7 @@
           
           <div>
             <label class="switch" id="show-push">
-              <span class="label">Show push mark</span>
+              <span class="label">Show push mark <i class="fas fa-map-marker-alt"></i></span>
               <input type="checkbox" checked=true>
               <span class="slider round"></span>
             </label>
@@ -79,7 +89,7 @@
           <div id="interaction"></div>
         </div>
         <div class="timeline-wrap">
-          <div id="timeline-tooltip"></div>
+          <div id="timeline-tooltip" style="opacity:0"></div>
         </div>
       </div>
       <div id="right-sidebar">
