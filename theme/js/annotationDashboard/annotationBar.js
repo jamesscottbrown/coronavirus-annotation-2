@@ -39,8 +39,7 @@ function renderAnnotationBoxes(divs){
   annoTypeHeader.filter((f) => f.has_unkown === 'TRUE').selectAll('i.question').data((d) => [d]).join('i')
     .classed('fas fa-exclamation-circle question', true);
 
-
-    annoTypeHeader.filter((f) => f.ref != '' && f.ref != 'na').selectAll('i.reference').data((d) => [d]).join('i')
+  annoTypeHeader.filter((f) => f.ref != '' && f.ref != 'na').selectAll('i.reference').data((d) => [d]).join('i')
     .classed('fas fa-book-open reference', true);
  
   annoHeadSpan.style('background-color', (d) => 'gray');
@@ -88,6 +87,8 @@ export async function updateAnnotationSidebar(data, stackedData) {
   clearAnnotationSidebar();
 
   console.log('stacleked data',stackedData)
+  let header = annoWrap.select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
+  header.text(d=> d);
 
   if (stackedData != null) {
     const structAnnoDivs = annoWrap.select('.sel-anno-wrap').selectAll('div.structure-anno').data(stackedData).join('div')

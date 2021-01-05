@@ -66,7 +66,7 @@ export function goBackButton() {
       renderStructureKnowns(d3.select('#comment-wrap').select('.top'));
     } else {
       structureSelectedToggle(null);
-      // clearRightSidebar();
+      clearRightSidebar();
       renderCommentDisplayStructure();
       updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
@@ -79,7 +79,7 @@ export function goBackButton() {
 
 export function addCommentButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
-
+  console.log('test user login', userLoggedIn.loggedInBool);
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {

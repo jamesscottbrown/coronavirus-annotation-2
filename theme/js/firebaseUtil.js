@@ -1,6 +1,9 @@
 import firebase from 'firebase/app';
 import { currentUser, dataKeeper } from './dataManager';
 import { fbConfig } from '.';
+import { addCommentButton } from './annotationDashboard/topbar';
+import { updateCommentSidebar } from './annotationDashboard/commentBar';
+import { renderTimeline } from './annotationDashboard/timeline';
 
 
 require('firebase/auth');
@@ -33,6 +36,9 @@ export function addUser(user) {
 
 function loginSuccess(user) {
   addUser(user);
+  console.log('loggin success',userLoggedIn)
+  // addCommentButton();
+  // updateCommentSidebar();
 }
 
 export function userLogin() {
@@ -96,21 +102,23 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
 
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
+      console.log('does this fire again?')
       currentUser.push(user);
       addUser(user);
-      // console.log('userrrr', user)
+
       callbackArray.forEach((fun) => {
         fun(user);
       });
-      //checkDatabase([addCommentButton, updateCommentSidebar, renderTimeline]);
+      checkDatabase(callbackArrayNoArgs);
       
       // User is signed in.
     } else {
       console.log('NO USER', user);
-      //checkDatabase([addCommentButton, updateCommentSidebar, renderTimeline]);
+      checkDatabase(callbackArrayNoArgs);
       // No user is signed in.
     }
-    checkDatabase(callbackArrayNoArgs);
+   
+   // checkDatabase([addCommentButton, updateCommentSidebar])
   });
   return currentUser;
 }
@@ -118,11 +126,9 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
 export function checkDatabase(callbackArray) {
   const ref = firebase.database().ref();
   ref.on('value', (snapshot) => {
-    // extraArgs != null ? callback(snapshot.val(), extraArgs) : callback(snapshot.val());
+  
     dataKeeper.push({ ...snapshot.val() });
-
-    // console.log('snapshooot',snapshot.val());
-
+   
     callbackArray.forEach((fun) => {
       fun(snapshot.val());
     });
