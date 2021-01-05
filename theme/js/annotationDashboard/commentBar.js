@@ -17,8 +17,8 @@ export function clearRightSidebar() {
 
 export function updateCommentSidebar(dbRef) {
 
+  renderCommentDisplayStructure();
 
- 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
   let header = wrap.selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
   header.text(d=> d);
@@ -28,7 +28,7 @@ export function updateCommentSidebar(dbRef) {
   // topBox.append('h7').text('Comments:');
 
   // clearRightSidebar();
-  // renderCommentDisplayStructure();
+
 
   const nestReplies = formatCommentData(dbRef);
 
@@ -141,9 +141,11 @@ function downvoteIcon(div, db) {
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
+  console.log('is this fireing in comment update??', wrap, nestedData)
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
+
 
   const memoDivs = wrap.selectAll('.memo').data(nestedData).join('div').classed('memo', true);
   memoDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
@@ -339,6 +341,7 @@ export function addTagFunctionality(inputDiv, tagArray) {
   const tagWrap = inputWrap.append('div').classed('tag-wrap', true);
 
   const tags = tagWrap.selectAll('span.badge').data(tagArray).join('span').classed('badge badge-secondary', true);
+
   if (tagArray.length > 0) {
     tags.text((d) => `${d}  `);
     const x = tags.append('text').text('X');

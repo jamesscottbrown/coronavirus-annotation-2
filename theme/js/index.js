@@ -40,6 +40,10 @@ async function init() {
   if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]); }
 
   checkUser([renderUser], [addCommentButton, updateCommentSidebar, renderTimeline]);
+  // addCommentButton();
+  // updateCommentSidebar();
+  // renderTimeline();
+
   renderIssueButton(d3.select('#top-bar').select('#user'));
   updateAnnotationSidebar(anno, null, null);
   formatVidPlayer(true);
