@@ -317,13 +317,17 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
   });
 
   const annotationGroup = pushedG.selectAll('g.annotations').data((d) => [d]).join('g').classed('annotations', true);
-
+  
   const labelRect = annotationGroup.selectAll('rect').data((d) => [d]).join('rect')
     .attr('x', 17)
     .attr('y', -20)
-    .attr('width', 100)
+    .attr('width', (d)=> {
+      return (d.displayName.split('').length * 6);
+    })
     .attr('height', 30)
-    .attr('fill', '#fff');
+    .attr('fill', '#fff')
+    .attr('fill-opacity', .9);
+
 
   const annotationText = annotationGroup.selectAll('text').data((d) => [d]).join('text')
     .text((d) => d.displayName)

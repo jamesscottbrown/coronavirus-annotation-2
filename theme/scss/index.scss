@@ -109,11 +109,13 @@ div{
 
 .toggle-show-title{
   display:inline-block;
-  width: 120px;
+  width: 90px;
   position: absolute;
-  left:44%;
-  top:15px;
-  font-size: 11px;
+  left:45.5%;
+  top:17px;
+  font-size: 10px;
+  background-color: #fff;
+  height:17px;
   color:#6e6a6a;
 }
 
@@ -703,8 +705,7 @@ button.btn.dropbtn.dropdown-toggle:active{
     border-radius: 3px;
     display:flex;
     padding:2px;
-    // min-width:300px;
-    width:280px;
+    width:330px;
     height:auto;
 }
 
@@ -723,8 +724,36 @@ button.btn.dropbtn.dropdown-toggle:active{
 .time-tabber, .media-tabber{
   align-self: center;
   justify-content: center;
-  padding:20px;
+  margin:20px;
+  border-left: #BBBBBB solid .5px;
+  border-radius: 5px;
+  font-size: 13px;
+  color:#4d4949;
 }
+.media-tabber h6{
+  margin-bottom:0;
+}
+.media-tabber input{
+  margin-left:5px;
+}
+.tag-label{
+  font-size: 12px;
+  padding:3px;
+  color:#4d4949;
+  margin-top:5px;
+
+}
+.tag-label h6{
+  margin-bottom:0;
+}
+
+.mark-input-label{
+  width: 330px;
+  font-size: 12px;
+  padding:5px;
+  margin-left:10px;
+}
+
 
 #comment-submit-button{
   margin:20px;

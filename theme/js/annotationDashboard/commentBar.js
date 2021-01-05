@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import { select } from 'd3';
 import firebase from 'firebase/app';
 import { annotationData } from '..';
-import { currentUser, dataKeeper, formatVideoTime } from '../dataManager';
+import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { colorDictionary, structureSelected, doodleKeeper } from './imageDataUtil';
@@ -49,7 +49,7 @@ function replyInputBox(d, i, n, user) {
   const inputDiv = d3.select(n.parentNode.parentNode).select('.reply-space').append('div').classed('text-input-sidebar', true);
   inputDiv.append('text').text(`${userLoggedIn.displayName}:`);
   inputDiv.append('textarea').attr('id', 'text-area-id').attr('placeholder', 'Comment Here');
-  const submit = inputDiv.append('button').text('Add').classed('btn btn-secondary', true);
+  const submit = inputDiv.append('button').text('Add Comment').classed('btn btn-secondary', true);
 
   submit.on('click', (event) => {
     event.stopPropagation();// user, currentTime, mark, tag, coords, replyTo, quote
@@ -310,20 +310,23 @@ export function renderStructureKnowns(topCommentWrap) {
 }
 
 export function defaultTemplate(div, tagArray) {
-  const { currentTime } = document.getElementById('video');
+  let time = formatTime(document.getElementById('video').currentTime);
 
   const inputDiv = div.select('.template-wrap');// .append('div');//.classed('text-input', true);
   // inputDiv.append('text').text(`${user.displayName}@ ${formatVideoTime(currentTime)} :`);
 
   const templatehtml = `
-    <br>
-    <p>Add a comment here - comments can be suggestions for the tool, critiques of the animation, questions on biology, etc.</p>
-    <p>Please include as any tags that describe the comment you are making</p> 
+    <h6>Add a comment @ ${time.minutes} : ${time.seconds}</h6>
+    <p>Add a comment to the video. If this is about a structure, please add the structure name as a tag.</p> 
     `;
 
   inputDiv.append('div').classed('temp-text', true).html(templatehtml);
 
   inputDiv.append('textarea').attr('id', 'text-area-id').attr('placeholder', 'Comment Here');
+
+  let tagLabel = inputDiv.append('div').classed('tag-label', true);
+  tagLabel.append('span').append('h6').text('Add tags to your comment');
+  tagLabel.append('span').append('text').text('This helps others find and read your comments')
 
   addTagFunctionality(inputDiv, tagArray);
 }
@@ -370,6 +373,10 @@ export function addTagFunctionality(inputDiv, tagArray) {
 }
 
 export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
+  let labelDiv = div.append('div').classed('mark-input-label', true);
+
+  labelDiv.append('span').append('h6').text('Mark video for comment');
+  labelDiv.append('span').append('text').text('You can mark the video to suppliment your annotation. Select which kind of mark you want to make and mouseover the video');
   const form = div.append('form').classed(className, true);
   const labelOne = form.append('label').classed('container', true);
   labelOne.text(t1Ob.label);
