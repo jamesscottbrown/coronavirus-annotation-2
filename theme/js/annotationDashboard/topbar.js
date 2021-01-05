@@ -83,7 +83,7 @@ export function addCommentButton() {
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {
-      clearRightSidebar();
+      //clearRightSidebar();
       d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
       userLogin();
     });

@@ -32,6 +32,11 @@
     text-align: center;
 }
 
+#sign-in-wrap{
+  width:100%;
+  // padding-right:30px;
+}
+
 div{
    // outline: black solid 1px;
 }
@@ -115,7 +120,7 @@ div{
   left:55px;
   top:6px;
   font-size:11px;
-  width: 130px;
+  width: 150px;
 }
 
 #main{
@@ -361,6 +366,10 @@ margin-top:10px;
   flex-basis: 80%;
 }
 
+.doodles{
+  opacity:.5;
+}
+
 #time-update{
   text-align: center;
   width:100%;
@@ -381,7 +390,7 @@ margin-top:10px;
   display: inline;
   position:relative;
   float:right;
-  width:300px;
+  width:330px;
   height:50px;
 }
 
@@ -813,4 +822,12 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.pushed circle{
+  fill:#d54444;
+  fill-opacity: .7;
+  stroke: black;
+  stroke-opacity: 1;
+  stroke-width: .5px;
 }

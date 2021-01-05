@@ -304,7 +304,7 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
 
   circ.attr('cx', (d) => 0);
   circ.attr('cy', (d) => 0);
-  circ.attr('fill', 'red');
+  //circ.attr('fill', 'red');
 
   circ.on('mouseover', (d) => {
     const wrap = d3.select('#right-sidebar').select('#comment-wrap');
