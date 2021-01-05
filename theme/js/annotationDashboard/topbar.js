@@ -60,20 +60,29 @@ export function goBackButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
   button.text('Go back');
   button.on('click', (event) => {
-    console.log('button clicked', structureSelected);
-    if (structureSelected.structure != null && d3.select('#right-sidebar').select('.top').select('.found-info').empty()) {
-      d3.select('#right-sidebar').select('.top').selectAll('*').remove();
-      renderStructureKnowns(d3.select('#comment-wrap').select('.top'));
-    } else {
-      structureSelectedToggle(null);
-      clearRightSidebar();
-      renderCommentDisplayStructure();
-      updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
-      updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
-      addCommentButton();
-      clearCanvas();
-      d3.select('.tooltip').style('opacity', 0);
+    if(userLoggedIn.loggedInBool === false){
+      console.log('button clicked', structureSelected);
+     d3.select('#right-sidebar').select('#sign-in-wrap').selectAll('*').remove();
+     addCommentButton();
+    
+    }else{
+
+      if (structureSelected.structure != null && d3.select('#right-sidebar').select('.top').select('.found-info').empty()) {
+        d3.select('#right-sidebar').select('.top').selectAll('*').remove();
+        renderStructureKnowns(d3.select('#comment-wrap').select('.top'));
+      } else {
+        structureSelectedToggle(null);
+        clearRightSidebar();
+        renderCommentDisplayStructure();
+        updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
+        updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+        addCommentButton();
+        clearCanvas();
+        d3.select('.tooltip').style('opacity', 0);
+      }
+      
     }
+   
   });
 }
 
@@ -86,6 +95,7 @@ export function addCommentButton() {
       //clearRightSidebar();
       d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
       userLogin();
+      goBackButton();
     });
   } else {
     button.text('Add Comment');

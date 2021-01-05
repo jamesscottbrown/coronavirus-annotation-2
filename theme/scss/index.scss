@@ -70,26 +70,22 @@ div{
 #top-bar #user{
   width:25%;
   display:inline;
-
-
 }
 
 #top-bar #user .user_name{
   font-size: 12px;
   margin-right:10px;
-
 }
 
 #toggle-sort-wrap{
   display:inline-block;
   //width:300px;
   position:absolute;
-  left:3%;
+  left:8%;
   top:10px;
 }
 #toggle-sort-ref-wrap{
   display:inline-block;
-  //width:300px;
   position:absolute;
   left:20%;
   top:10px;
@@ -102,17 +98,28 @@ div{
 
 #toggle-show-wrap{
   display:inline-block;
-  width:420px;
+  width:360px;
   position:absolute;
   left:50%;
   top:10px;
+  border:rgb(209, 208, 208) solid 1px;
+  border-radius:25px;
+  padding:3px;
 }
 
-#toggle-show-wrap div, #toggle-sort-wrap div, #toggle-sort-ref-wrap di{
-  margin-left:90px;
-  display: inline;
- // text-align: end;
-  width:190px;
+.toggle-show-title{
+  display:inline-block;
+  width: 120px;
+  position: absolute;
+  left:44%;
+  top:15px;
+  font-size: 11px;
+  color:#6e6a6a;
+}
+
+#toggle-show-wrap div, #toggle-sort-wrap div, #toggle-sort-ref-wrap div{
+  display: inline-block;
+  width:160px;
 }
 
 #toggle-show-wrap .label, #toggle-sort-wrap .label, #toggle-sort-ref-wrap .label{
@@ -120,7 +127,7 @@ div{
   left:55px;
   top:6px;
   font-size:11px;
-  width: 150px;
+  width:150px;
 }
 
 #main{
@@ -765,6 +772,7 @@ toggle
   display: inline-block;
   width: 50px;
   height: 25px;
+  margin-left: 20px;
   // width: 60px;
   // height: 34px;
 }
@@ -827,7 +835,7 @@ input:checked + .slider:before {
 .pushed circle{
   fill:#d54444;
   fill-opacity: .7;
-  stroke: black;
+  stroke: #fff;
   stroke-opacity: 1;
   stroke-width: .5px;
 }
