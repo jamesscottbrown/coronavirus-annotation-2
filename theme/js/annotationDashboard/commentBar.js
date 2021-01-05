@@ -16,8 +16,17 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
+
+
  
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
+  let header = wrap.selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
+  header.text(d=> d);
+
+  // let topBox = d3.select('#right-sidebar').select('#comment-wrap').select('.top')
+  // topBox.selectAll('*').remove();
+  // topBox.append('h7').text('Comments:');
+
   // clearRightSidebar();
   // renderCommentDisplayStructure();
 
@@ -281,9 +290,9 @@ export function renderStructureKnowns(topCommentWrap) {
 
   topCommentWrap.append('div').classed('found-info', true)
     .html(`<h4>${structureSelected.structure}</h4>
-    <span class="badge badge-pill badge-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
-    <span class="badge badge-pill badge-danger">${questions}</span> Questions. <br>
-    <span class="badge badge-pill badge-primary">${refs}</span> Refs. <br>
+    <span class="badge badge-pill bg-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
+    <span class="badge badge-pill bg-danger">${questions}</span> Questions. <br>
+    <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
     <br>
     `);
 

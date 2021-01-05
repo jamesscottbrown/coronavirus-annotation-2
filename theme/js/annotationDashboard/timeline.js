@@ -21,7 +21,6 @@ function structureTooltip(coord, d, type) {
     
     let blurb = d.text_description.split(' ').filter((f, i)=> i < 8);
     function addS(a, stri){
-  
       return a + " " + stri;
     }
     let stringB = blurb.reduce(addS, "")
@@ -43,7 +42,7 @@ export function renderTimeline(commentData) {
 
   const timelineWrap = div.select('.timeline-wrap');
   timelineWrap.style('position', 'absolute');
-  timelineWrap.style('top', `${560 + 60}px`);
+  timelineWrap.style('top', `${560 + 50}px`);
   const timeSVG = timelineWrap.append('svg');
   timeSVG.style('width', `${970}px`);
   const comments = Object.entries(commentData.comments).map((m) => {
@@ -65,8 +64,9 @@ export function renderTimeline(commentData) {
   const binScale = d3.scaleLinear().range([0, 1]).domain([0, d3.max(commentBins.map((m) => m.data.length))]);
 
   const commentGroup = timeSVG.append('g').classed('comm-group', true);
+  commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 10)');
   const comBins = commentGroup.selectAll('g.comm-bin').data(commentBins).join('g').classed('comm-bin', true);
-  comBins.attr('transform', (d, i) => `translate(${xScale((i * 5))} 2)`);
+  comBins.attr('transform', (d, i) => `translate(${xScale((i * 5))} 15)`);
   const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
   commentBinRect.attr('height', 10).attr('width', (950 / commentBins.length));
 
@@ -77,8 +77,12 @@ export function renderTimeline(commentData) {
 
   commentBins.map((m, i) => m.data.length);
 
+  timeSVG.append('text').text('Annotations').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 38)');
+
   const annoGroup = timeSVG.append('g').classed('anno-group', true);
-  annoGroup.attr('transform', 'translate(0, 30)');
+  annoGroup.attr('transform', 'translate(0, 42)');
+  
+
   const annos = annoGroup.selectAll('g.anno').data(annotationData[annotationData.length - 1]).join('g').classed('anno', true);
   const rects = annos.selectAll('rect').data((d) => [d]).join('rect');
   rects.attr('height', 6).attr('width', (d) => (xScale(d.seconds[1]) - xScale(d.seconds[0])));

@@ -66,7 +66,7 @@ export function goBackButton() {
       renderStructureKnowns(d3.select('#comment-wrap').select('.top'));
     } else {
       structureSelectedToggle(null);
-      // clearRightSidebar();
+       clearRightSidebar();
       renderCommentDisplayStructure();
       updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
