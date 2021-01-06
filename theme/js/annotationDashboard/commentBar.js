@@ -134,7 +134,7 @@ function downvoteIcon(div, db) {
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
-  console.log('is this fireing in comment update??', wrap, nestedData)
+ 
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
@@ -228,7 +228,7 @@ export function drawCommentBoxes(nestedData, wrap) {
           || event.target.tagName.toLowerCase() === 'button'
           || event.target.tagName.toLowerCase() === 'a'
           || event.target.tagName.toLowerCase() === 'svg') {
-      console.log('not clicked on div');
+     
     } else {
       commentClicked(event, d);
     }
@@ -698,7 +698,7 @@ export function formatToComment(div, startingTags) {
 
     event.stopPropagation();
 
-    console.log('button clicked');
+    //console.log('button clicked');
    
     const user = userLoggedIn;
 
@@ -719,7 +719,7 @@ export function formatToComment(div, startingTags) {
 
         if(structureSelected.selected){
 
-          console.log(structureSelected);
+         // console.log(structureSelected);
           structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
           //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
@@ -738,7 +738,7 @@ export function formatToComment(div, startingTags) {
 
         if(structureSelected.selected){
 
-          console.log(structureSelected);
+     
           structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
           //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
@@ -757,7 +757,6 @@ export function formatToComment(div, startingTags) {
 
         if(structureSelected.selected){
 
-          console.log(structureSelected);
           structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
           //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);

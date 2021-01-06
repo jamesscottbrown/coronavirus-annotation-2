@@ -126,11 +126,8 @@ export function togglePlay() {
 }
 
 export async function mouseMoveVideo(coord, video) {
-  if (video.playing) {
-      console.log('video playing');
-  } else if (structureSelected.selected === true || video.currentTime >= endDrawTime) {
-      console.log('struct selected');
-  } else {
+
+    if(!video.playing && (structureSelected.selected === false || video.currentTime <= endDrawTime)){
     const snip = getCoordColor(coord);
 
     if (snip != currentColorCodes[currentColorCodes.length - 1] && !video.playing && snip != 'black' && snip != 'unknown') {
@@ -243,7 +240,7 @@ export function updateWithSelectedStructure(snip, commentData){
   updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
 
   annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
-  console.log('is this working', topCommentWrap)
+
   renderStructureKnowns(topCommentWrap);
 
   const stackedData = structureSelected.annotations.filter((f) => f.has_unkown == 'TRUE').concat(structureSelected.annotations.filter((f) => f.has_unkown == 'FALSE'));
@@ -269,8 +266,6 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
   const nestReplies = formatCommentData({ ...commentData }, null);
-
-  console.log(structureSelected);
 
   let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
 

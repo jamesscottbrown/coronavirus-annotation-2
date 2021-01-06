@@ -37,7 +37,9 @@ export const colorDictionary = {
   yellow: { code: [255, 255, 0], structure: ['Membrane Protein'], other_names:['Membrane Protein','membrane'] },
   aqua: { code: [0, 255, 255], structure: ['Furin'], other_names:['Furin'] },
   teal: { code: [10, 160, 140], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
-  'light gray': { code: [200, 200, 200], structure: ['Virus Membrane'], other_names:['Virus Membrane'] },
+  'light gray': { code: [200, 200, 200], structure: ['Sugars'], other_names:['Sugars'] },
+  white: { code: [250, 250, 250], structure: ['Virus Membrane'], other_names:['Virus Membrane']},
+  'dark gray': { code: [200, 200, 200], structure: ['Nucleocapsid Protein'], other_names:['Nucleocapsid Protein', 'n protein'] },
   unknown: { code: [200, 200, 200], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
 };
 
@@ -105,45 +107,34 @@ export function drawFrameOnPause(video) {
 }
 
 export function colorChecker(code){
-   // console.log('code',code)
-    // if((code[0] + code[1] + code[2]) === 0){
-    //   return 'black';
-    // }else if(code[0]<14 && code[1] > 142 && code[1] < 199 && code[2] > 142 && code[2] < 147){
-    //    return 'teal';
-    // }else if(code[2] > 70 && code[0] < 100 && code[2] > code[0] && code[2] > code[1]){
-    //   return 'blue';
-    // }else if(code[2] > 70 && code[0] > 100 && code[2] > code[0] && code[2] > code[1]){
-    //   return 'purple';
-    // }else if(code[2] < 70 && code[0] > 200 && code[2] < code[0] && code[1] < code[0] && code[1] < 80){
-    //   return 'red';
-    // }else if(code[2] < 70 && code[0] > 50 && code[2] < code[0] && code[1] < code[0] && code[1] > 80){
-    //   return 'orange';
-    // }else if(code[1] > code[2] && code[1] > code[0] && code[2] > 49 && code[2] > 110 && code[0] < 120 && code[1] > 200){
-    //   return 'mint';
-  
 
     if((code[0] + code[1] + code[2]) === 0){
       return 'black';
-    }if(code[0] < code[1] && code[1] > 196 && code[2] < code[1]){
+    }else if(code[0] < code[1] && code[1] > 196 && code[2] < code[1]){
       return 'green';
-    }if(code[0] > 250 && code[1] > 200 && code[2] < 100){
+    }else if(code[0] > 250 && code[1] > 200 && code[2] < 100){
         return 'yellow';
-    }if(code[0] > 240 && code[1] > 240  && code[2] > 240){
+    }else if(code[0] > 250 && code[1] > 250 && code[2] > 250){
       return 'white';
-    }if(code[0] < 250 && code[0] > 200 && code[1] < 250 && code[1] > 200 && code[2] < 250 &&  code[2] > 200){
+    }else if((code[0] < 160 && code[0] > 50 && (Math.abs(code[0] - code[1]) < 5) ) && code[1] < 160 && code[2] < 160){
+      return 'dark gray';
+    }else if(code[0] < 250 && code[0] > 185 && code[1] < 250 && code[1] > 185 && code[2] < 250 &&  code[2] > 185){
       return 'light gray';
-    }if(code[2] < 70 && code[0] > 200 && code[2] < code[0] && code[1] < code[0] && code[1] < 80){
+    }else if(code[2] < 70 && code[0] > 200 && code[2] < code[0] && code[1] < code[0] && code[1] < 80){
         return 'red';
-    }if(code[0] > 250 && code[1] < 10 && code[2] > 250){
+    }else if(code[0] > 250 && code[1] < 10 && code[2] > 250){
       return 'magenta';
-    }if(code[2] < 70 && code[0] > 50 && code[2] < code[0] && code[1] < code[0] && code[1] > 80){
+    }else if(code[2] < 70 && code[0] > 50 && code[2] < code[0] && code[1] < code[0] && code[1] > 80){
       return 'orange';
-    }if(code[0] < 10 && code[1] > 250 && code[2] > 250){
+    }else if(code[0] < 10 && code[1] > 250 && code[2] > 250){
       return 'aqua';
-    }if(code[2] > 70 && code[0] < 100 && code[2] > code[0] && code[2] > code[1]){
+    }else if(code[2] > 70 && code[0] < 100 && code[2] > code[0] && code[2] > code[1]){
       return 'blue';
-    }
+    }else{
+      //console.log('unknown', code);
       return "unknown";
+    }
+      
     
   
   }
@@ -156,6 +147,8 @@ export function parseArray(hoverColor) {
     const end = i + 4;
     const snip = newData.data.slice(i, end);
     const color = colorChecker(snip);
+
+   // console.log('in parse array',color)
 
     if (color != hoverColor) {
       newData.data[i] = 255;
