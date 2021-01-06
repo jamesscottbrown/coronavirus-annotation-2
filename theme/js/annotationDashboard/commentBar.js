@@ -5,8 +5,8 @@ import { annotationData } from '..';
 import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
-import { colorDictionary, structureSelected, doodleKeeper } from './imageDataUtil';
-import { commentClicked } from './video';
+import { colorDictionary, structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
+import { commentClicked, updateWithSelectedStructure } from './video';
 
 require('firebase/auth');
 require('firebase/database');
@@ -720,12 +720,12 @@ export function formatToComment(div, startingTags) {
         if(structureSelected.selected){
 
           console.log(structureSelected);
+          structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
+          //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
 
         }else{
-
           checkDatabase([updateCommentSidebar]);
-
         }
 
       } else if (form.node().value === 't3') {
@@ -735,6 +735,18 @@ export function formatToComment(div, startingTags) {
         const canvas = d3.select('canvas').node();
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
+
+        if(structureSelected.selected){
+
+          console.log(structureSelected);
+          structureSelectedToggle(null, null, null);
+          checkDatabase([updateCommentSidebar]);
+          //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
+
+        }else{
+          checkDatabase([updateCommentSidebar]);
+        }
+
       } else {
         const coords = null; // user, currentTime, mark, tag, coords, replyTo, quote
         const dataPush = formatComment2Send(user, currentTime, 'none', tags.data().toString(), coords, null, null);
@@ -742,6 +754,17 @@ export function formatToComment(div, startingTags) {
         refCom.push(dataPush);
         checkDatabase([updateCommentSidebar]);
         d3.select('#add-mark').remove();
+
+        if(structureSelected.selected){
+
+          console.log(structureSelected);
+          structureSelectedToggle(null, null, null);
+          checkDatabase([updateCommentSidebar]);
+          //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
+
+        }else{
+          checkDatabase([updateCommentSidebar]);
+        }
       }
 
       d3.select('.add-comment').select('button').text('Add Comment');

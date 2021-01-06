@@ -24,7 +24,7 @@ function structureTooltip(coord, d, type) {
       return a + " " + stri;
     }
     let stringB = blurb.reduce(addS, "")
-    console.log('blurb', blurb, stringB);
+ 
     d3.select('#timeline-tooltip')
       .style('position', 'absolute')
       .style('opacity', 1)

@@ -86,7 +86,7 @@ export async function updateAnnotationSidebar(data, stackedData) {
   const annoWrap = d3.select('#left-sidebar');
   clearAnnotationSidebar();
 
-  console.log('stacleked data',stackedData)
+ 
   let header = annoWrap.select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
   header.text(d=> d);
 

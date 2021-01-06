@@ -175,7 +175,6 @@ export async function mouseClickVideo(coord, video) {
       updateCommentSidebar(commentData);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
 
-    
       let tool = d3.select('.tooltip');
       tool.style('opacity', 0);
       tool.style('top', '-100px');
@@ -195,26 +194,20 @@ export async function mouseClickVideo(coord, video) {
   }
 }
 
-function updateWithSelectedStructure(snip, commentData){
+export function updateWithSelectedStructure(snip, commentData){
   
   parseArray(snip);
 
   const nestReplies = formatCommentData({ ...commentData }, null);
-
   let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
 
   structureSelected.comments = nestReplies.filter((f) => {
-
     if(snip  === 'orange'){
-
       let reply = f.replyKeeper.filter(r=> {
         return r.comment.toUpperCase().includes(structure.toUpperCase());
       });
-
       return f.comment.toUpperCase().includes(structure.toUpperCase()) || reply.length > 0;
-
     }else{
-
       let tags = f.tags.split(',').filter(m=> {
         return colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase()) > -1;
       });
@@ -223,13 +216,9 @@ function updateWithSelectedStructure(snip, commentData){
           let rTest = colorDictionary[snip].other_names.filter(n=> r.comment.toUpperCase().includes(n.toUpperCase()));
           return rTest.length > 0;
         });
-
       return test.length > 0 || reply.length > 0 || tags.length > 0;
-
     }
-   
-  }
-  );
+  });
 
   const structureAnnotations = annotationData[annotationData.length - 1].filter((f) => {
     let structsAnno = f.associated_structures.split(', ').filter((m) => {
@@ -252,8 +241,9 @@ function updateWithSelectedStructure(snip, commentData){
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
   updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
-  annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
 
+  annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
+  console.log('is this working', topCommentWrap)
   renderStructureKnowns(topCommentWrap);
 
   const stackedData = structureSelected.annotations.filter((f) => f.has_unkown == 'TRUE').concat(structureSelected.annotations.filter((f) => f.has_unkown == 'FALSE'));
@@ -275,8 +265,7 @@ function updateWithSelectedStructure(snip, commentData){
 
   return structureAnnotations;
 }
-
-function structureTooltip(structureData, coord, snip, hoverBool) {
+export function structureTooltip(structureData, coord, snip, hoverBool) {
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
   const nestReplies = formatCommentData({ ...commentData }, null);
@@ -303,7 +292,7 @@ function structureTooltip(structureData, coord, snip, hoverBool) {
     `)
       .style('left', `${coord[0]+5}px`)
       .style('top', `${coord[1]+5}px`);
-      
+
   } else {
     d3.select('.tooltip')
       .style('position', 'absolute')
@@ -314,7 +303,6 @@ function structureTooltip(structureData, coord, snip, hoverBool) {
       .style('top', `${coord[1]}px`);
   }
 }
-
 function renderPushpinMarks(commentsInTimeframe, svg) {
   const pushes = commentsInTimeframe.filter((f) => f.commentMark === 'push');
   const pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
@@ -370,6 +358,7 @@ async function renderDoodles(commentsInTimeframe, div) {
 
   const images = div.selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
   images.attr('src', (d) => d);
+
 }
 
 export function videoUpdates(data, annoType) {
