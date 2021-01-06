@@ -76,6 +76,9 @@ function updateTimeElapsed() {
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
   d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
+  if(!d3.select('.template-wrap').empty()){
+    d3.select('.template-wrap').select('h6').text(`Add a comment @ ${time.minutes} : ${time.seconds}`);
+  }
 }
 function progressClicked(mouse) {
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));

@@ -684,7 +684,8 @@ export function formatToComment(div, startingTags) {
   const form = radioBlob(div, t1Ob, t2Ob, t3Ob, 'media-tabber');
   noMarkFormat();
 
-  const submit = div.append('button').attr('id', 'comment-submit-button').text('Add').classed('btn btn-secondary', true);
+  const submitDiv = div.append('div').classed('button-wrap', true);
+  let submit = submitDiv.append('button').attr('id', 'comment-submit-button').text('Add Comment').classed('btn btn-secondary', true);
   const commentType = 'comments';
 
   submit.on('click', (event) => {
