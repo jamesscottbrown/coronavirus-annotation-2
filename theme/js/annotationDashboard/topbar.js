@@ -43,6 +43,26 @@ export function renderIssueButton(wrap) {
   bugLink.attr('href', 'https://github.com/jrogerthat/coronavirus_flask/issues');
   bugLink.attr('target', '_blank');
   bugLink.append('span').classed('fas fa-bug', true);
+
+  bugLink.on('mouseover', (event)=>{
+    console.log(event.target);
+    let tool = d3.select('#general-tooltip');
+    tool.style('opacity', 1);
+    tool.style('top', '5px');
+    tool.style('left', '30px');
+    tool.style('background', '#eaeaea');
+    tool.style('font-size', '12px');
+    tool.style('border-radius', '5px');
+    tool.style('padding', '5px');
+    tool.style('width', '100px')
+    tool.html(`<span>click on me to report bugs in the tool</span>`)
+  });
+  bugLink.on('mouseout', ()=> {
+    let tool = d3.select('#general-tooltip');
+    tool.style('opacity', 0);
+    tool.style('top', '-150px');
+    tool.style('left', '-100px');
+  })
 }
 
 export function renderUser(userData) {

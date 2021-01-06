@@ -174,6 +174,7 @@ export async function mouseClickVideo(coord, video) {
       d3.select('.tooltip')
         .style('position', 'absolute')
         .style('opacity', 0);
+        
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE
