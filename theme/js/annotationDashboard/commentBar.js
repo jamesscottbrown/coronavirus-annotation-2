@@ -376,7 +376,8 @@ export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
   let labelDiv = div.append('div').classed('mark-input-label', true);
 
   labelDiv.append('span').append('h6').text('Mark video for comment');
-  labelDiv.append('span').append('text').text('You can mark the video to suppliment your annotation. Select which kind of mark you want to make and mouseover the video');
+  labelDiv.append('span').append('text')
+  .text('Mark the video to better explain your comment. Select what kind of mark and mouseover the video to add it.');
   const form = div.append('form').classed(className, true);
   const labelOne = form.append('label').classed('container', true);
   labelOne.text(t1Ob.label);
