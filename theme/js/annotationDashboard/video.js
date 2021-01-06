@@ -167,7 +167,7 @@ export async function mouseClickVideo(coord, video) {
       addCommentButton();
       clearRightSidebar();
       renderCommentDisplayStructure();
-      d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap').append('h7').text('Associated Comments: ');
+      
       updateCommentSidebar(commentData);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
 
