@@ -223,7 +223,7 @@ function updateWithSelectedStructure(snip, commentData){
           let rTest = colorDictionary[snip].other_names.filter(n=> r.comment.toUpperCase().includes(n.toUpperCase()));
           return rTest.length > 0;
         });
-        
+
       return test.length > 0 || reply.length > 0 || tags.length > 0;
 
     }
@@ -301,8 +301,9 @@ function structureTooltip(structureData, coord, snip, hoverBool) {
     <br>
     <h7>Click Structure for more Info</h7>
     `)
-      .style('left', `${coord[0]}px`)
-      .style('top', `${coord[1]}px`);
+      .style('left', `${coord[0]+5}px`)
+      .style('top', `${coord[1]+5}px`);
+      
   } else {
     d3.select('.tooltip')
       .style('position', 'absolute')
