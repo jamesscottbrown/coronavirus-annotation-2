@@ -138,11 +138,15 @@ export async function mouseMoveVideo(coord, video) {
       parseArray(snip);
       const structFromDict = (snip === 'orange' && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
       const structureData = annotationData[annotationData.length - 1].filter((f) => {
-        //console.log('f in mouseover', f);
         return f.associated_structures.split(', ').map((m) => m.toUpperCase()).indexOf(structFromDict) > -1});
       structureTooltip(structureData, coord, snip, true);
+
     } else if (snip === 'black') {
-      d3.select('.tooltip').style('opacity', 0);
+
+      let tool = d3.select('.tooltip');
+      tool.style('opacity', 0);
+      tool.style('top', '-100px');
+      tool.style('left', '-100px');
 
       makeNewImageData();
     }
@@ -171,10 +175,14 @@ export async function mouseClickVideo(coord, video) {
       updateCommentSidebar(commentData);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
 
-      d3.select('.tooltip')
-        .style('position', 'absolute')
-        .style('opacity', 0);
-        
+      // d3.select('.tooltip')
+      //   .style('position', 'absolute')
+      //   .style('opacity', 0);
+        let tool = d3.select('.tooltip');
+        tool.style('opacity', 0);
+        tool.style('top', '-100px');
+        tool.style('left', '-100px');
+
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE
