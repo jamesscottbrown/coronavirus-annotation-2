@@ -5,17 +5,23 @@ export const structureSelected = {
   structure: null,
   annotations: null,
   comments: null,
+  coord: null,
+  color: null
 };
 
-export function structureSelectedToggle(datum) {
+export function structureSelectedToggle(datum, coords, color) {
   structureSelected.structure = datum;
 
   if (datum === null) {
     structureSelected.annotations = null;
     structureSelected.comments = null;
     structureSelected.selected = false;
+    structureSelected.coord = null;
+    structureSelected.color = null;
   } else {
     structureSelected.selected = true;
+    structureSelected.coord = coords;
+    structureSelected.color = color;
   }
 }
 

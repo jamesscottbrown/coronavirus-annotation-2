@@ -296,6 +296,10 @@ export function renderStructureKnowns(topCommentWrap) {
     infoButton.text('Add comment for this structure')
       .on('click', (event, d) => {
         topCommentWrap.selectAll('*').remove();
+        let tool = d3.select('.tooltip');
+        tool.style('opacity', 0);
+        tool.style('top', '-100px');
+        tool.style('left', '-100px');
         const structArray = [structureSelected.structure.toString()];
         formatToComment(topCommentWrap, structArray);
       });
@@ -378,6 +382,7 @@ export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
   labelDiv.append('span').append('h6').text('Mark video for comment');
   labelDiv.append('span').append('text')
   .text('Mark the video to better explain your comment. Select what kind of mark and mouseover the video to add it.');
+
   const form = div.append('form').classed(className, true);
   const labelOne = form.append('label').classed('container', true);
   labelOne.text(t1Ob.label);
@@ -709,8 +714,20 @@ export function formatToComment(div, startingTags) {
         const dataPush = formatComment2Send(user, currentTime, 'push', tags.data().toString(), coords, null, null);
         const refCom = firebase.database().ref(commentType);
         refCom.push(dataPush);
-        checkDatabase([updateCommentSidebar]);
+
         d3.select('#add-mark').remove();
+
+        if(structureSelected.selected){
+
+          console.log(structureSelected);
+          checkDatabase([updateCommentSidebar]);
+
+        }else{
+
+          checkDatabase([updateCommentSidebar]);
+
+        }
+
       } else if (form.node().value === 't3') {
         doodleSubmit(commentType, user, tags, currentTime);
         d3.select('#add-mark').remove();

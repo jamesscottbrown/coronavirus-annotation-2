@@ -175,110 +175,118 @@ export async function mouseClickVideo(coord, video) {
       updateCommentSidebar(commentData);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
 
-      // d3.select('.tooltip')
-      //   .style('position', 'absolute')
-      //   .style('opacity', 0);
-        let tool = d3.select('.tooltip');
-        tool.style('opacity', 0);
-        tool.style('top', '-100px');
-        tool.style('left', '-100px');
+    
+      let tool = d3.select('.tooltip');
+      tool.style('opacity', 0);
+      tool.style('top', '-100px');
+      tool.style('left', '-100px');
 
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE
        */
-      structureSelectedToggle(colorDictionary[snip].structure[0]);
-      parseArray(snip);
-
-      console.log('snip', snip);
-
-      const nestReplies = formatCommentData({ ...commentData }, null);
-
-      structureSelected.comments = nestReplies.filter((f) => {
-        if (snip === 'orange') { //it  could be furin or rna - check time
-          if(video.currentTime < 15){
-            let struct = colorDictionary[snip].structure[0].toUpperCase();
-            let reply = f.replyKeeper.filter(r=> {
-              r.comment.toUpperCase().includes(struct);
-              return rTest.length > 0;
-            });
-            
-            return f.comment.toUpperCase().includes(colorDictionary).includes(struct) || reply.length > 0;
-          }else{
-            let struct = colorDictionary[snip].structure[1].toUpperCase();
-            return f.comment.toUpperCase().includes(colorDictionary).includes(struct);
-          }
-        }else{
-          let tags = f.tags.split(',').filter(m=> {
-            return colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase()) > -1;
-          });
-          let test = colorDictionary[snip].other_names.filter(n=> f.comment.toUpperCase().includes(n.toUpperCase()));
-            let reply = f.replyKeeper.filter(r=> {
-              let rTest = colorDictionary[snip].other_names.filter(n=> r.comment.toUpperCase().includes(n.toUpperCase()));
-              return rTest.length > 0;
-            });
-          return test.length > 0 || reply.length > 0 || tags.length > 0;
-        }
+    
+      let structure = (snip === 'orange' && video.currentTime > 16) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
        
-      });
-
-      const structureAnnotations = annotationData[annotationData.length - 1].filter((f) => {
-        let structsAnno = f.associated_structures.split(', ').filter((m) => {
-          let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
-          return otherNames > -1;
-        });
-        return structsAnno.length > 0;
-      });
-
-      structureSelected.annotations = structureAnnotations.filter((f) => f.has_unkown === 'TRUE').concat(structureAnnotations.filter((f) => f.has_unkown === 'FALSE'));
-
+      structureSelectedToggle(structure, coord, snip);
+      let structureAnnotations = updateWithSelectedStructure(snip, commentData);
       structureTooltip(structureAnnotations, coord, snip, false);
-      const annoWrap = d3.select('#left-sidebar');
-
-      goBackButton();
-      // clearRightSidebar();
-      renderCommentDisplayStructure();
-
-      const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
-      const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
-      const topCommentWrap = d3.select('#comment-wrap').select('.top');
-      // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
-      updateCommentSidebar(commentData, structureSelected.comments);
-      updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
-      annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
-
-      renderStructureKnowns(topCommentWrap);
-
-      const stackedData = structureSelected.annotations.filter((f) => f.has_unkown == 'TRUE').concat(structureSelected.annotations.filter((f) => f.has_unkown == 'FALSE'));
-      const annos = topCommentWrap.selectAll('.anno').data(stackedData).join('div').classed('anno', true);
-
-      const unknowns = annos.filter((f) => f.has_unkown === 'TRUE');
-      unknowns.classed('unknown', true);
-
-      selectedComWrap.append('h7').text('Associated Comments: ');
-      genComWrap.append('h7').text('Comments: ');
-
-      topCommentWrap.node().scrollIntoView();
-      annoWrap.select('.top').node().scrollIntoView();
-
-      // MIGHT BE REPEATING WORK - ALREADY HAVE UPDATE COMMENT SIDEBAR ABOVE
-      drawCommentBoxes(structureSelected.comments, selectedComWrap);
-      drawCommentBoxes(nestReplies, genComWrap);
-      genComWrap.selectAll('.memo').style('opacity', 0.3);
     }
   }
 }
+
+function updateWithSelectedStructure(snip, commentData){
+  
+  parseArray(snip);
+
+  const nestReplies = formatCommentData({ ...commentData }, null);
+
+  let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
+
+  structureSelected.comments = nestReplies.filter((f) => {
+
+    if(snip  === 'orange'){
+
+      let reply = f.replyKeeper.filter(r=> {
+        return r.comment.toUpperCase().includes(structure.toUpperCase());
+      });
+
+      return f.comment.toUpperCase().includes(structure.toUpperCase()) || reply.length > 0;
+
+    }else{
+
+      let tags = f.tags.split(',').filter(m=> {
+        return colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase()) > -1;
+      });
+      let test = colorDictionary[snip].other_names.filter(n=> f.comment.toUpperCase().includes(n.toUpperCase()));
+        let reply = f.replyKeeper.filter(r=> {
+          let rTest = colorDictionary[snip].other_names.filter(n=> r.comment.toUpperCase().includes(n.toUpperCase()));
+          return rTest.length > 0;
+        });
+        
+      return test.length > 0 || reply.length > 0 || tags.length > 0;
+
+    }
+   
+  }
+  );
+
+  const structureAnnotations = annotationData[annotationData.length - 1].filter((f) => {
+    let structsAnno = f.associated_structures.split(', ').filter((m) => {
+      let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
+      return otherNames > -1;
+    });
+    return structsAnno.length > 0;
+  });
+
+  structureSelected.annotations = structureAnnotations.filter((f) => f.has_unkown === 'TRUE').concat(structureAnnotations.filter((f) => f.has_unkown === 'FALSE'));
+
+  const annoWrap = d3.select('#left-sidebar');
+
+  goBackButton();
+  renderCommentDisplayStructure();
+
+  const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
+  const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
+  const topCommentWrap = d3.select('#comment-wrap').select('.top');
+  // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
+  updateCommentSidebar(commentData, structureSelected.comments);
+  updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
+  annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
+
+  renderStructureKnowns(topCommentWrap);
+
+  const stackedData = structureSelected.annotations.filter((f) => f.has_unkown == 'TRUE').concat(structureSelected.annotations.filter((f) => f.has_unkown == 'FALSE'));
+  const annos = topCommentWrap.selectAll('.anno').data(stackedData).join('div').classed('anno', true);
+
+  const unknowns = annos.filter((f) => f.has_unkown === 'TRUE');
+  unknowns.classed('unknown', true);
+
+  selectedComWrap.append('h7').text('Associated Comments: ');
+  genComWrap.append('h7').text('Comments: ');
+
+  topCommentWrap.node().scrollIntoView();
+  annoWrap.select('.top').node().scrollIntoView();
+
+  // MIGHT BE REPEATING WORK - ALREADY HAVE UPDATE COMMENT SIDEBAR ABOVE
+  drawCommentBoxes(structureSelected.comments, selectedComWrap);
+  drawCommentBoxes(nestReplies, genComWrap);
+  genComWrap.selectAll('.memo').style('opacity', 0.3);
+
+  return structureAnnotations;
+}
+
 function structureTooltip(structureData, coord, snip, hoverBool) {
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
   const nestReplies = formatCommentData({ ...commentData }, null);
 
-  const structureComments = nestReplies.filter((f) => {
-    if (colorDictionary[snip].structure[1]) {
-      return f.comment.toUpperCase().includes(colorDictionary[snip].structure[0].toUpperCase()) || f.comment.toUpperCase().includes(colorDictionary[snip].structure[1].toUpperCase);
-    }
-    return f.comment.includes(colorDictionary[snip].structure[0]);
-  });
+  console.log(structureSelected);
+
+  let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
+
+  const structureComments = nestReplies.filter((f) => f.comment.toUpperCase().includes(structure));
+
   if (hoverBool) {
     const question = structureData.filter((f) => f.has_unkown === 'TRUE').length + structureComments.filter((f) => f.comment.includes('?')).length;
     const refs = structureData.filter((f) => f.url != '').length + structureComments.filter((f) => f.comment.includes('http')).length;
@@ -286,7 +294,7 @@ function structureTooltip(structureData, coord, snip, hoverBool) {
     d3.select('.tooltip')
       .style('position', 'absolute')
       .style('opacity', 1)
-      .html(`<h4>${colorDictionary[snip].structure[0]}</h4>
+      .html(`<h4>${structure}</h4>
     <span class="badge badge-pill bg-dark">${structureData.length}</span> annotations for this structure. <br>
     <span class="badge badge-pill bg-danger">${question}</span> Questions. <br>
     <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
@@ -299,7 +307,7 @@ function structureTooltip(structureData, coord, snip, hoverBool) {
     d3.select('.tooltip')
       .style('position', 'absolute')
       .style('opacity', 1)
-      .html(`<h4>${colorDictionary[snip].structure[0]}</h4>
+      .html(`<h4>${structure}</h4>
     `)
       .style('left', `${coord[0]}px`)
       .style('top', `${coord[1]}px`);
