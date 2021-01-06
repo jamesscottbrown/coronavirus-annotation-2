@@ -47,9 +47,9 @@ const canvas = document.getElementById('canvas');
 function check(pull) {
   if (pull < 10) {
     return `000${pull}`;
-  } if (pull < 100) {
+  }else if (pull < 100) {
     return `00${pull}`;
-  } if (pull < 1000) {
+  }else if (pull < 1000) {
     return `0${pull}`;
   }
   return pull;
