@@ -40,7 +40,7 @@ export function toggleSortRef(event) {
 
 export function renderIssueButton(wrap) {
   const bugLink = wrap.append('a');
-  bugLink.attr('href', 'https://github.com/jrogerthat/coronavirus_flask/issues');
+  bugLink.attr('href', 'https://github.com/visdesignlab/coronavirus-annotation-2/issues');
   bugLink.attr('target', '_blank');
   bugLink.append('span').classed('fas fa-bug', true);
 
