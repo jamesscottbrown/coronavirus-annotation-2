@@ -880,10 +880,10 @@ body{
   margin:50px 300px;
 }
 
-.loader{
+#loader{
   position:absolute;
-  //width:960px;
-  width:100%;
+  width:960px;
+  //width:100%;
   height:5px;
   overflow-x: hidden;
   top:50%;
