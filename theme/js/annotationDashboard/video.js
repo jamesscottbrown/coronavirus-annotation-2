@@ -41,7 +41,7 @@ function initializeVideo() {
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
 }
 
-export function formatVidPlayer(isInteractive) {
+export async function formatVidPlayer(isInteractive) {
   const video = document.getElementById('video');
   video.muted = true;
 
@@ -54,7 +54,9 @@ export function formatVidPlayer(isInteractive) {
   video.oncanplay = function () {
     if (video.readyState >= 3) {
       canPlay = true;
+      d3.select('.slider').remove();
       resizeVideoElements();
+
       drawFrameOnPause(video);
 
       d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
