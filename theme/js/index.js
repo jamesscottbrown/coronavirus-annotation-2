@@ -12,7 +12,6 @@ import { updateAnnotationSidebar } from './annotationDashboard/annotationBar';
 import { formatVidPlayer, videoUpdates } from './annotationDashboard/video';
 import { updateCommentSidebar } from './annotationDashboard/commentBar';
 import { renderTimeline } from './annotationDashboard/timeline';
-import { renderLoader } from './annotationDashboard/progress';
 
 const {
   renderUser, addCommentButton, toggleSort, renderIssueButton,
@@ -27,10 +26,11 @@ dom.watch();
 export const fbConfig = [];
 export const annotationData = [];
 
+
 init();
 
 async function init() {
- // renderLoader(d3.select('#main'));
+  console.log('window',window.innerWidth);
   const config = await d3.json('../static/assets/firebase_data.json');
   fbConfig.push(config[0]);
   const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i) => {

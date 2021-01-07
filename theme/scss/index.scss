@@ -48,6 +48,7 @@ div{
     width: 100vw;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
+    //grid-template-columns: auto 3fr auto;
     position:fixed;
     grid-template-areas: "side1 main side2";
 }
@@ -140,14 +141,14 @@ div{
 }
 
 #left-sidebar{
-    position:fixed;
+  //  position:fixed;
     left:0px;
     top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     grid-area: side1;
     overflow-y: scroll;
-    max-width: 320px;
+   // max-width: 320px;
 }
 
 #left-sidebar .anno-wrap{
@@ -240,16 +241,16 @@ margin-top:10px;
 }
 
 #right-sidebar{
-    position:fixed;
+    //position:fixed;
     right:0px;
     top:60px;
     height:calc(100vh - 70px);
     grid-area: side2;
     overflow-y: scroll;
-    max-width:350px;
+    //max-width:350px;
 }
 #comment-wrap{
-  grid-area: vid;
+  //grid-area: vid;
   margin-top:20px;
 }
 

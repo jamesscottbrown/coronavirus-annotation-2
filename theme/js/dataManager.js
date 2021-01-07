@@ -1,6 +1,9 @@
 export const dataKeeper = [];
 export const currentUser = [];
 
+export const originalDimension = {width: 960, height:540 };
+export const smallerDimension = {width: 720, height: 405 };
+
 export function formatTime(timeInSeconds) {
   const result = new Date(timeInSeconds * 1000).toISOString().substr(11, 8);
 

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
 import { annotationData } from '..';
-import { dataKeeper, formatAnnotationTime, formatTime } from '../dataManager';
+import { dataKeeper, formatAnnotationTime, formatTime, originalDimension } from '../dataManager';
 import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
 import {
   clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
@@ -301,9 +301,10 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
   }
 }
 function renderPushpinMarks(commentsInTimeframe, svg) {
+  
   const pushes = commentsInTimeframe.filter((f) => f.commentMark === 'push');
   const pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
-  pushedG.attr('transform', (d) => `translate(${(960 * d.posLeft)}, ${(540 * d.posTop)})`);
+  pushedG.attr('transform', (d) => `translate(${(originalDimension.width * d.posLeft)}, ${(originalDimension.height * d.posTop)})`);
 
   const circ = pushedG.selectAll('circle').data((d) => [d]).join('circle');
   circ.attr('r', 10);
