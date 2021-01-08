@@ -22,7 +22,6 @@ canvas.setAttribute('pointer-events', 'none');
 
 function resizeVideoElements() {
 
- 
 
   const video = document.getElementById('video');
 
@@ -64,7 +63,6 @@ export async function formatVidPlayer() {
 
   if(video.readyState >= 2) {
     
-    console.log('video can play');
     canPlay = true;
      
     resizeVideoElements();
@@ -108,6 +106,13 @@ export async function formatVidPlayer() {
 
   video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
+  window.addEventListener('resize', ()=> {
+    let dimW = window.innerWidth;
+    console.log('is this working', dimW);
+    resizeVideoElements();
+    drawFrameOnPause(video);
+    
+  })
 }
 export function updateTimeElapsed() {
   const time = formatTime(Math.round(document.getElementById('video').currentTime));

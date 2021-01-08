@@ -6,9 +6,9 @@ export const middleDimension = {width: 800, height: 450 };
 export const smallerDimension = {width: 720, height: 405 };
 
 export function getRightDimension(){
-  if(window.innerWidth < 1440){
+  if(window.innerWidth < 1330){
     return smallerDimension;
-  }else if(window.innerWidth > 1550){
+  }else if(window.innerWidth > 1596){
     return originalDimension;
   }else{
     return middleDimension;

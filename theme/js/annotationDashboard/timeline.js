@@ -1,10 +1,12 @@
 import * as d3 from 'd3';
 import { annotationData } from '..';
-import { formatTime } from '../dataManager';
+import { formatTime, getRightDimension } from '../dataManager';
 import { formatCommentData } from './commentBar';
 import {updateTimeElapsed} from './video';
 
-const xScale = d3.scaleLinear().domain([0, 89]).range([0, 950]);
+const dim = getRightDimension();
+
+const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
 
 function structureTooltip(coord, d, type) {
   if (type === 'comments') {
@@ -52,9 +54,9 @@ export function renderTimeline(commentData) {
 
   const timelineWrap = div.select('.timeline-wrap');
   timelineWrap.style('position', 'absolute');
-  timelineWrap.style('top', `${560 + 60}px`);
+  timelineWrap.style('top', `${dim.height + 70}px`);
   const timeSVG = timelineWrap.append('svg');
-  timeSVG.style('width', `${970}px`);
+  timeSVG.style('width', `${dim.width+20}px`);
   const comments = Object.entries(commentData.comments).map((m) => {
     m[1].key = m[0];
     return m[1];
