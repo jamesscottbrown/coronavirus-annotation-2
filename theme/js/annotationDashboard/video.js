@@ -4,7 +4,7 @@ import { annotationData } from '..';
 import { dataKeeper, formatAnnotationTime, formatTime, originalDimension } from '../dataManager';
 import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
 import {
-  clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
+  clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
 } from './imageDataUtil';
 import {
   drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar, highlightCommentBoxes, renderCommentDisplayStructure, renderStructureKnowns,
@@ -16,8 +16,6 @@ import 'firebase/storage';
 let canPlay;
 
 const currentColorCodes = [];
-
-
 
 const canvas = document.getElementById('canvas');
 canvas.setAttribute('pointer-events', 'none');
@@ -46,7 +44,6 @@ function initializeVideo() {
   duration.innerText = `${time.minutes}:${time.seconds}`;
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
 }
-
 export async function formatVidPlayer() {
   const video = document.getElementById('video');
   video.muted = true;
@@ -103,6 +100,7 @@ function updateTimeElapsed() {
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
   d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
+  loadPngForFrame();
   if(!d3.select('.template-wrap').empty()){
     d3.select('.template-wrap').select('h6').text(`Add a comment @ ${time.minutes} : ${time.seconds}`);
   }
