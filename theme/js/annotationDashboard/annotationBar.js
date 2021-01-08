@@ -20,8 +20,9 @@ export function annoTypes() {
 export function clearAnnotationSidebar() {
   const annoWrap = d3.select('#left-sidebar');
   annoWrap.select('.top').selectAll('*').remove();
+  
   annoWrap.select('.sel-anno-wrap').selectAll('*').remove();
-  annoWrap.select('.anno-wrap').selectAll('*').remove();
+  annoWrap.select('.gen-anno-wrap').selectAll('*').remove();
 }
 
 function renderAnnotationBoxes(divs){
@@ -83,11 +84,12 @@ function renderAnnotationBoxes(divs){
 export async function updateAnnotationSidebar(data, stackedData) {
   const annoType = annoTypes();
   /// start drawing annotation
-  const annoWrap = d3.select('#left-sidebar');
+  const annoWrap = d3.select('#left-sidebar').select('#annotation-wrap');
+  console.log('annoWrap', annoWrap)
   clearAnnotationSidebar();
 
  
-  let header = annoWrap.select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
+  let header = d3.select('#left-sidebar').select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
   header.text(d=> d);
 
   if (stackedData != null) {
@@ -98,7 +100,7 @@ export async function updateAnnotationSidebar(data, stackedData) {
     
   }
 
-  const annoDiv = annoWrap.select('.anno-wrap').selectAll('div.anno').data(data).join('div')
+  const annoDiv = annoWrap.select('.gen-anno-wrap').selectAll('div.anno').data(data).join('div')
     .classed('anno', true);
 
   renderAnnotationBoxes(annoDiv);
@@ -117,7 +119,7 @@ export async function updateAnnotationSidebar(data, stackedData) {
 }
 
 export function highlightAnnotationbar(currentTime) {
-  const annos = d3.selectAll('#left-sidebar').select('.anno-wrap').selectAll('div.anno');
+  const annos = d3.selectAll('#left-sidebar').select('.gen-anno-wrap').selectAll('div.anno');
   const test = Array.from(new Set(annos.data().map((m) => m.seconds[0]))).filter((f) => f <= currentTime);
 
   const selectedAnno = annos.filter((f) => f.seconds[0] == test[test.length - 1]).classed('selected', true);

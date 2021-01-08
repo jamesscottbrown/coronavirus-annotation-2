@@ -41,7 +41,7 @@ d3.select('#wrapper').on('mousemove', (event, d)=>{
 init();
 
 async function init() {
-  console.log('window',window.innerWidth);
+
   const config = await d3.json('../static/assets/firebase_data.json');
   fbConfig.push(config[0]);
   const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i) => {

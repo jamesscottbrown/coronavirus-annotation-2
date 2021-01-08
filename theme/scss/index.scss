@@ -42,7 +42,10 @@ div{
 }
 
 #wrapper{
-    margin-top:50px;
+    top:50px;
+    left:0;
+    right:0;
+    bottom:0;
     overflow-y: hidden;
     height: calc(100vh - 60px);
     width: 100vw;
@@ -133,21 +136,50 @@ div{
   width:150px;
 }
 
+// #main{
+//     grid-area: main;
+//     height: calc(100vh - 60px);
+//     position: relative;
+//     //margin-top:20px;
+//     top:20px;
+// }
+
+// #left-sidebar{
+//     left:0px;
+//     top:0;
+//     height:calc(100vh - 70px);
+//     padding: 1rem 0 0 0;
+//     grid-area: side1;
+//     overflow-y: scroll;
+//     position:relative;
+// }
+
 #main{
-    grid-area: main;
-    height: calc(100vh - 60px);
-    position: relative;
-    margin-top:20px;
+  grid-area: main;
+  height: calc(100vh - 60px);
+  position: relative;
+  margin-top:20px;
 }
 
 #left-sidebar{
-    left:0px;
-    top:0;
-    height:calc(100vh - 70px);
-    padding: 1rem 0 0 0;
-    grid-area: side1;
-    overflow-y: scroll;
-    position:relative;
+  position:fixed;
+  left:0px;
+  top:60px;
+  height:calc(100vh - 70px);
+  padding: 1rem 0 0 0;
+  grid-area: side1;
+  width:300px;
+  overflow-y: scroll;
+}
+
+#right-sidebar{
+  position:fixed;
+  right:0px;
+  top:60px;
+  height:calc(100vh - 70px);
+  width:330px;
+  grid-area: side2;
+  overflow-y: scroll;
 }
 
 #annotation-wrap{
@@ -157,6 +189,7 @@ div{
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  margin-top: 70px;
 }
 
 #left-sidebar .gen-anno-wrap{
@@ -248,13 +281,13 @@ margin-top:10px;
   margin:18px;
 }
 
-#right-sidebar{
-    height:calc(100vh - 70px);
-    grid-area: side2;
-    overflow-y: scroll;
-    position:relative;
-    //max-width:350px;
-}
+// #right-sidebar{
+//     height:calc(100vh - 70px);
+//     grid-area: side2;
+//     overflow-y: scroll;
+//     position:relative;
+//     //max-width:350px;
+// }
 #comment-wrap{
   position:absolute;
   top:0;
@@ -541,12 +574,16 @@ video::-webkit-media-controls {
 }
 
 .top{
-  //width:inherit;
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  width:100%;
+  // //width:inherit;
+  // position: -webkit-sticky; /* Safari */
+  // position: sticky;
+  // width:100%;
+  min-width:320px;
+  max-width:330px;
+  position: fixed;
+  top:50px;
   background-color: #fff;
-  padding:10px;
+  padding-left:10px;
   margin-top:20px;
   z-index: 1000;
 }

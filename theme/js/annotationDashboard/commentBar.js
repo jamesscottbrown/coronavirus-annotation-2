@@ -665,7 +665,10 @@ export function renderCommentDisplayStructure() {
   const genTest = wrap.select('.general-comm-wrap');
   const gen = genTest.empty() ? wrap.append('div').classed('general-comm-wrap', true) : genTest;
 
-  d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
+  wrap.node().scrollTop -= 100;
+  // d3.select('#right-sidebar').node().scrollTop -= 50;
+  // top.node().scrollTop = 0;
+  // d3.select('#wrapper').scrollTop -= 50;
 }
 
 export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo, quote) {
