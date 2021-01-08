@@ -17,10 +17,15 @@ let canPlay;
 
 const currentColorCodes = [];
 
+
+
 const canvas = document.getElementById('canvas');
 canvas.setAttribute('pointer-events', 'none');
 
 function resizeVideoElements() {
+
+  console.log('resize elements firing');
+
   const video = document.getElementById('video');
   document.getElementById('interaction').style.width = `${Math.round(video.videoWidth)}px`;
   document.getElementById('interaction').style.height = `${video.videoHeight}px`;
@@ -34,6 +39,7 @@ function resizeVideoElements() {
 }
 
 function initializeVideo() {
+  console.log('is this firing every time')
   const videoDuration = Math.round(document.getElementById('video').duration);
   const time = formatTime(videoDuration);
   const duration = document.getElementById('duration');
@@ -51,23 +57,42 @@ export async function formatVidPlayer(isInteractive) {
     },
   });
 
-  video.oncanplay = function () {
-    if (video.readyState >= 3) {
-      canPlay = true;
+  if(video.readyState >= 2) {
+    
+    console.log('video can play');
+    canPlay = true;
      
-      resizeVideoElements();
+    resizeVideoElements();
 
-      drawFrameOnPause(video);
+    drawFrameOnPause(video);
 
-      d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
+    d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
         .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video));
 
+    d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
+    d3.select('.progress-bar').on('click', progressClicked);
+
+
+  }else{
+    console.log('ELSE FIRED canplay event added');
+
+    video.addEventListener('canplay', (event) => {
+      console.log('Video can start, but not sure it will play through.', event);
+  
+      canPlay = true;
+       
+      resizeVideoElements();
+  
+      drawFrameOnPause(video);
+  
+      d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
+          .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video));
+  
       d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
       d3.select('.progress-bar').on('click', progressClicked);
-    } else {
-      video.addEventListener('canplay', canPlay = true);
-    }
-  };
+  
+    });
+  }
 
   video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
