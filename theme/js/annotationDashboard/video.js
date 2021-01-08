@@ -54,7 +54,7 @@ export async function formatVidPlayer(isInteractive) {
   video.oncanplay = function () {
     if (video.readyState >= 3) {
       canPlay = true;
-      d3.select('.slider').remove();
+     
       resizeVideoElements();
 
       drawFrameOnPause(video);

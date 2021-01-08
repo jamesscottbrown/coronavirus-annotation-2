@@ -102,7 +102,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
 
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-      console.log('does this fire again?')
+      console.log('does this fire again?');
       currentUser.push(user);
       addUser(user);
 

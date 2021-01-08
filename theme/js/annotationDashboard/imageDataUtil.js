@@ -162,7 +162,7 @@ export function parseArray(hoverColor) {
       newData.data[i] = colorDictionary[color].code[0];
       newData.data[i + 1] = colorDictionary[color].code[1];
       newData.data[i + 2] = colorDictionary[color].code[2];
-      newData.data[i + 3] = 100;
+      newData.data[i + 3] = 0;
     }
   }
   const cxt = canvas.getContext('2d');
