@@ -10,7 +10,7 @@ import {
   drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar, highlightCommentBoxes, renderCommentDisplayStructure, renderStructureKnowns,
 } from './commentBar';
 import { highlightAnnotationbar, updateAnnotationSidebar } from './annotationBar';
-import { highlightTimelineBars } from './timeline';
+import { highlightTimelineBars, renderTimeline } from './timeline';
 import 'firebase/storage';
 
 let canPlay;
@@ -107,10 +107,11 @@ export async function formatVidPlayer() {
   video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
   window.addEventListener('resize', ()=> {
-    let dimW = window.innerWidth;
-    console.log('is this working', dimW);
+ 
     resizeVideoElements();
     drawFrameOnPause(video);
+    
+    renderTimeline(dataKeeper[dataKeeper.length - 1]);
     
   })
 }

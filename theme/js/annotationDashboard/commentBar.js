@@ -30,7 +30,8 @@ export function updateCommentSidebar(dbRef) {
   }else{
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
-    d3.select('#comment-wrap').style('margin-top', '200px');
+    console.log('width for this', d3.select('#right-sidebar').select('.top').node().width)
+    d3.select('#comment-wrap').style('margin-top', '240px');
   }
   
   const nestReplies = formatCommentData(dbRef);

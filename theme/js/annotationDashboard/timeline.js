@@ -4,11 +4,13 @@ import { formatTime, getRightDimension } from '../dataManager';
 import { formatCommentData } from './commentBar';
 import {updateTimeElapsed} from './video';
 
-const dim = getRightDimension();
 
-const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
+
+// const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
 
 function structureTooltip(coord, d, type) {
+  let dim = getRightDimension();
+  const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
   if (type === 'comments') {
     let formatedTime = formatTime(d.videoTime);
 
@@ -49,18 +51,18 @@ function structureTooltip(coord, d, type) {
   }
 }
 export function renderTimeline(commentData) {
+
+  let dim = getRightDimension();
+
+  const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
  
   const div = d3.select('#main');
 
-  const timelineWrap = div.select('.timeline-wrap');
-  timelineWrap.style('position', 'absolute');
-  timelineWrap.style('top', `${dim.height + 70}px`);
-  const timeSVG = timelineWrap.append('svg');
-  timeSVG.style('width', `${dim.width+20}px`);
-  const comments = Object.entries(commentData.comments).map((m) => {
-    m[1].key = m[0];
-    return m[1];
-  });
+  
+  // const comments = Object.entries(commentData.comments).map((m) => {
+  //   m[1].key = m[0];
+  //   return m[1];
+  // });
 
   // function binThings() {
   //   const binCount = 90 / 5;
@@ -94,10 +96,20 @@ export function renderTimeline(commentData) {
   let comms = formatCommentData(commentData);
   const binScale = d3.scaleLinear().range([.1, 1]).domain([0, comms.map(m=> Math.max(m.replyKeeper.length))]);
   console.log('comm data', comms);
-  const commentGroup = timeSVG.append('g').classed('comm-group', true);
+
+  let masterData = [{comments: {data: comms, label: "comments"}, annotations: {data:annotationData[annotationData.length - 1], label: "annotations"}}];
+
+  const timelineWrap = div.select('.timeline-wrap');
+  timelineWrap.style('position', 'relative');
+  timelineWrap.style('top', `${(dim.height + dim.margin)}px`);
+  const timeSVG = timelineWrap.selectAll('svg').data(masterData).join('svg');
+  timeSVG.style('width', `${dim.width+20}px`);
+
+
+  const commentGroup = timeSVG.selectAll('g.comm-group').data(d=> [d.comments]).join('g').classed('comm-group', true);
   commentGroup.attr('transform', 'translate(3, 0)')
-  commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(0, 10)');
-  const comBins = commentGroup.selectAll('g.comm-bin').data(comms).join('g').classed('comm-bin', true);
+  commentGroup.selectAll('text').data(d => [d.label]).join('text').text(d=> d).style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(0, 10)');
+  const comBins = commentGroup.selectAll('g.comm-bin').data(d=> d.data).join('g').classed('comm-bin', true);
  comBins.attr('transform', (d, i) => `translate(${xScale(d.videoTime)} 15)`);
   const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
   commentBinRect.attr('height', 10).attr('width', 2);
@@ -110,16 +122,18 @@ export function renderTimeline(commentData) {
     updateTimeElapsed();
   })
 
-  timeSVG.append('text').text('Annotations').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 38)');
 
-  const annoGroup = timeSVG.append('g').classed('anno-group', true);
+  const annoGroup = timeSVG.selectAll('g.anno-group').data(d => {
+    return [d.annotations]}).join('g').classed('anno-group', true);
+  annoGroup.selectAll('text').data(d => [d.label]).join('text').text(d=> d).style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(0, -4)');
   annoGroup.attr('transform', 'translate(0, 42)');
   
-  const annos = annoGroup.selectAll('g.anno').data(annotationData[annotationData.length - 1]).join('g').classed('anno', true);
+  const annos = annoGroup.selectAll('g.anno').data(d => d.data).join('g').classed('anno', true);
   const rects = annos.selectAll('rect').data((d) => [d]).join('rect');
   rects.attr('height', 6).attr('width', (d) => (xScale(d.seconds[1]) - xScale(d.seconds[0])));
 
   annos.attr('transform', (d, i, n) => {
+   // const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
     if (i > 0) {
       const chosen = d3.selectAll(n).data().filter((f, j) => j < i && f.seconds[1] > d.seconds[0]);
       return `translate(${xScale(d.seconds[0])} ${(7 * chosen.length)})`;
@@ -186,6 +200,8 @@ export function commentBinTimelineMouseout(event, d) {
 }
 
 export function timelineMouseover(event, d) {
+  let dim = getRightDimension();
+  const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
   let hoverRectWidth  =  xScale(d.seconds[1]) - xScale(d.seconds[0]);
 
   d3.select('.progress-bar').append('div').attr('id', 'progress-highlight')

@@ -1,9 +1,9 @@
 export const dataKeeper = [];
 export const currentUser = [];
 
-export const originalDimension = {width: 960, height:540 };
-export const middleDimension = {width: 800, height: 450 };
-export const smallerDimension = {width: 720, height: 405 };
+export const originalDimension = {width: 960, height:540, margin: 80};
+export const middleDimension = {width: 800, height: 450, margin: 70};
+export const smallerDimension = {width: 720, height: 405, margin: 70};
 
 export function getRightDimension(){
   if(window.innerWidth < 1330){
