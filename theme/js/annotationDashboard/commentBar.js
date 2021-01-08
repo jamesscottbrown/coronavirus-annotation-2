@@ -12,6 +12,7 @@ require('firebase/auth');
 require('firebase/database');
 
 export function clearRightSidebar() {
+  d3.select('#right-sidebar').selectAll('*').remove();
   d3.select('#comment-wrap').selectAll('*').remove();
 }
 
@@ -19,7 +20,7 @@ export function updateCommentSidebar(dbRef) {
 
   renderCommentDisplayStructure();
 
-  d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
+  // d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
   console.log('updatecommentsidebar', structureSelected.selected)
@@ -30,8 +31,7 @@ export function updateCommentSidebar(dbRef) {
   }else{
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
-    console.log('width for this', d3.select('#right-sidebar').select('.top').node().width)
-    d3.select('#comment-wrap').style('margin-top', '240px');
+    d3.select('#comment-wrap').style('margin-top', '250px');
   }
   
   const nestReplies = formatCommentData(dbRef);
@@ -172,15 +172,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').selectAll('i.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
   let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').selectAll('i.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
-  // const typeOf = memoDivs.selectAll('i.marks').data((d) => [d]).join('i.fa-map-marker-alt').data().attr('class', (d) => {
-  //   if (d.commentMark === 'push') {
-  //     return 'fas marks fa-map-marker-alt';
-  //   } 
-  //   if (d.commentMark === 'doodle') {
-  //     return 'fas marks fa-paint-brush';
-  //   }
-  //   return 'hidden';
-  // });
+
 
   memoDivs.selectAll('.comment').data((d) => [d]).join('span').classed('comment', true)
     .selectAll('text')
@@ -663,13 +655,17 @@ export function noMarkFormat() {
 export function renderCommentDisplayStructure() {
   const topTest = d3.select('#right-sidebar').select('.top');
   const top = topTest.empty() ? d3.select('#right-sidebar').append('div').classed('top', true) : topTest;
-  const wrap = d3.select('#right-sidebar').select('#comment-wrap');
+  let wrapTest = d3.select('#right-sidebar').select('#comment-wrap');
+  const wrap = wrapTest.empty() ? d3.select('#right-sidebar').append('div').attr('id', 'comment-wrap') : wrapTest;
+
 
   wrap.select('.template-wrap').remove();
   const selTest = wrap.select('.selected-comm-wrap');
   const sel = selTest.empty() ? wrap.append('div').classed('selected-comm-wrap', true) : selTest;
   const genTest = wrap.select('.general-comm-wrap');
   const gen = genTest.empty() ? wrap.append('div').classed('general-comm-wrap', true) : genTest;
+
+  d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
 }
 
 export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo, quote) {

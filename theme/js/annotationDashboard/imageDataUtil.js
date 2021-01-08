@@ -1,4 +1,5 @@
 export const endDrawTime = 84;
+import * as d3 from 'd3';
 
 export const structureSelected = {
   selected: false,
@@ -18,10 +19,12 @@ export function structureSelectedToggle(datum, coords, color) {
     structureSelected.selected = false;
     structureSelected.coord = null;
     structureSelected.color = null;
+    d3.selectAll('.memo').classed('disabled', false);
   } else {
     structureSelected.selected = true;
     structureSelected.coord = coords;
     structureSelected.color = color;
+    d3.selectAll('.memo').classed('disabled', true);
   }
 }
 

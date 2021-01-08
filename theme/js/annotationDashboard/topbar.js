@@ -79,6 +79,8 @@ export function addStructureLabelFromButton(structure) {
 export function goBackButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
   button.text('Go back');
+  d3.select('#comment-wrap').style('margin-top', '400px');
+
   button.on('click', (event) => {
     if(userLoggedIn.loggedInBool === false){
       console.log('button clicked', structureSelected);
@@ -89,7 +91,7 @@ export function goBackButton() {
 
       if (structureSelected.structure != null && d3.select('#right-sidebar').select('.top').select('.found-info').empty()) {
         d3.select('#right-sidebar').select('.top').selectAll('*').remove();
-        renderStructureKnowns(d3.select('#comment-wrap').select('.top'));
+        renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
       } else {
         structureSelectedToggle(null);
         clearRightSidebar();
