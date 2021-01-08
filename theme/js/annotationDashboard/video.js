@@ -47,7 +47,7 @@ function initializeVideo() {
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
 }
 
-export async function formatVidPlayer(isInteractive) {
+export async function formatVidPlayer() {
   const video = document.getElementById('video');
   video.muted = true;
 

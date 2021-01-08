@@ -413,11 +413,11 @@ margin-top:10px;
   transform: translate(-50%);
 }
 .add-comment-structure{
-  position: absolute;
-  left: 45%;
-  top:126px;
-  -ms-transform: translate(-50%);
-  transform: translate(-50%);
+  // position: absolute;
+  // left: 45%;
+  // top:126px;
+  // -ms-transform: translate(-50%);
+  // transform: translate(-50%);
 }
 .anno .fa-exclamation-circle, .anno .fa-book-open,
 .structure-anno .fa-exclamation-circle, .structure-anno .fa-book-open,
@@ -430,7 +430,9 @@ margin-top:10px;
 }
 
 .found-info{
-  height:200px;
+  width:inherit;
+  padding-left:30px;
+  
 }
 
 .add-comment-structure{
@@ -521,6 +523,14 @@ video::-webkit-media-controls {
 
 .togg-wrap{
  margin: auto;
+}
+
+.top{
+  width:inherit;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  background-color: #fff;
 }
 
 .top h6{

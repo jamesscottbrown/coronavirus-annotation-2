@@ -46,7 +46,7 @@ async function init() {
   renderIssueButton(d3.select('#top-bar').select('#user'));
   updateAnnotationSidebar(anno, null, null);
 
-  formatVidPlayer(true).then(()=> {
+  formatVidPlayer().then(()=> {
     d3.select('#loader').remove();
   });
 

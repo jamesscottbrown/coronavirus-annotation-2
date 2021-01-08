@@ -280,18 +280,20 @@ export const tagOptions = [
 ];
 
 export function renderStructureKnowns(topCommentWrap) {
+  
   const questions = structureSelected.annotations.filter((f) => f.has_unkown === 'TRUE').length + structureSelected.comments.filter((f) => f.comment.includes('?')).length;
   const refs = structureSelected.annotations.filter((f) => f.url != '').length + structureSelected.comments.filter((f) => f.comment.includes('http')).length;
 
-  topCommentWrap.append('div').classed('found-info', true)
-    .html(`<h4>${structureSelected.structure}</h4>
+  let foundDiv = topCommentWrap.selectAll('div.found-info').data([structureSelected]).join('div').classed('found-info', true);
+  foundDiv.html(`<h4>${structureSelected.structure}</h4>
     <span class="badge badge-pill bg-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
     <span class="badge badge-pill bg-danger">${questions}</span> Questions. <br>
     <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
     <br>
     `);
 
-  const infoButton = topCommentWrap.append('button').classed('btn btn-outline-secondary add-comment-structure', true);
+  const infoButton = foundDiv.selectAll('button').data(d=> [d]).join('button').classed('btn btn-outline-secondary add-comment-structure', true);
+
   if (userLoggedIn.loggedInBool) {
     infoButton.text('Add comment for this structure')
       .on('click', (event, d) => {
