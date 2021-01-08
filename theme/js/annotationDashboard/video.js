@@ -94,7 +94,7 @@ export async function formatVidPlayer() {
   video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
 }
-function updateTimeElapsed() {
+export function updateTimeElapsed() {
   const time = formatTime(Math.round(document.getElementById('video').currentTime));
   const timeElapsed = document.getElementById('time-elapsed');
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;

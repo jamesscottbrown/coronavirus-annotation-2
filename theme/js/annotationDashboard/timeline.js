@@ -2,21 +2,30 @@ import * as d3 from 'd3';
 import { annotationData } from '..';
 import { formatTime } from '../dataManager';
 import { formatCommentData } from './commentBar';
+import {updateTimeElapsed} from './video';
 
 const xScale = d3.scaleLinear().domain([0, 89]).range([0, 950]);
 
 function structureTooltip(coord, d, type) {
   if (type === 'comments') {
-    let formatedTime = [formatTime(d.range[0]), formatTime(d.range[1])];
+    let formatedTime = formatTime(d.videoTime);
+
+    let blurb = d.comment.split(' ').filter((f, i)=> i < 8);
+    function addS(a, stri){
+      return a + " " + stri;
+    }
+    let stringB = blurb.reduce(addS, "")
     
     d3.select('#timeline-tooltip')
       .style('position', 'absolute') 
       .style('opacity', 1)
       .html(`
-        <h7 style="color:gray">${formatedTime[0].minutes}:${formatedTime[0].seconds} - ${formatedTime[1].minutes}:${formatedTime[1].seconds}</h7><br>
-        <h7>${d.data.length} comments</h7>
+        <h7 style="color:gray">${formatedTime.minutes}:${formatedTime.seconds}  - </h7>
+        <h7 style="color:gray">${d.displayName}</h7><br>
+        <h7>${stringB + (blurb.length > 8 ? '...' : ' ')}</h7><br>
+        <h7>${d.replyKeeper.length} replies</h7>
         `)
-      .style('left', `${coord[0]}px`)
+      .style('left', `${xScale(d.videoTime)}px`)
       .style('top', '-60px');
   } else {
     
@@ -43,7 +52,7 @@ export function renderTimeline(commentData) {
 
   const timelineWrap = div.select('.timeline-wrap');
   timelineWrap.style('position', 'absolute');
-  timelineWrap.style('top', `${560 + 50}px`);
+  timelineWrap.style('top', `${560 + 60}px`);
   const timeSVG = timelineWrap.append('svg');
   timeSVG.style('width', `${970}px`);
   const comments = Object.entries(commentData.comments).map((m) => {
@@ -78,12 +87,14 @@ export function renderTimeline(commentData) {
 
   // commentBins.map((m, i) => m.data.length);
 
-  const binScale = d3.scaleLinear().range([.1, 1]).domain([0, 7]);
+ 
     
   let comms = formatCommentData(commentData);
+  const binScale = d3.scaleLinear().range([.1, 1]).domain([0, comms.map(m=> Math.max(m.replyKeeper.length))]);
   console.log('comm data', comms);
   const commentGroup = timeSVG.append('g').classed('comm-group', true);
-  commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 10)');
+  commentGroup.attr('transform', 'translate(3, 0)')
+  commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(0, 10)');
   const comBins = commentGroup.selectAll('g.comm-bin').data(comms).join('g').classed('comm-bin', true);
  comBins.attr('transform', (d, i) => `translate(${xScale(d.videoTime)} 15)`);
   const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
@@ -92,13 +103,16 @@ export function renderTimeline(commentData) {
 
   comBins.on('mouseover', (event, d) => commentBinTimelineMouseover(event, d));
   comBins.on('mouseout', (event, d) => commentBinTimelineMouseout(event, d));
+  comBins.on('click', (event, d)=> {
+    document.getElementById('video').currentTime = d.videoTime;
+    updateTimeElapsed();
+  })
 
   timeSVG.append('text').text('Annotations').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 38)');
 
   const annoGroup = timeSVG.append('g').classed('anno-group', true);
   annoGroup.attr('transform', 'translate(0, 42)');
   
-
   const annos = annoGroup.selectAll('g.anno').data(annotationData[annotationData.length - 1]).join('g').classed('anno', true);
   const rects = annos.selectAll('rect').data((d) => [d]).join('rect');
   rects.attr('height', 6).attr('width', (d) => (xScale(d.seconds[1]) - xScale(d.seconds[0])));
@@ -114,9 +128,13 @@ export function renderTimeline(commentData) {
   annos.on('mouseover', (event, d) => {
     timelineMouseover(event, d);
   })
-    .on('mouseout', (event, d) => {
-      timelineMouseout(event, d);
-    });
+  .on('mouseout', (event, d) => {
+    timelineMouseout(event, d);
+  });
+  annos.on('click', (event, d)=> {
+    console.log(event, d);
+    document.getElementById('video').currentTime = d.seconds[0];
+  })
 }
 
 export function highlightTimelineBars(timeRange) {
@@ -132,10 +150,12 @@ export function highlightTimelineBars(timeRange) {
 export function commentBinTimelineMouseover(event, d) {
   d3.select(event.target.parentNode).classed('current-hover', true);
 
+  console.log('d on mouseover', d);
+
   d3.select('.progress-bar').append('div');
-  if (d.data.length > 0) {
+  if (d) {
     const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
-    const filComm = comments.filter((f) => d.data.map((m) => m.key).indexOf(f.key) > -1);
+    const filComm = comments.filter((f) => d.key === f.key);
     filComm.classed('selected', true);
     filComm.nodes()[0].scrollIntoView({ behavior: 'smooth' });
 
@@ -144,12 +164,12 @@ export function commentBinTimelineMouseover(event, d) {
 
     let measuereLeft = (jump * rectNodes.indexOf(event.target))
 
-    d3.select('.progress-bar').append('div').attr('id', 'progress-highlight')
-    .style('position', 'absolute')
-    .style('left', `${measuereLeft}px`).style('opacity', '.2')
-    .style('background-color', 'orange')
-    .style('border-radius', 0)
-    .style('width', `${jump}px`);
+    // d3.select('.progress-bar').append('div').attr('id', 'progress-highlight')
+    // .style('position', 'absolute')
+    // .style('left', `${measuereLeft}px`).style('opacity', '.2')
+    // .style('background-color', 'orange')
+    // .style('border-radius', 0)
+    // .style('width', `${jump}px`);
 
     structureTooltip([measuereLeft + (jump+5)], d, 'comments');
   }
@@ -159,7 +179,7 @@ export function commentBinTimelineMouseout(event, d) {
   d3.select('#progress-highlight').remove();
   d3.select(event.target.parentNode).classed('current-hover', false);
   const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
-  comments.filter((f) => d.data.map((m) => m.key).indexOf(f.key) > -1).classed('selected', false);
+ comments.filter((f) => f.key === d.key).classed('selected', false);
   d3.select('#timeline-tooltip').style('opacity', 0).style('left', 0).style('top', '-200px');
 }
 
