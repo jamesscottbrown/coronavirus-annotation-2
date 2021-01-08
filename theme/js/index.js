@@ -12,6 +12,7 @@ import { updateAnnotationSidebar } from './annotationDashboard/annotationBar';
 import { formatVidPlayer, videoUpdates } from './annotationDashboard/video';
 import { updateCommentSidebar } from './annotationDashboard/commentBar';
 import { renderTimeline } from './annotationDashboard/timeline';
+import { structureSelected } from './annotationDashboard/imageDataUtil';
 
 const {
   renderUser, addCommentButton, toggleSort, renderIssueButton,
@@ -26,6 +27,16 @@ dom.watch();
 export const fbConfig = [];
 export const annotationData = [];
 
+d3.select('#wrapper').on('mousemove', (event, d)=>{
+  let svg = document.getElementById('vid-svg');
+  if(event.target != svg && structureSelected.selected === false){
+    let tool = d3.select('.tooltip');
+    tool.style('opacity', 0);
+    tool.style('top', '-100px');
+    tool.style('left', '-100px');
+  }
+  
+})
 
 init();
 

@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
 import { annotationData } from '..';
-import { dataKeeper, formatAnnotationTime, formatTime, originalDimension } from '../dataManager';
+import { dataKeeper, formatAnnotationTime, formatTime, getRightDimension, originalDimension, smallerDimension } from '../dataManager';
 import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
 import {
   clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
@@ -22,18 +22,26 @@ canvas.setAttribute('pointer-events', 'none');
 
 function resizeVideoElements() {
 
-  console.log('resize elements firing');
+ 
 
   const video = document.getElementById('video');
-  document.getElementById('interaction').style.width = `${Math.round(video.videoWidth)}px`;
-  document.getElementById('interaction').style.height = `${video.videoHeight}px`;
 
-  canvas.style.width = `${Math.round(video.videoWidth)}px`;
-  canvas.style.height = `${video.videoHeight}px`;
+  let dimension = getRightDimension();
 
-  document.getElementById('video-controls').style.top = `${video.videoHeight + 7}px`;
+  video.width = dimension.width;
+  video.height = dimension.height;
 
-  d3.select('.progress-bar').node().style.width = `${Math.round(video.videoWidth)}px`;
+  console.log('resize elements firing', window.innerWidth, dimension);
+  
+  document.getElementById('interaction').style.width = `${Math.round(dimension.width)}px`;
+  document.getElementById('interaction').style.height = `${dimension.height}px`;
+
+  canvas.style.width = `${Math.round(dimension.width)}px`;
+  canvas.style.height = `${dimension.height}px`;
+
+  document.getElementById('video-controls').style.top = `${dimension.height + 7}px`;
+
+  d3.select('.progress-bar').node().style.width = `${Math.round(dimension.width)}px`;
 }
 
 function initializeVideo() {
@@ -63,8 +71,15 @@ export async function formatVidPlayer() {
 
     drawFrameOnPause(video);
 
-    d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
-        .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video));
+    d3.select('#interaction')
+        .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
+        .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video))
+        .on('mouseout', ()=>{
+          let tool = d3.select('.tooltip');
+          tool.style('opacity', 0);
+          tool.style('top', '-100px');
+          tool.style('left', '-100px');
+    })
 
     d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
     d3.select('.progress-bar').on('click', progressClicked);
@@ -257,9 +272,11 @@ export function updateWithSelectedStructure(snip, commentData){
   goBackButton();
   renderCommentDisplayStructure();
 
+  const topCommentWrap = d3.select('#right-sidebar').select('.top');
+
   const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
-  const topCommentWrap = d3.select('#comment-wrap').select('.top');
+  
 
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
@@ -381,6 +398,7 @@ async function renderDoodles(commentsInTimeframe, div) {
 export function videoUpdates(data, annoType) {
   const svgTest = d3.select('#interaction').select('svg');
   const svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
+  svg.attr('id', 'vid-svg');
 
   const video = document.querySelector('video');
 
@@ -428,7 +446,7 @@ export function videoUpdates(data, annoType) {
   });
 
   video.ontimeupdate = async (event) => {
-    const timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
+    const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
 
     highlightTimelineBars(timeRange);
 

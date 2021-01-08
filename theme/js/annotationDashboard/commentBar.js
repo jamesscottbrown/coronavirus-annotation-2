@@ -19,14 +19,18 @@ export function updateCommentSidebar(dbRef) {
 
   renderCommentDisplayStructure();
 
+  d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
+
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
   console.log('updatecommentsidebar', structureSelected.selected)
   if(structureSelected.selected === false){
-    let header = d3.select('#right-sidebar').select('#comment-wrap').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
+    let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
     header.text(d=> d);
+    d3.select('#comment-wrap').style('margin-top', '70px');
   }else{
-    let header = d3.select('#right-sidebar').select('#comment-wrap').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
+    let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
+    d3.select('#comment-wrap').style('margin-top', '200px');
   }
   
   const nestReplies = formatCommentData(dbRef);
@@ -140,7 +144,6 @@ function downvoteIcon(div, db) {
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
- 
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
@@ -657,10 +660,11 @@ export function noMarkFormat() {
 }
 
 export function renderCommentDisplayStructure() {
+  const topTest = d3.select('#right-sidebar').select('.top');
+  const top = topTest.empty() ? d3.select('#right-sidebar').append('div').classed('top', true) : topTest;
   const wrap = d3.select('#right-sidebar').select('#comment-wrap');
+
   wrap.select('.template-wrap').remove();
-  const topTest = wrap.select('.top');
-  const top = topTest.empty() ? wrap.append('div').classed('top', true) : topTest;
   const selTest = wrap.select('.selected-comm-wrap');
   const sel = selTest.empty() ? wrap.append('div').classed('selected-comm-wrap', true) : selTest;
   const genTest = wrap.select('.general-comm-wrap');

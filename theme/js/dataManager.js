@@ -2,7 +2,18 @@ export const dataKeeper = [];
 export const currentUser = [];
 
 export const originalDimension = {width: 960, height:540 };
+export const middleDimension = {width: 800, height: 450 };
 export const smallerDimension = {width: 720, height: 405 };
+
+export function getRightDimension(){
+  if(window.innerWidth < 1440){
+    return smallerDimension;
+  }else if(window.innerWidth > 1550){
+    return originalDimension;
+  }else{
+    return middleDimension;
+  }
+}
 
 export function formatTime(timeInSeconds) {
   const result = new Date(timeInSeconds * 1000).toISOString().substr(11, 8);

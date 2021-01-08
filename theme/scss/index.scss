@@ -141,17 +141,25 @@ div{
 }
 
 #left-sidebar{
-  //  position:fixed;
     left:0px;
-    top:60px;
+    top:0;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     grid-area: side1;
     overflow-y: scroll;
-   // max-width: 320px;
+    position:relative;
 }
 
-#left-sidebar .anno-wrap{
+#annotation-wrap{
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#left-sidebar .gen-anno-wrap{
   display:-webkit-box;
  // display:flex;
   -webkit-box-orient:vertical;
@@ -241,17 +249,19 @@ margin-top:10px;
 }
 
 #right-sidebar{
-    //position:fixed;
-    right:0px;
-    top:60px;
     height:calc(100vh - 70px);
     grid-area: side2;
     overflow-y: scroll;
+    position:relative;
     //max-width:350px;
 }
 #comment-wrap{
-  //grid-area: vid;
-  margin-top:20px;
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .comm-bin rect{
@@ -526,11 +536,13 @@ video::-webkit-media-controls {
 }
 
 .top{
-  width:inherit;
+  //width:inherit;
   position: -webkit-sticky; /* Safari */
   position: sticky;
-  top: 0;
+  width:100%;
   background-color: #fff;
+  padding:10px;
+  margin-top:20px;
 }
 
 .top h6{
