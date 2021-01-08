@@ -154,7 +154,7 @@ export function togglePlay() {
 
 export async function mouseMoveVideo(coord, video) {
 
-    if(!video.playing && (structureSelected.selected === false || video.currentTime <= endDrawTime)){
+    if(!video.playing && (structureSelected.selected === false && video.currentTime <= endDrawTime)){
     const snip = getCoordColor(coord);
 
     if (snip != currentColorCodes[currentColorCodes.length - 1] && !video.playing && snip != 'black' && snip != 'unknown') {
@@ -262,11 +262,10 @@ export function updateWithSelectedStructure(snip, commentData){
   const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
   const topCommentWrap = d3.select('#comment-wrap').select('.top');
+
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
   updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
-
-  annoWrap.select('.top').append('h6').text('   Associated Annotations: ');
 
   renderStructureKnowns(topCommentWrap);
 
@@ -275,9 +274,6 @@ export function updateWithSelectedStructure(snip, commentData){
 
   const unknowns = annos.filter((f) => f.has_unkown === 'TRUE');
   unknowns.classed('unknown', true);
-
-  selectedComWrap.append('h7').text('Associated Comments: ');
-  genComWrap.append('h7').text('Comments: ');
 
   topCommentWrap.node().scrollIntoView();
   annoWrap.select('.top').node().scrollIntoView();

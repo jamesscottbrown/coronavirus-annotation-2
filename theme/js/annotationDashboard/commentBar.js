@@ -20,9 +20,15 @@ export function updateCommentSidebar(dbRef) {
   renderCommentDisplayStructure();
 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
-  let header = wrap.selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
-  header.text(d=> d);
-
+  console.log('updatecommentsidebar', structureSelected.selected)
+  if(structureSelected.selected === false){
+    let header = d3.select('#right-sidebar').select('#comment-wrap').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
+    header.text(d=> d);
+  }else{
+    let header = d3.select('#right-sidebar').select('#comment-wrap').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
+    header.text(d=> d);
+  }
+  
   const nestReplies = formatCommentData(dbRef);
 
   drawCommentBoxes(nestReplies, wrap);
@@ -138,7 +144,11 @@ export function drawCommentBoxes(nestedData, wrap) {
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
-
+  if(wrap.classed('selected-comm-wrap')){
+    wrap.selectAll('h7').data(['Associated Comments ']).join('h7').text(d => d);
+  }
+  
+  //topCommentWrap.append('h7').text('Comments: ');
 
   const memoDivs = wrap.selectAll('.memo').data(nestedData).join('div').classed('memo', true);
   memoDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
@@ -156,15 +166,17 @@ export function drawCommentBoxes(nestedData, wrap) {
   tags.selectAll('.badge').data((d) => d.tags.split(',').filter((f) => f != 'none')).join('span').classed('badge badge-secondary', true)
     .text((d) => d);
 
-  const typeOf = memoDivs.selectAll('i.fas').data((d) => [d]).join('i').attr('class', (d) => {
-    if (d.commentMark === 'push') {
-      return 'fas fa-map-marker-alt';
-    } 
-    if (d.commentMark === 'doodle') {
-      return 'fas fa-paint-brush';
-    }
-    return 'hidden';
-  });
+  let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').selectAll('i.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
+  let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').selectAll('i.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
+  // const typeOf = memoDivs.selectAll('i.marks').data((d) => [d]).join('i.fa-map-marker-alt').data().attr('class', (d) => {
+  //   if (d.commentMark === 'push') {
+  //     return 'fas marks fa-map-marker-alt';
+  //   } 
+  //   if (d.commentMark === 'doodle') {
+  //     return 'fas marks fa-paint-brush';
+  //   }
+  //   return 'hidden';
+  // });
 
   memoDivs.selectAll('.comment').data((d) => [d]).join('span').classed('comment', true)
     .selectAll('text')
@@ -251,7 +263,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
-  refMemos.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
+  refMemos.selectAll('i.fas.fa-book-open').data((d) => [d]).join('i').classed('fas fa-book-open', true);
   //<i class="fas fa-book-open"></i>
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
