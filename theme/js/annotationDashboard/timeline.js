@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { annotationData } from '..';
 import { formatTime } from '../dataManager';
+import { formatCommentData } from './commentBar';
 
 const xScale = d3.scaleLinear().domain([0, 89]).range([0, 950]);
 
@@ -50,32 +51,47 @@ export function renderTimeline(commentData) {
     return m[1];
   });
 
-  function binThings() {
-    const binCount = 90 / 5;
-    const keeper = [];
-    for (let i = 0; i < binCount; i++) {
-      keeper[i] = { range: [(i * 5), ((i + 1) * 5)], data: comments.filter((f) => f.videoTime >= (i * 5) && f.videoTime <= ((i + 1) * 5)) };
-    }
-    return keeper;
-  }
+  // function binThings() {
+  //   const binCount = 90 / 5;
+  //   const keeper = [];
+  //   for (let i = 0; i < binCount; i++) {
+  //     keeper[i] = { range: [(i * 5), ((i + 1) * 5)], data: comments.filter((f) => f.videoTime >= (i * 5) && f.videoTime <= ((i + 1) * 5)) };
+  //   }
+  //   return keeper;
+  // }
 
-  const commentBins = binThings();
+  // const commentBins = binThings();
 
-  const binScale = d3.scaleLinear().range([0, 1]).domain([0, d3.max(commentBins.map((m) => m.data.length))]);
+  // const binScale = d3.scaleLinear().range([0, 1]).domain([0, d3.max(commentBins.map((m) => m.data.length))]);
 
+  // const commentGroup = timeSVG.append('g').classed('comm-group', true);
+  // commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 10)');
+  // const comBins = commentGroup.selectAll('g.comm-bin').data(commentBins).join('g').classed('comm-bin', true);
+  // comBins.attr('transform', (d, i) => `translate(${xScale((i * 5))} 15)`);
+  // const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
+  // commentBinRect.attr('height', 10).attr('width', (950 / commentBins.length));
+
+  // commentBinRect.style('fill-opacity', (d, i) => binScale(d.data.length));
+
+  // comBins.on('mouseover', (event, d) => commentBinTimelineMouseover(event, d));
+  // comBins.on('mouseout', (event, d) => commentBinTimelineMouseout(event, d));
+
+  // commentBins.map((m, i) => m.data.length);
+
+  const binScale = d3.scaleLinear().range([.1, 1]).domain([0, 7]);
+    
+  let comms = formatCommentData(commentData);
+  console.log('comm data', comms);
   const commentGroup = timeSVG.append('g').classed('comm-group', true);
   commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 10)');
-  const comBins = commentGroup.selectAll('g.comm-bin').data(commentBins).join('g').classed('comm-bin', true);
-  comBins.attr('transform', (d, i) => `translate(${xScale((i * 5))} 15)`);
+  const comBins = commentGroup.selectAll('g.comm-bin').data(comms).join('g').classed('comm-bin', true);
+ comBins.attr('transform', (d, i) => `translate(${xScale(d.videoTime)} 15)`);
   const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
-  commentBinRect.attr('height', 10).attr('width', (950 / commentBins.length));
-
-  commentBinRect.style('fill-opacity', (d, i) => binScale(d.data.length));
+  commentBinRect.attr('height', 10).attr('width', 2);
+  commentBinRect.style('fill-opacity', (d, i) => binScale(d.replyKeeper.length));
 
   comBins.on('mouseover', (event, d) => commentBinTimelineMouseover(event, d));
   comBins.on('mouseout', (event, d) => commentBinTimelineMouseout(event, d));
-
-  commentBins.map((m, i) => m.data.length);
 
   timeSVG.append('text').text('Annotations').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 38)');
 

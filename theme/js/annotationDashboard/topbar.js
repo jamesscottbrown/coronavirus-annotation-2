@@ -100,9 +100,7 @@ export function goBackButton() {
         clearCanvas();
         d3.select('.tooltip').style('opacity', 0);
       }
-      
     }
-   
   });
 }
 
