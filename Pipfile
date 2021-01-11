@@ -30,5 +30,5 @@ python_version = "3.8"
 
 [scripts]
 serve = "python run.py"
-deploy = "gunicorn --bind 0.0.0.0:5000 wsgi"
+deploy = "gunicorn --bind 127.0.0.1:5000 wsgi"
 
