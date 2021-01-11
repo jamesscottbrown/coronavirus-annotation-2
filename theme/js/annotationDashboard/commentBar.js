@@ -23,20 +23,28 @@ export function updateCommentSidebar(dbRef) {
   // d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
-  console.log('updatecommentsidebar', structureSelected.selected)
+  console.log('updatecommentsidebar', structureSelected.selected);
+  console.log('top', d3.select('.top').node().getBoundingClientRect());
+
+  
+ 
   if(structureSelected.selected === false){
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
     header.text(d=> d);
-    d3.select('#comment-wrap').style('margin-top', '70px');
+    
   }else{
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
-    d3.select('#comment-wrap').style('margin-top', '250px');
+
+    
   }
   
   const nestReplies = formatCommentData(dbRef);
 
   drawCommentBoxes(nestReplies, wrap);
+
+  // d3.select('#comment-wrap').style('margin-top', d3.select('.top').node().getBoundingClientRect().height+'px');
+
 }
 
 function recurse(parent, replyArray, level) {
@@ -264,6 +272,8 @@ export function drawCommentBoxes(nestedData, wrap) {
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
+
+  
   
 }
 
