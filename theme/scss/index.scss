@@ -43,19 +43,15 @@ div{
 
 #wrapper{
     top:50px;
-    // left:0;
-    // right:0;
-    // bottom:0;
-    min-width:100vw;
-    overflow-y: hidden;
+    min-width: 100vw;
+    position: absolute;
     overflow-x: scroll;
     height: calc(100vh - 60px);
-   // width: 100vw;
-   // display: grid;
-    //grid-template-columns: 1fr 3fr 1fr;
-    position:fixed;
-    //grid-template-areas: "side1 main side2";
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
 }
+
 
 #top-bar{
     position:fixed;
@@ -148,25 +144,36 @@ div{
     margin-top:20px;
     left: 300px;
   }
-  
-  #left-sidebar{
-    position:fixed;
+  #left-wrap{
+    position: absolute;
     left:0px;
     top:60px;
+    width:300px;
+  }
+  #left-sidebar{
+    position:fixed;
+    // left:0px;
+    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  
-  #right-sidebar{
-    position:fixed;
+  #right-wrap{
+    position: absolute;
     left:1060px;
     top:60px;
+    width:300px;
+  }
+  #right-sidebar{
+    position:fixed;
+    // left:1060px;
+    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
   }
+
 }
 @media only screen and (min-width: 1331px) {
   #main{
@@ -178,24 +185,36 @@ div{
     left: 300px;
   }
   
-  #left-sidebar{
-    position:fixed;
+  #left-wrap{
+    position: absolute;
     left:0px;
     top:60px;
+    width:300px;
+  }
+  #left-sidebar{
+    position:fixed;
+    // left:0px;
+    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  
-  #right-sidebar{
-    position:fixed;
+  #right-wrap{
+    position: absolute;
     left:1140px;
     top:60px;
+    width:300px;
+  }
+  #right-sidebar{
+    position:fixed;
+    // left:1060px;
+    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
   }
+  
 
 }
 @media only screen and (min-width: 1596px) {
@@ -208,20 +227,31 @@ div{
     left: 300px;
   }
   
-  #left-sidebar{
-    position:fixed;
+  #left-wrap{
+    position: absolute;
     left:0px;
     top:60px;
+    width:300px;
+  }
+  #left-sidebar{
+    position:fixed;
+    // left:0px;
+    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  
-  #right-sidebar{
-    position:fixed;
+  #right-wrap{
+    position: absolute;
     left:1300px;
     top:60px;
+    width:300px;
+  }
+  #right-sidebar{
+    position:fixed;
+    // left:1060px;
+    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
@@ -257,24 +287,24 @@ div{
 //   overflow-y: scroll;
 // }
 
-#gen-anno-wraptation-wrap{
+#annotation-wrap{
   position:absolute;
   top:0;
   bottom:0;
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  margin-top: 70px;
+ // margin-top: 70px;
 }
 
-#left-sidebar .gen-gen-anno-wrap-wrap{
-  display:-webkit-box;
- // display:flex;
-  -webkit-box-orient:vertical;
- // flex-direction:column;
- // height:100%;
-  overflow-y: scroll;
-}
+// #left-sidebar .gen-anno-wrap, .structure-gen-anno-wrap{
+//   display:-webkit-box;
+//  // display:flex;
+//   -webkit-box-orient:vertical;
+//  // flex-direction:column;
+//  // height:100%;
+//   overflow-y: scroll;
+// }
 
 #left-sidebar #control svg{
   width:65px;
@@ -288,6 +318,7 @@ div{
   margin:8px;
   margin-top:3px;
   font-size: 12px;
+  overflow-y: scroll;
 }
 
 #left-sidebar .gen-anno-wrap .ref,
