@@ -137,38 +137,23 @@ div{
 // export const smallerDimension = {width: 720, height: 405, margin: 70};
 @media only screen and (max-width: 1330px) {
   #main{
-    width:760px;
+    width:720px;
     height: calc(100vh - 60px);
     position: relative;
     margin:20px;
     margin-top:20px;
-    left: 300px;
   }
-  #left-wrap{
-    position: absolute;
-    left:0px;
-    top:60px;
-    width:300px;
-  }
+
   #left-sidebar{
     position:fixed;
-    // left:0px;
-    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  #right-wrap{
-    position: absolute;
-    left:1060px;
-    top:60px;
-    width:300px;
-  }
+
   #right-sidebar{
     position:fixed;
-    // left:1060px;
-    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
@@ -177,39 +162,23 @@ div{
 }
 @media only screen and (min-width: 1331px) {
   #main{
-    width:840px;
+    width:800px;
     height: calc(100vh - 60px);
     position: relative;
     margin:25px;
     margin-top:20px;
-    left: 300px;
   }
-  
-  #left-wrap{
-    position: absolute;
-    left:0px;
-    top:60px;
-    width:300px;
-  }
+
   #left-sidebar{
     position:fixed;
-    // left:0px;
-    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  #right-wrap{
-    position: absolute;
-    left:1140px;
-    top:60px;
-    width:300px;
-  }
+
   #right-sidebar{
     position:fixed;
-    // left:1060px;
-    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
@@ -219,44 +188,34 @@ div{
 }
 @media only screen and (min-width: 1596px) {
   #main{
-    width:1000px;
+    width:960px;
     height: calc(100vh - 60px);
     position: relative;
     margin:20px;
     margin-top:20px;
-    left: 300px;
   }
   
-  #left-wrap{
-    position: absolute;
-    left:0px;
-    top:60px;
-    width:300px;
-  }
   #left-sidebar{
     position:fixed;
-    // left:0px;
-    // top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
   }
-  #right-wrap{
-    position: absolute;
-    left:1300px;
-    top:60px;
-    width:300px;
-  }
+
   #right-sidebar{
     position:fixed;
-    // left:1060px;
-    // top:60px;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
   }
 
+}
+
+#right-wrap, #left-wrap{
+  position: relative;
+  margin-top:60px;
+  width:300px;
 }
 
 // #main{

@@ -1,5 +1,6 @@
 export const endDrawTime = 84;
 import * as d3 from 'd3';
+import { getRightDimension } from '../dataManager';
 
 export const structureSelected = {
   selected: false,
@@ -82,9 +83,15 @@ export async function loadPngForFrame() {
   // Set the src of this Image object.
   imgObj.src = imgPath;
 
+
   imgObj.onload = function () {
-    canvas.width = imgObj.width;
-    canvas.height = imgObj.height;
+    let dimension = getRightDimension();
+
+    canvas.width = dimension.width;
+    canvas.height = dimension.height;
+    imgObj.width =  dimension.width;
+    imgObj.height = dimension.height;
+   
     const cxt = canvas.getContext('2d');
     cxt.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
 

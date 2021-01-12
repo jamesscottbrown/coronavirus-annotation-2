@@ -281,7 +281,6 @@ export function updateWithSelectedStructure(snip, commentData){
   const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
   
-
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
   updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
@@ -352,13 +351,13 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
 
   circ.attr('cx', (d) => 0);
   circ.attr('cy', (d) => 0);
-  //circ.attr('fill', 'red');
 
   circ.on('mouseover', (d) => {
     const wrap = d3.select('#right-sidebar').select('#comment-wrap');
     const memoDivs = wrap.selectAll('.memo').filter((f) => f.key === d.key);
     memoDivs.classed('selected', true);
     memoDivs.nodes()[0].scrollIntoView({ behavior: 'smooth' });
+
   }).on('mouseout', (d) => {
     const wrap = d3.select('#right-sidebar').select('#annotation-wrap');
     const memoDivs = wrap.selectAll('.memo').classed('selected', false);
@@ -394,12 +393,13 @@ async function renderDoodles(commentsInTimeframe, div) {
     const urlDood = await doods.items.filter((f) => f._delegate._location.path_ === `images/${dood.doodleName}`)[0].getDownloadURL();
     return urlDood;
   });
-
+  let dimension = getRightDimension();
   const images = div.selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
   images.attr('src', (d) => d);
+  images.attr('width', dimension.width);
+  images.attr('height', dimension.height);
 
 }
-
 export function videoUpdates(data, annoType) {
   const svgTest = d3.select('#interaction').select('svg');
   const svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
