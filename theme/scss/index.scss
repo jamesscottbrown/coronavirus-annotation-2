@@ -182,7 +182,7 @@ div{
   overflow-y: scroll;
 }
 
-#annotation-wrap{
+#gen-anno-wraptation-wrap{
   position:absolute;
   top:0;
   bottom:0;
@@ -192,7 +192,7 @@ div{
   margin-top: 70px;
 }
 
-#left-sidebar .gen-anno-wrap{
+#left-sidebar .gen-gen-anno-wrap-wrap{
   display:-webkit-box;
  // display:flex;
   -webkit-box-orient:vertical;
@@ -206,7 +206,7 @@ div{
   height:35px;
 }
 
-#left-sidebar .anno, .structure-anno{
+#left-sidebar .gen-anno-wrap, .structure-gen-anno-wrap{
   border: 1px solid gray;
   border-radius: 5px;
   padding:15px;
@@ -215,9 +215,9 @@ div{
   font-size: 12px;
 }
 
-#left-sidebar .anno .ref,
-.anno .ref,
-#left-sidebar .structure-anno .ref{
+#left-sidebar .gen-anno-wrap .ref,
+.gen-anno-wrap .ref,
+#left-sidebar .structure-gen-anno-wrap .ref{
 display: block;
 color: gray;
 font-size: 12px;
@@ -225,15 +225,15 @@ margin-top:10px;
 font-style: italic;
 }
 
-#left-sidebar .anno .link, 
-#left-sidebar .structure-anno .link, 
-.anno .link{
+#left-sidebar .gen-anno-wrap .link, 
+#left-sidebar .structure-gen-anno-wrap .link, 
+.gen-anno-wrap .link{
 display: block;
 font-size: 12px;
 margin-top:10px;
 }
 
-.anno.current rect{
+.gen-anno-wrap.current rect{
   opacity: 1;
 }
 
@@ -243,19 +243,19 @@ margin-top:10px;
   fill:orange;
 }
 
-.anno.current-hover rect,
-.anno.current.current-hover rect,
+.gen-anno-wrap.current-hover rect,
+.gen-anno-wrap.current.current-hover rect,
 .comm-bin.current-hover rect,
 .comm-bin.current.current-hover rect{
   opacity:.8;
   fill:orange;
 }
 
-.anno rect{
+.gen-anno-wrap rect{
   opacity: 0.3;
 }
 
-.anno .header-anno{
+.gen-anno-wrap .header-gen-anno-wrap{
   position:relative;
   top:0;
   left:0;
@@ -265,11 +265,11 @@ margin-top:10px;
   padding:3px;
 }
 
-.anno .anno-body{
+.gen-anno-wrap .gen-anno-wrap-body{
   margin:5px;
 }
 
-.anno.anno.unknown .header-anno{
+.gen-anno-wrap.gen-anno-wrap.unknown .header-gen-anno-wrap{
   position:relative;
   top:0;
   left:0;
@@ -288,6 +288,16 @@ margin-top:10px;
 //     position:relative;
 //     //max-width:350px;
 // }
+.anno rect{
+  stroke:#fff;
+  stroke-width: 1.5;
+  opacity: 0.3;
+}
+
+.anno.current rect{
+  opacity: 1;
+}
+
 #comment-wrap{
   position:absolute;
   top:0;
@@ -321,11 +331,11 @@ margin-top:10px;
    cursor:not-allowed;
  }
 
- .memo.selected, .anno.selected{
+ .memo.selected, .gen-anno-wrap.selected{
   background-color: #e2dfdf;
  }
 
- .memo.question, .anno.question, .structure-anno.question, .reply-memo.question{
+ .memo.question, .gen-anno-wrap.question, .structure-gen-anno-wrap.question, .reply-memo.question{
   border: 1px solid red !important;
  }
 
@@ -333,7 +343,7 @@ margin-top:10px;
    fill:#4d4949;
  }
 
- .memo.reference, .anno.reference, .structure-anno.reference{
+ .memo.reference, .gen-anno-wrap.reference, .structure-gen-anno-wrap.reference{
   border: 1px solid dodgerblue !important;
  }
 
@@ -433,7 +443,7 @@ margin-top:10px;
   width:100%;
 }
 
-#annotation-ui{
+#gen-anno-wraptation-ui{
   position:absolute;
   top:65px;
   right:20px;
@@ -467,8 +477,8 @@ margin-top:10px;
   // -ms-transform: translate(-50%);
   // transform: translate(-50%);
 }
-.anno .fa-exclamation-circle, .anno .fa-book-open,
-.structure-anno .fa-exclamation-circle, .structure-anno .fa-book-open,
+.gen-anno-wrap .fa-exclamation-circle, .gen-anno-wrap .fa-book-open,
+.structure-gen-anno-wrap .fa-exclamation-circle, .structure-gen-anno-wrap .fa-book-open,
 .memo .fa-exclamation-circle, .memo .fa-book-open{
   margin-left:10px;
   float:right;
@@ -629,7 +639,7 @@ button.btn.dropbtn.dropdown-toggle {
   width:100%;
 }
 
-.annotation-label{
+.gen-anno-wraptation-label{
   fill:black !important;
   font-size: 10px;
 }

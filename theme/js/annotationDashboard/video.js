@@ -22,9 +22,7 @@ canvas.setAttribute('pointer-events', 'none');
 
 function resizeVideoElements() {
 
-
   const video = document.getElementById('video');
-
   let dimension = getRightDimension();
 
   video.width = dimension.width;
@@ -346,7 +344,8 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
   
   const pushes = commentsInTimeframe.filter((f) => f.commentMark === 'push');
   const pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
-  pushedG.attr('transform', (d) => `translate(${(originalDimension.width * d.posLeft)}, ${(originalDimension.height * d.posTop)})`);
+  let dimension = getRightDimension();
+  pushedG.attr('transform', (d) => `translate(${(dimension.width * d.posLeft)}, ${(dimension.height * d.posTop)})`);
 
   const circ = pushedG.selectAll('circle').data((d) => [d]).join('circle');
   circ.attr('r', 10);

@@ -4,8 +4,6 @@ import { formatTime, getRightDimension } from '../dataManager';
 import { formatCommentData } from './commentBar';
 import {updateTimeElapsed} from './video';
 
-
-
 // const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
 
 function structureTooltip(coord, d, type) {
@@ -58,41 +56,6 @@ export function renderTimeline(commentData) {
  
   const div = d3.select('#main');
 
-  
-  // const comments = Object.entries(commentData.comments).map((m) => {
-  //   m[1].key = m[0];
-  //   return m[1];
-  // });
-
-  // function binThings() {
-  //   const binCount = 90 / 5;
-  //   const keeper = [];
-  //   for (let i = 0; i < binCount; i++) {
-  //     keeper[i] = { range: [(i * 5), ((i + 1) * 5)], data: comments.filter((f) => f.videoTime >= (i * 5) && f.videoTime <= ((i + 1) * 5)) };
-  //   }
-  //   return keeper;
-  // }
-
-  // const commentBins = binThings();
-
-  // const binScale = d3.scaleLinear().range([0, 1]).domain([0, d3.max(commentBins.map((m) => m.data.length))]);
-
-  // const commentGroup = timeSVG.append('g').classed('comm-group', true);
-  // commentGroup.append('text').text('Comments').style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(2, 10)');
-  // const comBins = commentGroup.selectAll('g.comm-bin').data(commentBins).join('g').classed('comm-bin', true);
-  // comBins.attr('transform', (d, i) => `translate(${xScale((i * 5))} 15)`);
-  // const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
-  // commentBinRect.attr('height', 10).attr('width', (950 / commentBins.length));
-
-  // commentBinRect.style('fill-opacity', (d, i) => binScale(d.data.length));
-
-  // comBins.on('mouseover', (event, d) => commentBinTimelineMouseover(event, d));
-  // comBins.on('mouseout', (event, d) => commentBinTimelineMouseout(event, d));
-
-  // commentBins.map((m, i) => m.data.length);
-
- 
-    
   let comms = formatCommentData(commentData);
   const binScale = d3.scaleLinear().range([.1, 1]).domain([0, comms.map(m=> Math.max(m.replyKeeper.length))]);
   console.log('comm data', comms);
@@ -104,7 +67,6 @@ export function renderTimeline(commentData) {
   timelineWrap.style('top', `${(dim.height + dim.margin)}px`);
   const timeSVG = timelineWrap.selectAll('svg').data(masterData).join('svg');
   timeSVG.style('width', `${dim.width+20}px`);
-
 
   const commentGroup = timeSVG.selectAll('g.comm-group').data(d=> [d.comments]).join('g').classed('comm-group', true);
   commentGroup.attr('transform', 'translate(3, 0)')
@@ -133,7 +95,6 @@ export function renderTimeline(commentData) {
   rects.attr('height', 6).attr('width', (d) => (xScale(d.seconds[1]) - xScale(d.seconds[0])));
 
   annos.attr('transform', (d, i, n) => {
-   // const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
     if (i > 0) {
       const chosen = d3.selectAll(n).data().filter((f, j) => j < i && f.seconds[1] > d.seconds[0]);
       return `translate(${xScale(d.seconds[0])} ${(7 * chosen.length)})`;
