@@ -58,7 +58,7 @@ export function renderTimeline(commentData) {
 
   let comms = formatCommentData(commentData);
   const binScale = d3.scaleLinear().range([.1, 1]).domain([0, comms.map(m=> Math.max(m.replyKeeper.length))]);
-  console.log('comm data', comms);
+  
 
   let masterData = [{comments: {data: comms, label: "comments"}, annotations: {data:annotationData[annotationData.length - 1], label: "annotations"}}];
 
@@ -109,7 +109,6 @@ export function renderTimeline(commentData) {
     timelineMouseout(event, d);
   });
   annos.on('click', (event, d)=> {
-    console.log(event, d);
     document.getElementById('video').currentTime = d.seconds[0];
   })
 }
@@ -126,8 +125,6 @@ export function highlightTimelineBars(timeRange) {
 
 export function commentBinTimelineMouseover(event, d) {
   d3.select(event.target.parentNode).classed('current-hover', true);
-
-  console.log('d on mouseover', d);
 
   d3.select('.progress-bar').append('div');
   if (d) {

@@ -45,7 +45,7 @@ export function renderIssueButton(wrap) {
   bugLink.append('span').classed('fas fa-bug', true);
 
   bugLink.on('mouseover', (event)=>{
-    console.log(event.target);
+  
     let tool = d3.select('#general-tooltip');
     tool.style('opacity', 1);
     tool.style('top', '5px');
@@ -83,7 +83,7 @@ export function goBackButton() {
 
   button.on('click', (event) => {
     if(userLoggedIn.loggedInBool === false){
-      console.log('button clicked', structureSelected);
+    
      d3.select('#right-sidebar').select('#sign-in-wrap').selectAll('*').remove();
      addCommentButton();
     
@@ -108,7 +108,7 @@ export function goBackButton() {
 
 export function addCommentButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
-  console.log('test user login', userLoggedIn.loggedInBool);
+ 
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {

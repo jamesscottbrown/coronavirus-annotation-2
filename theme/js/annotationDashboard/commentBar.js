@@ -23,10 +23,6 @@ export function updateCommentSidebar(dbRef) {
   // d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
-  console.log('updatecommentsidebar', structureSelected.selected);
-  console.log('top', d3.select('.top').node().getBoundingClientRect());
-
-  
  
   if(structureSelected.selected === false){
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
@@ -181,7 +177,6 @@ export function drawCommentBoxes(nestedData, wrap) {
   let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').selectAll('i.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
   let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').selectAll('i.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
 
-
   memoDivs.selectAll('.comment').data((d) => [d]).join('span').classed('comment', true)
     .selectAll('text')
     .data((d) => [d])
@@ -200,7 +195,6 @@ export function drawCommentBoxes(nestedData, wrap) {
   memoDivs.style('border', (d) => '1px solid gray');
 
   upvoteIcon(memoDivs, db);
-
   downvoteIcon(memoDivs, db);
 
   if (userLoggedIn.loggedInBool) {
@@ -725,8 +719,6 @@ export function formatToComment(div, startingTags) {
   submit.on('click', (event) => {
 
     event.stopPropagation();
-
-    //console.log('button clicked');
    
     const user = userLoggedIn;
 
@@ -747,10 +739,8 @@ export function formatToComment(div, startingTags) {
 
         if(structureSelected.selected){
 
-         // console.log(structureSelected);
           structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
-          //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
 
         }else{
           checkDatabase([updateCommentSidebar]);

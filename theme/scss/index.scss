@@ -43,17 +43,18 @@ div{
 
 #wrapper{
     top:50px;
-    left:0;
-    right:0;
-    bottom:0;
+    // left:0;
+    // right:0;
+    // bottom:0;
+    min-width:100vw;
     overflow-y: hidden;
+    overflow-x: scroll;
     height: calc(100vh - 60px);
-    width: 100vw;
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-    //grid-template-columns: auto 3fr auto;
+   // width: 100vw;
+   // display: grid;
+    //grid-template-columns: 1fr 3fr 1fr;
     position:fixed;
-    grid-template-areas: "side1 main side2";
+    //grid-template-areas: "side1 main side2";
 }
 
 #top-bar{
@@ -135,52 +136,126 @@ div{
   font-size:11px;
   width:150px;
 }
+// export const originalDimension = {width: 960, height:540, margin: 80};
+// export const middleDimension = {width: 800, height: 450, margin: 70};
+// export const smallerDimension = {width: 720, height: 405, margin: 70};
+@media only screen and (max-width: 1330px) {
+  #main{
+    width:760px;
+    height: calc(100vh - 60px);
+    position: relative;
+    margin:20px;
+    margin-top:20px;
+    left: 300px;
+  }
+  
+  #left-sidebar{
+    position:fixed;
+    left:0px;
+    top:60px;
+    height:calc(100vh - 70px);
+    padding: 1rem 0 0 0;
+    width:300px;
+    overflow-y: scroll;
+  }
+  
+  #right-sidebar{
+    position:fixed;
+    left:1060px;
+    top:60px;
+    height:calc(100vh - 70px);
+    width:330px;
+    overflow-y: scroll;
+  }
+}
+@media only screen and (min-width: 1331px) {
+  #main{
+    width:840px;
+    height: calc(100vh - 60px);
+    position: relative;
+    margin:25px;
+    margin-top:20px;
+    left: 300px;
+  }
+  
+  #left-sidebar{
+    position:fixed;
+    left:0px;
+    top:60px;
+    height:calc(100vh - 70px);
+    padding: 1rem 0 0 0;
+    width:300px;
+    overflow-y: scroll;
+  }
+  
+  #right-sidebar{
+    position:fixed;
+    left:1140px;
+    top:60px;
+    height:calc(100vh - 70px);
+    width:330px;
+    overflow-y: scroll;
+  }
+
+}
+@media only screen and (min-width: 1596px) {
+  #main{
+    width:1000px;
+    height: calc(100vh - 60px);
+    position: relative;
+    margin:20px;
+    margin-top:20px;
+    left: 300px;
+  }
+  
+  #left-sidebar{
+    position:fixed;
+    left:0px;
+    top:60px;
+    height:calc(100vh - 70px);
+    padding: 1rem 0 0 0;
+    width:300px;
+    overflow-y: scroll;
+  }
+  
+  #right-sidebar{
+    position:fixed;
+    left:1300px;
+    top:60px;
+    height:calc(100vh - 70px);
+    width:330px;
+    overflow-y: scroll;
+  }
+
+}
 
 // #main{
-//     grid-area: main;
-//     height: calc(100vh - 60px);
-//     position: relative;
-//     //margin-top:20px;
-//     top:20px;
+//   grid-area: main;
+//   height: calc(100vh - 60px);
+//   position: relative;
+//   margin-top:20px;
 // }
 
 // #left-sidebar{
-//     left:0px;
-//     top:0;
-//     height:calc(100vh - 70px);
-//     padding: 1rem 0 0 0;
-//     grid-area: side1;
-//     overflow-y: scroll;
-//     position:relative;
+//   position:fixed;
+//   left:0px;
+//   top:60px;
+//   height:calc(100vh - 70px);
+//   padding: 1rem 0 0 0;
+//   grid-area: side1;
+//   width:300px;
+//   overflow-y: scroll;
 // }
 
-#main{
-  grid-area: main;
-  height: calc(100vh - 60px);
-  position: relative;
-  margin-top:20px;
-}
-
-#left-sidebar{
-  position:fixed;
-  left:0px;
-  top:60px;
-  height:calc(100vh - 70px);
-  padding: 1rem 0 0 0;
-  grid-area: side1;
-  width:300px;
-  overflow-y: scroll;
-}
-
-#right-sidebar{
-  position:fixed;
-  right:0px;
-  top:60px;
-  height:calc(100vh - 70px);
-  width:330px;
-  grid-area: side2;
-  overflow-y: scroll;
-}
+// #right-sidebar{
+//   position:fixed;
+//   right:0px;
+//   top:60px;
+//   height:calc(100vh - 70px);
+//   width:330px;
+//   grid-area: side2;
+//   overflow-y: scroll;
+// }
 
 #gen-anno-wraptation-wrap{
   position:absolute;
@@ -281,13 +356,6 @@ margin-top:10px;
   margin:18px;
 }
 
-// #right-sidebar{
-//     height:calc(100vh - 70px);
-//     grid-area: side2;
-//     overflow-y: scroll;
-//     position:relative;
-//     //max-width:350px;
-// }
 .anno rect{
   stroke:#fff;
   stroke-width: 1.5;

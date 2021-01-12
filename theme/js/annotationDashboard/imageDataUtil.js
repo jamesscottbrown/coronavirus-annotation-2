@@ -134,7 +134,6 @@ export function colorChecker(code){
     }else if(code[2] > 70 && code[0] < 100 && code[2] > code[0] && code[2] > code[1]){
       return 'blue';
     }else{
-      //console.log('unknown', code);
       return "unknown";
     }
       
@@ -150,8 +149,6 @@ export function parseArray(hoverColor) {
     const end = i + 4;
     const snip = newData.data.slice(i, end);
     const color = colorChecker(snip);
-
-   // console.log('in parse array',color)
 
     if (color != hoverColor) {
       newData.data[i] = 255;

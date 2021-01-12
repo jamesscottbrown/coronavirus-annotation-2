@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
 import { annotationData } from '..';
-import { dataKeeper, formatAnnotationTime, formatTime, getRightDimension, originalDimension, smallerDimension } from '../dataManager';
+import { dataKeeper, formatAnnotationTime, formatTime, getRightDimension } from '../dataManager';
 import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
 import {
   clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
