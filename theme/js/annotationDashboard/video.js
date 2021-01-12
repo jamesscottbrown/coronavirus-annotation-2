@@ -293,8 +293,8 @@ export function updateWithSelectedStructure(snip, commentData){
   const unknowns = annos.filter((f) => f.has_unkown === 'TRUE');
   unknowns.classed('unknown', true);
 
-  topCommentWrap.node().scrollIntoView();
-  annoWrap.select('.top').node().scrollIntoView();
+  topCommentWrap.node().scrollIntoView({ block: 'end', behavior: 'smooth' });
+  annoWrap.select('.top').node().scrollIntoView({ block: 'end', behavior: 'smooth' });
 
   // MIGHT BE REPEATING WORK - ALREADY HAVE UPDATE COMMENT SIDEBAR ABOVE
   drawCommentBoxes(structureSelected.comments, selectedComWrap);
@@ -356,7 +356,7 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
     const wrap = d3.select('#right-sidebar').select('#comment-wrap');
     const memoDivs = wrap.selectAll('.memo').filter((f) => f.key === d.key);
     memoDivs.classed('selected', true);
-    memoDivs.nodes()[0].scrollIntoView({ behavior: 'smooth' });
+    memoDivs.nodes()[0].scrollIntoView({ block: 'end', behavior: 'smooth' });
 
   }).on('mouseout', (d) => {
     const wrap = d3.select('#right-sidebar').select('#annotation-wrap');

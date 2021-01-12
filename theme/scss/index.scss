@@ -129,7 +129,7 @@ div{
 @media only screen and (max-width: 1330px) {
   #wrapper{
     top:60px;
-    width: 1340px;
+    width: 1400px;
     position: fixed;
     overflow-x: scroll;
     height: calc(100vh - 60px);
@@ -172,7 +172,7 @@ div{
 
   #wrapper{
     top:60px;
-    width: 1420px;
+    width: 1500px;
     position: fixed;
     overflow-x: scroll;
     height: calc(100vh - 60px);
@@ -210,23 +210,24 @@ div{
 @media only screen and (min-width: 1596px) {
   #wrapper{
     top:60px;
-    width: 1580px;
+    width: 1620px;
     position: fixed;
     overflow-x: scroll;
-    height: calc(100vh - 60px);
-    //overflow-y: hidden;
+    //height: calc(100vh - 60px);
+    overflow-y: hidden;
+    bottom:0;
   }
   #main{
     width:960px;
     height: calc(100vh - 60px);
     position: absolute;
     left:300px;
-    margin:20px;
-    margin-top:20px;
+   // margin:20px;
+    top: 0;
   }
   
   #left-sidebar{
-    position:fixed;
+    position:sticky;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
@@ -248,7 +249,7 @@ div{
 
 #right-wrap, #left-wrap{
   position: absolute;
-  margin-top:60px;
+  top:60px;
   width:300px;
   display:inline;
   height:calc(100vh - 70px);
@@ -256,11 +257,12 @@ div{
 
 #annotation-wrap{
   position:absolute;
-  top:0;
+  top:60px;
   bottom:0;
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  scroll-margin-top: 80px;
  
 }
 
@@ -277,6 +279,7 @@ div{
   margin-top:3px;
   font-size: 12px;
   overflow-y: scroll;
+  scroll-margin-top: 5px;
 }
 
 #left-sidebar .gen-anno-wrap .ref,
