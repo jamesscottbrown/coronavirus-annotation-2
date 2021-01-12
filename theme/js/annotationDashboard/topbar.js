@@ -121,8 +121,9 @@ export function addCommentButton() {
     button.text('Add Comment');
     button.on('click', (event) => {
       clearRightSidebar();
+      renderCommentDisplayStructure();
       d3.select('#interaction').style('pointer-events', 'all');
-      const wrap = d3.select('#right-sidebar').select('#comment-wrap');
+      const wrap = d3.select('#right-sidebar').select('.top');
       formatToComment(wrap, []);
       goBackButton();
     });

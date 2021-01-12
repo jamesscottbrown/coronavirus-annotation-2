@@ -330,6 +330,8 @@ export function renderStructureKnowns(topCommentWrap) {
 export function defaultTemplate(div, tagArray) {
   let time = formatTime(document.getElementById('video').currentTime);
 
+  console.log('div in temp wrap', div);
+
   const inputDiv = div.select('.template-wrap');// .append('div');//.classed('text-input', true);
   // inputDiv.append('text').text(`${user.displayName}@ ${formatVideoTime(currentTime)} :`);
 
