@@ -41,16 +41,7 @@ div{
    // outline: black solid 1px;
 }
 
-#wrapper{
-    top:50px;
-    min-width: 100vw;
-    position: absolute;
-    overflow-x: scroll;
-    height: calc(100vh - 60px);
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-}
+
 
 
 #top-bar{
@@ -136,16 +127,29 @@ div{
 // export const middleDimension = {width: 800, height: 450, margin: 70};
 // export const smallerDimension = {width: 720, height: 405, margin: 70};
 @media only screen and (max-width: 1330px) {
+  #wrapper{
+    top:60px;
+    width: 1340px;
+    position: fixed;
+    overflow-x: scroll;
+    height: calc(100vh - 60px);
+   // overflow-y: hidden;
+}
   #main{
     width:720px;
     height: calc(100vh - 60px);
-    position: relative;
+    position: absolute;
+    left:300px;
+    top:0;
     margin:20px;
     margin-top:20px;
+    display:inline;
   }
 
   #left-sidebar{
-    position:fixed;
+    //position:fixed;
+    position:sticky;
+    top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
@@ -153,18 +157,32 @@ div{
   }
 
   #right-sidebar{
-    position:fixed;
+    position:sticky;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
   }
 
+  #right-wrap{
+    left:1060px;
+  }
+
 }
 @media only screen and (min-width: 1331px) {
+
+  #wrapper{
+    top:60px;
+    width: 1420px;
+    position: fixed;
+    overflow-x: scroll;
+    height: calc(100vh - 60px);
+   // overflow-y: hidden;
+}
   #main{
     width:800px;
     height: calc(100vh - 60px);
-    position: relative;
+    position: absolute;
+    left:300px;
     margin:25px;
     margin-top:20px;
   }
@@ -178,19 +196,31 @@ div{
   }
 
   #right-sidebar{
-    position:fixed;
+    position:sticky;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
+  }
+  #right-wrap{
+    left:1150px;
   }
   
 
 }
 @media only screen and (min-width: 1596px) {
+  #wrapper{
+    top:60px;
+    width: 1580px;
+    position: fixed;
+    overflow-x: scroll;
+    height: calc(100vh - 60px);
+    //overflow-y: hidden;
+  }
   #main{
     width:960px;
     height: calc(100vh - 60px);
-    position: relative;
+    position: absolute;
+    left:300px;
     margin:20px;
     margin-top:20px;
   }
@@ -204,47 +234,25 @@ div{
   }
 
   #right-sidebar{
-    position:fixed;
+    position:sticky;
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
   }
 
+  #right-wrap{
+    left:1300px;
+  }
+
 }
 
 #right-wrap, #left-wrap{
-  position: relative;
+  position: absolute;
   margin-top:60px;
   width:300px;
+  display:inline;
+  height:calc(100vh - 70px);
 }
-
-// #main{
-//   grid-area: main;
-//   height: calc(100vh - 60px);
-//   position: relative;
-//   margin-top:20px;
-// }
-
-// #left-sidebar{
-//   position:fixed;
-//   left:0px;
-//   top:60px;
-//   height:calc(100vh - 70px);
-//   padding: 1rem 0 0 0;
-//   grid-area: side1;
-//   width:300px;
-//   overflow-y: scroll;
-// }
-
-// #right-sidebar{
-//   position:fixed;
-//   right:0px;
-//   top:60px;
-//   height:calc(100vh - 70px);
-//   width:330px;
-//   grid-area: side2;
-//   overflow-y: scroll;
-// }
 
 #annotation-wrap{
   position:absolute;
@@ -253,7 +261,7 @@ div{
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
- // margin-top: 70px;
+ 
 }
 
 #left-sidebar #control svg{
