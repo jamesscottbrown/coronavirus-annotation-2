@@ -315,6 +315,7 @@ export function renderStructureKnowns(topCommentWrap) {
         tool.style('left', '-100px');
         const structArray = [structureSelected.structure.toString()];
         formatToComment(topCommentWrap, structArray);
+        d3.select('#comment-wrap').style('margin-top', '420px');
       });
   } else {
     infoButton.text('Log in to comment on this')

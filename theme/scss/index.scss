@@ -135,7 +135,7 @@ div{
     //height: calc(100vh - 60px);
     bottom:0;
    // overflow-y: hidden;
-}
+  }
   #main{
     width:720px;
     //height: calc(100vh - 60px);
@@ -149,13 +149,12 @@ div{
   }
 
   #left-sidebar{
-    //position:fixed;
     position:sticky;
-    top:60px;
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
+    padding: 1rem 0 0 0;
   }
 
   #right-sidebar{
@@ -163,10 +162,15 @@ div{
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
+    padding: 1rem 0 0 0;
   }
 
   #right-wrap{
     left:1060px;
+  }
+
+  .add-comment{
+    left:1040px;
   }
 
 }
@@ -195,6 +199,7 @@ div{
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
+    padding: 1rem 0 0 0;
   }
 
   #right-sidebar{
@@ -202,9 +207,14 @@ div{
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
+    padding: 1rem 0 0 0;
   }
   #right-wrap{
     left:1150px;
+  }
+
+  .add-comment{
+    left:1140px;
   }
   
 
@@ -239,9 +249,14 @@ div{
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
+    padding: 1rem 0 0 0;
   }
 
   #right-wrap{
+    left:1300px;
+  }
+
+  .add-comment{
     left:1300px;
   }
 
@@ -271,7 +286,7 @@ div{
   height:35px;
 }
 
-#left-sidebar .gen-anno-wrap div.anno, .structure-gen-anno-wrap div.anno{
+#left-sidebar .gen-anno-wrap div.anno, .sel-anno-wrap div.structure-anno{
   border: 1px solid gray;
   border-radius: 5px;
   padding:15px;
@@ -293,7 +308,7 @@ font-style: italic;
 }
 
 #left-sidebar .gen-anno-wrap .link, 
-#left-sidebar .structure-gen-anno-wrap .link, 
+#left-sidebar .sel-anno-wrap .link, 
 .gen-anno-wrap .link{
 display: block;
 font-size: 12px;
@@ -396,7 +411,7 @@ margin-top:10px;
   background-color: #e2dfdf;
  }
 
- .memo.question, .gen-anno-wrap.question, .structure-gen-anno-wrap.question, .reply-memo.question{
+ .memo.question, .gen-anno-wrap.question, .sel-anno-wrap.question, .reply-memo.question{
   border: 1px solid red !important;
  }
 
@@ -404,7 +419,7 @@ margin-top:10px;
    fill:#4d4949;
  }
 
- .memo.reference, .gen-anno-wrap.reference, .structure-gen-anno-wrap.reference{
+ .memo.reference, .gen-anno-wrap.reference, .sel-anno-wrap.reference{
   border: 1px solid dodgerblue !important;
  }
 
@@ -504,22 +519,11 @@ margin-top:10px;
   width:100%;
 }
 
-#gen-anno-wraptation-ui{
-  position:absolute;
-  top:65px;
-  right:20px;
-  height: 400px;
-  width:300px;
-  background-color: aqua;
-  border-radius: 3px;
-}
-
 .add-comment{
   text-align: center;
   display: inline;
-  position:relative;
-  float:right;
-  width:330px;
+  position:absolute;
+  width:300px;
   height:50px;
 }
 
@@ -531,15 +535,9 @@ margin-top:10px;
   -ms-transform: translate(-50%);
   transform: translate(-50%);
 }
-.add-comment-structure{
-  // position: absolute;
-  // left: 45%;
-  // top:126px;
-  // -ms-transform: translate(-50%);
-  // transform: translate(-50%);
-}
+
 .gen-anno-wrap .fa-exclamation-circle, .gen-anno-wrap .fa-book-open,
-.structure-gen-anno-wrap .fa-exclamation-circle, .structure-gen-anno-wrap .fa-book-open,
+.sel-anno-wrap .fa-exclamation-circle, .sel-gen-anno-wrap .fa-book-open,
 .memo .fa-exclamation-circle, .memo .fa-book-open{
   margin-left:10px;
   float:right;
@@ -609,19 +607,6 @@ video, canvas, #interaction, #add-mark, #interaction svg{
 
 video::-webkit-media-controls {
   display:none !important;
-}
-
-.add-comment{
-  //float:right;
-  padding-top:3px;
-  text-align: center;
-  //width:20%;
-  display: inline;
-  flex: 1 0 auto;
- // align-self: flex-end;
-  align-items: flex-end;
-
-  
 }
 
 .user-wrap{
@@ -885,7 +870,7 @@ button.btn.dropbtn.dropdown-toggle:active{
 
 
 #comment-submit-button{
-  margin:20px;
+  margin: 0 20px;
 }
 
 .button-wrap{
