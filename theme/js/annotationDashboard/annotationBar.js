@@ -123,5 +123,5 @@ export function highlightAnnotationbar(currentTime) {
   const test = Array.from(new Set(annos.data().map((m) => m.seconds[0]))).filter((f) => f <= currentTime);
 
   const selectedAnno = annos.filter((f) => f.seconds[0] == test[test.length - 1]).classed('selected', true);
-  selectedAnno.nodes()[0].scrollIntoView({ behavior: 'smooth' });
+  selectedAnno.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 }

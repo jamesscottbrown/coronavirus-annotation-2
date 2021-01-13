@@ -101,8 +101,7 @@ export function highlightCommentBoxes(timeRange) {
   memoDivs.classed('selected', false);
   const selectedMemoDivs = memoDivs.filter((f) => f.videoTime <= timeRange[1] && f.videoTime >= timeRange[0]).classed('selected', true);
   if (!selectedMemoDivs.empty()) {
-    // selectedMemoDivs.nodes()[0].scrollIntoView({behavior: "smooth"});
-    selectedMemoDivs.nodes()[0].scrollIntoView();
+    selectedMemoDivs.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
   }
 }
 

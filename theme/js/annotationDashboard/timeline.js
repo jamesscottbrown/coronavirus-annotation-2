@@ -131,19 +131,12 @@ export function commentBinTimelineMouseover(event, d) {
     const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
     const filComm = comments.filter((f) => d.key === f.key);
     filComm.classed('selected', true);
-    filComm.nodes()[0].scrollIntoView({ behavior: 'smooth' });
+    filComm.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 
     let rectNodes = d3.selectAll('.comm-bin').select('rect').nodes();
     let jump  = 960  / rectNodes.length;
 
     let measuereLeft = (jump * rectNodes.indexOf(event.target))
-
-    // d3.select('.progress-bar').append('div').attr('id', 'progress-highlight')
-    // .style('position', 'absolute')
-    // .style('left', `${measuereLeft}px`).style('opacity', '.2')
-    // .style('background-color', 'orange')
-    // .style('border-radius', 0)
-    // .style('width', `${jump}px`);
 
     structureTooltip([measuereLeft + (jump+5)], d, 'comments');
   }
@@ -154,7 +147,7 @@ export function commentBinTimelineMouseout(event, d) {
   d3.select(event.target.parentNode).classed('current-hover', false);
   const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
  comments.filter((f) => f.key === d.key).classed('selected', false);
-  d3.select('#timeline-tooltip').style('opacity', 0).style('left', 0).style('top', '-200px');
+  d3.select('#timeline-tooltip').style('opacity', 0).style('left', "-200px").style('top', "-200px");
 }
 
 export function timelineMouseover(event, d) {
@@ -173,7 +166,8 @@ export function timelineMouseover(event, d) {
   
   const filAnn = d3.select('#left-sidebar').selectAll('.anno').filter((f) => f.index === d.index).classed('selected', true);
   if(!filAnn.empty()){
-    filAnn.nodes()[0].scrollIntoView({ behavior: 'smooth' });
+     filAnn.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    //filAnn.nodes()[0].scrollTop = 60+"px";
   }
   
   const coord = d3.pointer(event);
@@ -184,5 +178,6 @@ export function timelineMouseout(event, d) {
   d3.select('#progress-highlight').remove();
   d3.select(event.target.parentNode).classed('current-hover', false);
   d3.select('#left-sidebar').selectAll('.anno').filter((f) => f.index === d.index).classed('selected', false);
-  d3.select('#timeline-tooltip').style('opacity', 0);
+
+  d3.select('#timeline-tooltip').style('opacity', 0).style('left', "-200px").style('top', "-200px");
 }

@@ -132,17 +132,19 @@ div{
     width: 1400px;
     position: fixed;
     overflow-x: scroll;
-    height: calc(100vh - 60px);
+    //height: calc(100vh - 60px);
+    bottom:0;
    // overflow-y: hidden;
 }
   #main{
     width:720px;
-    height: calc(100vh - 60px);
+    //height: calc(100vh - 60px);
+    bottom:0;
     position: absolute;
     left:300px;
     top:0;
     margin:20px;
-    margin-top:20px;
+    //margin-top:20px;
     display:inline;
   }
 
@@ -213,7 +215,6 @@ div{
     width: 1620px;
     position: fixed;
     overflow-x: scroll;
-    //height: calc(100vh - 60px);
     overflow-y: hidden;
     bottom:0;
   }
@@ -222,7 +223,6 @@ div{
     height: calc(100vh - 60px);
     position: absolute;
     left:300px;
-   // margin:20px;
     top: 0;
   }
   
@@ -249,7 +249,7 @@ div{
 
 #right-wrap, #left-wrap{
   position: absolute;
-  top:60px;
+  top:10px;
   width:300px;
   display:inline;
   height:calc(100vh - 70px);
@@ -257,7 +257,7 @@ div{
 
 #annotation-wrap{
   position:absolute;
-  top:60px;
+  top:50px;
   bottom:0;
   width:100%;
   overflow-y: scroll;
@@ -360,7 +360,7 @@ margin-top:10px;
 
 #comment-wrap{
   position:absolute;
-  top:0;
+  top:50px;
   bottom:0;
   width:100%;
   overflow-y: scroll;
@@ -644,18 +644,11 @@ video::-webkit-media-controls {
 }
 
 .top{
-  // //width:inherit;
-  // position: -webkit-sticky; /* Safari */
-  // position: sticky;
-  // width:100%;
-  min-width:320px;
-  max-width:330px;
-  position: fixed;
-  top:50px;
+  width:100%;
+  position: sticky;
+  top:0;
   background-color: #fff;
   padding-left:10px;
-  margin-top:20px;
-  //z-index: 1000;
 }
 
 .top h6{
@@ -766,7 +759,6 @@ button.btn.dropbtn.dropdown-toggle:active{
 
 #timeline-tooltip{
   background: rgba($color: #eaeaea, $alpha: 1);
-  
   border-radius: 4px;
   position:absolute;
   padding:5px;
