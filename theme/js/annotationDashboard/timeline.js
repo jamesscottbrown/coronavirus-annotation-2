@@ -20,6 +20,7 @@ function structureTooltip(coord, d, type) {
     
     d3.select('#timeline-tooltip')
       .style('position', 'absolute') 
+      .style('pointer-events', 'all')
       .style('opacity', 1)
       .html(`
         <h7 style="color:gray">${formatedTime.minutes}:${formatedTime.seconds}  - </h7>
@@ -128,10 +129,12 @@ export function commentBinTimelineMouseover(event, d) {
 
   d3.select('.progress-bar').append('div');
   if (d) {
+    
     const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
     const filComm = comments.filter((f) => d.key === f.key);
     filComm.classed('selected', true);
-    filComm.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;
+ 
 
     let rectNodes = d3.selectAll('.comm-bin').select('rect').nodes();
     let jump  = 960  / rectNodes.length;
@@ -166,8 +169,9 @@ export function timelineMouseover(event, d) {
   
   const filAnn = d3.select('#left-sidebar').selectAll('.anno').filter((f) => f.index === d.index).classed('selected', true);
   if(!filAnn.empty()){
-     filAnn.nodes()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-    //filAnn.nodes()[0].scrollTop = 60+"px";
+     //filAnn.nodes()[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});//.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+     let scroll = filAnn.nodes()[0].offsetTop;
+     d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = scroll;
   }
   
   const coord = d3.pointer(event);
@@ -179,5 +183,5 @@ export function timelineMouseout(event, d) {
   d3.select(event.target.parentNode).classed('current-hover', false);
   d3.select('#left-sidebar').selectAll('.anno').filter((f) => f.index === d.index).classed('selected', false);
 
-  d3.select('#timeline-tooltip').style('opacity', 0).style('left', "-200px").style('top', "-200px");
+  d3.select('#timeline-tooltip').style('opacity', 0).style('left', "-200px").style('top', "-200px").style('pointer-events', 'none');
 }

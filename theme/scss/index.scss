@@ -130,7 +130,7 @@ div{
   #wrapper{
     top:60px;
     width: 1400px;
-    position: fixed;
+    position: absolute;
     overflow-x: scroll;
     //height: calc(100vh - 60px);
     bottom:0;
@@ -175,7 +175,7 @@ div{
   #wrapper{
     top:60px;
     width: 1500px;
-    position: fixed;
+    position: absolute;
     overflow-x: scroll;
     height: calc(100vh - 60px);
    // overflow-y: hidden;
@@ -213,7 +213,7 @@ div{
   #wrapper{
     top:60px;
     width: 1620px;
-    position: fixed;
+    position: absolute;
     overflow-x: scroll;
     overflow-y: hidden;
     bottom:0;
@@ -257,13 +257,13 @@ div{
 
 #annotation-wrap{
   position:absolute;
+  scroll-behavior: smooth;
   top:50px;
   bottom:0;
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
   scroll-margin-top: 80px;
- 
 }
 
 #left-sidebar #control svg{
@@ -365,6 +365,7 @@ margin-top:10px;
   width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 .comm-bin rect{
