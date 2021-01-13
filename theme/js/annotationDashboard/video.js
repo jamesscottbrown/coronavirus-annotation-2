@@ -169,20 +169,51 @@ export function togglePlay() {
   }
 }
 
+export function colorTimeline(snip){
+
+  colorDictionary[snip].other_names.map(f=> {
+    let name = f.toUpperCase();
+    let color = colorDictionary[snip].code;
+    let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
+      let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(name));
+      return c.comment.toUpperCase().includes(name) || rep.length > 0;
+    });
+    comm.select('rect').style('fill', `rgba(${color[0]}, ${color[1]}, ${color[2]}, 1)`);
+
+    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
+      return a.associated_structures.toUpperCase().includes(name);
+    }).select('rect').style('fill', `rgba(${color[0]}, ${color[1]}, ${color[2]}, 1)`);
+
+  });
+}
+
 export async function mouseMoveVideo(coord, video) {
 
     if(!video.playing && (structureSelected.selected === false && video.currentTime <= endDrawTime)){
     const snip = getCoordColor(coord);
 
     if (snip != currentColorCodes[currentColorCodes.length - 1] && !video.playing && snip != 'black' && snip != 'unknown') {
+
       currentColorCodes.push(snip);
       parseArray(snip);
       const structFromDict = (snip === 'orange' && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
+     
       const structureData = annotationData[annotationData.length - 1].filter((f) => {
         return f.associated_structures.split(', ').map((m) => m.toUpperCase()).indexOf(structFromDict) > -1});
       structureTooltip(structureData, coord, snip, true);
+      
+      if(!structureSelected.selected){
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        colorTimeline(snip);
+      }
 
     } else if (snip === 'black') {
+
+      if(!structureSelected.selected){
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+      }
 
       let tool = d3.select('.tooltip');
       tool.style('opacity', 0);
@@ -199,6 +230,10 @@ export async function mouseClickVideo(coord, video) {
   if (video.playing) {
     structureSelectedToggle(null);
     togglePlay();
+
+    d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+
   } else {
     /**
      * VIDEO PAUSED - CLICKED NOT ON STRUCTURE
@@ -207,6 +242,9 @@ export async function mouseClickVideo(coord, video) {
 
     if (snip === 'black' || snip === 'unknown') {
       structureSelectedToggle(null);
+
+      d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
 
       togglePlay();
       addCommentButton();
@@ -227,8 +265,9 @@ export async function mouseClickVideo(coord, video) {
        */
     
       let structure = (snip === 'orange' && video.currentTime > 16) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
-       
+      
       structureSelectedToggle(structure, coord, snip);
+      colorTimeline(snip);
       let structureAnnotations = updateWithSelectedStructure(snip, commentData);
       structureTooltip(structureAnnotations, coord, snip, false);
     }

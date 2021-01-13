@@ -366,11 +366,11 @@ margin-top:10px;
 .anno rect{
   stroke:#fff;
   stroke-width: 1.5;
-  opacity: 0.3;
+  fill:rgba(0,0,0,0.2);
 }
 
 .anno.current rect{
-  opacity: 1;
+  fill:rgba(0,0,0,0.9);
 }
 
 #comment-wrap{
@@ -381,11 +381,6 @@ margin-top:10px;
   overflow-y: scroll;
   overflow-x: hidden;
   scroll-behavior: smooth;
-}
-
-.comm-bin rect{
-  stroke: #BBBBBB;
-  stroke-width: 1px;
 }
 
 .memo{

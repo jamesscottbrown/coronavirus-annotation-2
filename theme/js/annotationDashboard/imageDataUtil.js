@@ -31,12 +31,12 @@ export function structureSelectedToggle(datum, coords, color) {
 
 export const doodleKeeper = [];
 
-export const colorDictionary = {
+export const colorDictionary = {//(60,179,113)
   blue: { code: [0, 0, 255], structure: ['Cell Membrane'], other_names:['Cell Membrane', 'plasma membrane'] },
   purple: { code: [102, 0, 204], structure: ['ACE2'], other_names:['ACE2'] },
   magenta: { code: [255, 0, 255], structure: ['ACE2'], other_names:['ACE2'] },
   red: { code: [255, 0, 0], structure: ['Envelope protein'], other_names:['Envelope protein', 'e protein'] },
-  green: { code: [0, 255, 0], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
+  green: { code: [60, 179, 113], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
   orange: { code: [255, 128, 0], structure: ['RNA', 'Furin'], other_names:[] },
   yellow: { code: [255, 255, 0], structure: ['Membrane Protein'], other_names:['Membrane Protein','membrane'] },
   aqua: { code: [0, 255, 255], structure: ['Furin'], other_names:['Furin'] },
