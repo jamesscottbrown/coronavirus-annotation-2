@@ -39,7 +39,7 @@ export const colorDictionary = {//(60,179,113)
   green: { code: [60, 179, 113], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
   orange: { code: [255, 128, 0], structure: ['RNA', 'Furin'], other_names:[] },
   yellow: { code: [255, 255, 0], structure: ['Membrane Protein'], other_names:['Membrane Protein','membrane'] },
-  aqua: { code: [0, 255, 255], structure: ['Furin'], other_names:['Furin'] },
+  aqua: { code: [255,215,0], structure: ['Furin'], other_names:['Furin'] },
   teal: { code: [10, 160, 140], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
   'light gray': { code: [200, 200, 200], structure: ['Sugars'], other_names:['Sugars'] },
   white: { code: [250, 250, 250], structure: ['Virus Membrane'], other_names:['Virus Membrane']},

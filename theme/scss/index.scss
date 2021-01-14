@@ -297,6 +297,14 @@ div{
   scroll-margin-top: 5px;
 }
 
+svg .anno rect{
+  opacity:.4;
+}
+
+svg .anno.current rect, svg .anno.struct-present rect{
+  opacity: 1;
+}
+
 #left-sidebar .gen-anno-wrap .ref,
 .gen-anno-wrap .ref,
 #left-sidebar .structure-gen-anno-wrap .ref{

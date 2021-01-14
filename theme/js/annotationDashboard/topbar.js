@@ -101,8 +101,8 @@ export function goBackButton() {
         renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
         d3.select('#comment-wrap').style('margin-top', '170px');
       } else {
-        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
-        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
         structureSelectedToggle(null);
         clearRightSidebar();
         renderCommentDisplayStructure();

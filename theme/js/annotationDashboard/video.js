@@ -171,20 +171,42 @@ export function togglePlay() {
 
 export function colorTimeline(snip){
 
-  colorDictionary[snip].other_names.map(f=> {
-    let name = f.toUpperCase();
+  let video = document.getElementById('video');
+
+  if(snip === "orange"){
+
+    let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
     let color = colorDictionary[snip].code;
     let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
-      let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(name));
-      return c.comment.toUpperCase().includes(name) || rep.length > 0;
+      let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(structure));
+      return c.comment.toUpperCase().includes(structure) || rep.length > 0;
     });
-    comm.select('rect').style('fill', `rgba(${color[0]}, ${color[1]}, ${color[2]}, 1)`);
+    comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
 
     d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
-      return a.associated_structures.toUpperCase().includes(name);
-    }).select('rect').style('fill', `rgba(${color[0]}, ${color[1]}, ${color[2]}, 1)`);
+      return a.associated_structures.toUpperCase().includes(structure);
+    }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
 
-  });
+
+  }else{
+
+    colorDictionary[snip].other_names.map(f=> {
+      let name = f.toUpperCase();
+      let color = colorDictionary[snip].code;
+      let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
+        let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(name));
+        return c.comment.toUpperCase().includes(name) || rep.length > 0;
+      });
+      comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+  
+      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
+        return a.associated_structures.toUpperCase().includes(name);
+      }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+  
+    });
+
+  }
+
 }
 
 export async function mouseMoveVideo(coord, video) {
@@ -203,16 +225,16 @@ export async function mouseMoveVideo(coord, video) {
       structureTooltip(structureData, coord, snip, true);
       
       if(!structureSelected.selected){
-        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
-        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
         colorTimeline(snip);
       }
 
     } else if (snip === 'black') {
 
       if(!structureSelected.selected){
-        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
-        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
       }
 
       let tool = d3.select('.tooltip');
@@ -231,8 +253,10 @@ export async function mouseClickVideo(coord, video) {
     structureSelectedToggle(null);
     togglePlay();
 
-    d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
-    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+    d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+    const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
+    highlightTimelineBars(timeRange);
 
   } else {
     /**
@@ -243,8 +267,11 @@ export async function mouseClickVideo(coord, video) {
     if (snip === 'black' || snip === 'unknown') {
       structureSelectedToggle(null);
 
-      d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
-      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').select('rect').style('fill', 'rgba(105, 105, 105, .3)');
+      d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+
+      const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
+      highlightTimelineBars(timeRange);
 
       togglePlay();
       addCommentButton();
