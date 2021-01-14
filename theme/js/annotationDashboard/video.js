@@ -111,7 +111,7 @@ export async function formatVidPlayer() {
     
     renderTimeline(dataKeeper[dataKeeper.length - 1]);
     
-  })
+  });
 }
 export function updateTimeElapsed() {
   const time = formatTime(Math.round(document.getElementById('video').currentTime));
@@ -384,6 +384,7 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
       .style('opacity', 1)
       .html(`<h4>${structure}</h4>
     <span class="badge badge-pill bg-dark">${structureData.length}</span> annotations for this structure. <br>
+    <span class="badge badge-pill bg-dark">${structureComments.length}</span> comments for this structure. <br>
     <span class="badge badge-pill bg-danger">${question}</span> Questions. <br>
     <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
     <br>
@@ -432,11 +433,12 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
     .attr('x', 17)
     .attr('y', -20)
     .attr('width', (d)=> {
-      return (d.displayName.split('').length * 6);
+      return (d.displayName.split('').length * 9);
     })
     .attr('height', 30)
     .attr('fill', '#fff')
-    .attr('fill-opacity', .9);
+    .attr('fill-opacity', .9)
+    .style('border-radius', '4px')
 
 
   const annotationText = annotationGroup.selectAll('text').data((d) => [d]).join('text')

@@ -298,6 +298,7 @@ export function renderStructureKnowns(topCommentWrap) {
   let foundDiv = topCommentWrap.selectAll('div.found-info').data([structureSelected]).join('div').classed('found-info', true);
   foundDiv.html(`<h4>${structureSelected.structure}</h4>
     <span class="badge badge-pill bg-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
+    <span class="badge badge-pill bg-dark">${structureSelected.comments.length}</span> comments for this structure. <br>
     <span class="badge badge-pill bg-danger">${questions}</span> Questions. <br>
     <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
     <br>
