@@ -28,6 +28,7 @@ function resizeVideoElements() {
   video.width = dimension.width;
   video.height = dimension.height;
 
+
   console.log('resize elements firing', window.innerWidth, dimension);
   
   document.getElementById('interaction').style.width = `${Math.round(dimension.width)}px`;
@@ -39,6 +40,11 @@ function resizeVideoElements() {
   document.getElementById('video-controls').style.top = `${dimension.height + 7}px`;
 
   d3.select('.progress-bar').node().style.width = `${Math.round(dimension.width)}px`;
+
+ // d3.select('#vid-svg').selectAll('*').remove();
+
+  //renderPushpinMarks(d3.select('#vid-svg'))
+
 }
 
 function initializeVideo() {
@@ -110,6 +116,21 @@ export async function formatVidPlayer() {
     drawFrameOnPause(video);
     
     renderTimeline(dataKeeper[dataKeeper.length - 1]);
+
+    const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
+    const timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
+    const commentsInTimeframe = commentData.filter((f, i) => {
+      const time = JSON.parse(f.videoTime);
+      if (time.length > 1) {
+        return time[0] <= video.currentTime && time[1] >= video.currentTime;
+      }
+      return time <= timeRange[1] && time >= timeRange[0];
+    });
+  
+    const svgTest = d3.select('#interaction').select('svg');
+    const svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
+  
+    renderPushpinMarks(commentsInTimeframe, svg);
     
   });
 }
@@ -403,7 +424,9 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
       .style('top', `${coord[1]}px`);
   }
 }
-function renderPushpinMarks(commentsInTimeframe, svg) {
+export function renderPushpinMarks(commentsInTimeframe, svg) {
+
+  console.log('comments in time frame',commentsInTimeframe);
   
   const pushes = commentsInTimeframe.filter((f) => f.commentMark === 'push');
   const pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
@@ -418,7 +441,9 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
 
   circ.on('mouseover', (d) => {
     const wrap = d3.select('#right-sidebar').select('#comment-wrap');
-    const memoDivs = wrap.selectAll('.memo').filter((f) => f.key === d.key);
+    const memoDivs = wrap.selectAll('.memo').filter((f) => {
+      console.log("test", f.key, d.key)
+      return f.key === d.key});
     memoDivs.classed('selected', true);
     d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = memoDivs.nodes()[0].offsetTop;
 
@@ -447,7 +472,7 @@ function renderPushpinMarks(commentsInTimeframe, svg) {
     .attr('x', (d) => 22)
     .attr('y', (d) => 0);
 }
-async function renderDoodles(commentsInTimeframe, div) {
+export async function renderDoodles(commentsInTimeframe, div) {
   const storageRef = firebase.storage().ref();
 
   const doods = await storageRef.child('images/').listAll();
@@ -480,7 +505,7 @@ export function videoUpdates(data, annoType) {
     if (!event.target.checked) {
       d3.select('#interaction').selectAll('.doodles').remove();
     } else {
-      const commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
+      const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
 
       const timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
       const commentsInTimeframe = commentData.filter((f, i) => {
@@ -498,7 +523,7 @@ export function videoUpdates(data, annoType) {
     if (!event.target.checked) {
       d3.select('#interaction').selectAll('.pushed').remove();
     } else {
-      const commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
+      const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
       const timeRange = [video.currentTime < 1.5 ? 0 : Math.floor(video.currentTime - 1.5), video.currentTime + 1.5];
       const commentsInTimeframe = commentData.filter((f, i) => {
         const time = JSON.parse(f.videoTime);
@@ -535,7 +560,9 @@ export function videoUpdates(data, annoType) {
 
     highlightCommentBoxes(timeRange);
 
-    const commentData = Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
+    console.log('dattaaa',dataKeeper[dataKeeper.length - 1].comments)
+
+    const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
 
     const commentsInTimeframe = commentData.filter((f, i) => {
       const time = JSON.parse(f.videoTime);

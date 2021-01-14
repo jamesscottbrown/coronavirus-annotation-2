@@ -6,7 +6,7 @@ import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataMan
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { colorDictionary, structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
-import { commentClicked, updateWithSelectedStructure } from './video';
+import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 
 require('firebase/auth');
 require('firebase/database');
@@ -163,6 +163,7 @@ export function drawCommentBoxes(nestedData, wrap) {
     .data((d) => [d])
     .join('text')
     .text((d) => `${d.displayName}:`);
+
   memoDivs.selectAll('.time').data((d) => [d]).join('span').classed('time', true)
     .selectAll('text')
     .data((d) => [d])
@@ -242,6 +243,45 @@ export function drawCommentBoxes(nestedData, wrap) {
       commentClicked(event, d);
     }
   });
+  memoDivs.on('mouseover', (event, d)=>{
+
+    let timeRange = [(video.currentTime < 1 ? 0 : video.currentTime - .2), (video.currentTime + .5)];
+    
+    if(d.videoTime >= timeRange[0] && d.videoTime <= timeRange[1]){
+      
+      if(d.commentMark === "push"){
+        
+        if(d3.select('#show-push').select('input').node().checked){
+          let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> f.key != d.key);
+          pushed.selectAll('circle').attr('opacity', .1);
+          pushed.selectAll('rect').attr('opacity', 0);
+          pushed.selectAll('text').attr('opacity', 0);
+        }else{
+          renderPushpinMarks([d], d3.select('#vid-svg'));
+        }
+
+      }
+      console.log('mouse over', d.videoTime, timeRange, d.doodle);
+      if(d.doodle === true){
+        console.log('is this reaching??');
+        if(d3.select('#show-doodle').select('input').node().checked){
+          console.log('dood checked this is a dood');
+        }else{
+          console.log('dood not checked this is a dood');
+          renderDoodles([d], d3.select('#interaction'));
+        }
+      }
+    }
+  }).on('mouseout', (event, d)=>{
+    if(d3.select('#show-push').select('input').node().checked){
+      d3.select('#vid-svg').selectAll('.pushed').selectAll('circle').attr('opacity', .7);
+      d3.select('#vid-svg').selectAll('.pushed').selectAll('rect').attr('opacity', .9);
+      d3.select('#vid-svg').selectAll('.pushed').selectAll('text').attr('opacity', 1);
+    }else{
+      d3.select('#vid-svg').selectAll('.pushed').remove();
+    }
+    
+  })
 
   memoDivs.each((d, i, n) => {
     if (d.replyKeeper.length > 0) {
