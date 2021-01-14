@@ -414,6 +414,10 @@ margin-top:10px;
   background-color: #e2dfdf;
  }
 
+ .memo.hover{
+   background-color: #ccc;
+ }
+
  .memo.question, .gen-anno-wrap.question, .sel-anno-wrap.question, .reply-memo.question{
   border: 1px solid red !important;
  }

@@ -245,6 +245,8 @@ export function drawCommentBoxes(nestedData, wrap) {
   });
   memoDivs.on('mouseover', (event, d)=>{
 
+    d3.select(event.target).classed('hover', true)
+
     let timeRange = [(video.currentTime < 1 ? 0 : video.currentTime - .2), (video.currentTime + .5)];
     
     if(d.videoTime >= timeRange[0] && d.videoTime <= timeRange[1]){
@@ -273,6 +275,9 @@ export function drawCommentBoxes(nestedData, wrap) {
       }
     }
   }).on('mouseout', (event, d)=>{
+
+    d3.select(event.target).classed('hover', false);
+    
     if(d3.select('#show-push').select('input').node().checked){
       d3.select('#vid-svg').selectAll('.pushed').selectAll('circle').attr('opacity', .7);
       d3.select('#vid-svg').selectAll('.pushed').selectAll('rect').attr('opacity', .9);
