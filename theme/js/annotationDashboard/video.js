@@ -152,6 +152,12 @@ function progressClicked(mouse) {
 
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
+  d3.select(event.target).classed('clicked', true);
+
+  d.clicked = true;
+
+  renderPushpinMarks([d], d3.select('#vid-svg'));
+
   updateTimeElapsed();
 }
 function scaleVideoTime(currentTime, invert) {

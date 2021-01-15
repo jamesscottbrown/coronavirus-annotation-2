@@ -20,8 +20,6 @@ export function updateCommentSidebar(dbRef) {
 
   renderCommentDisplayStructure();
 
-  // d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
-
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
  
   if(structureSelected.selected === false){
@@ -31,8 +29,6 @@ export function updateCommentSidebar(dbRef) {
   }else{
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
-
-    
   }
   
   const nestReplies = formatCommentData(dbRef);
@@ -154,10 +150,9 @@ export function drawCommentBoxes(nestedData, wrap) {
   if(wrap.classed('selected-comm-wrap')){
     wrap.selectAll('h7').data(['Associated Comments ']).join('h7').text(d => d);
   }
-  
-  //topCommentWrap.append('h7').text('Comments: ');
 
   const memoDivs = wrap.selectAll('.memo').data(nestedData).join('div').classed('memo', true);
+
   memoDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
     .selectAll('text')
     .data((d) => [d])
@@ -245,7 +240,7 @@ export function drawCommentBoxes(nestedData, wrap) {
   });
   memoDivs.on('mouseover', (event, d)=>{
 
-    d3.select(event.target).classed('hover', true)
+    d3.select(event.target).classed('hover', true);
 
     let timeRange = [(video.currentTime < 1 ? 0 : video.currentTime - .2), (video.currentTime + .5)];
     
@@ -254,7 +249,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       if(d.commentMark === "push"){
         
         if(d3.select('#show-push').select('input').node().checked){
-          let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> f.key != d.key);
+          let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> f.key != d.key && !f.clicked);
           pushed.selectAll('circle').attr('opacity', .1);
           pushed.selectAll('rect').attr('opacity', 0);
           pushed.selectAll('text').attr('opacity', 0);
@@ -276,14 +271,17 @@ export function drawCommentBoxes(nestedData, wrap) {
     }
   }).on('mouseout', (event, d)=>{
 
+  
     d3.select(event.target).classed('hover', false);
     
+    
     if(d3.select('#show-push').select('input').node().checked){
-      d3.select('#vid-svg').selectAll('.pushed').selectAll('circle').attr('opacity', .7);
-      d3.select('#vid-svg').selectAll('.pushed').selectAll('rect').attr('opacity', .9);
-      d3.select('#vid-svg').selectAll('.pushed').selectAll('text').attr('opacity', 1);
+      let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked);
+      pushed.selectAll('circle').attr('opacity', .7);
+      pushed.selectAll('rect').attr('opacity', .9);
+      pushed.selectAll('text').attr('opacity', 1);
     }else{
-      d3.select('#vid-svg').selectAll('.pushed').remove();
+      d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked).remove();
     }
     
   })

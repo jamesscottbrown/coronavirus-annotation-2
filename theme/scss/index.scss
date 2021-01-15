@@ -411,10 +411,10 @@ margin-top:10px;
  }
 
  .memo.selected, .gen-anno-wrap.selected{
-  background-color: #e2dfdf;
+  background-color:#F8F8F8;
  }
 
- .memo.hover{
+ .memo.hover, .memo.clicked, .memo.selected.clicked{
    background-color: #ccc;
  }
 
