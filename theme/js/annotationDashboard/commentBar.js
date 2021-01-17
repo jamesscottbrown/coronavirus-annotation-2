@@ -93,7 +93,8 @@ export function formatCommentData(dbRef) {
 }
 
 export function highlightCommentBoxes(timeRange) {
-  const memoDivs = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
+  console.log(d3.select('#right-sidebar').select('#comment-wrap').node())
+  const memoDivs = structureSelected.selected ? d3.select('#right-sidebar').select('#comment-wrap').select('.selected-comm-wrap').selectAll('.memo') : d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
   memoDivs.classed('selected', false);
   const selectedMemoDivs = memoDivs.filter((f) => f.videoTime <= timeRange[1] && f.videoTime >= timeRange[0]).classed('selected', true);
   if (!selectedMemoDivs.empty()) {
@@ -258,7 +259,7 @@ export function drawCommentBoxes(nestedData, wrap) {
         }
 
       }
-      console.log('mouse over', d.videoTime, timeRange, d.doodle);
+      //console.log('mouse over', d.videoTime, timeRange, d.doodle);
       if(d.doodle === true){
         console.log('is this reaching??');
         if(d3.select('#show-doodle').select('input').node().checked){

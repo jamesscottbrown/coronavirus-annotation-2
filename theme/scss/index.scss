@@ -286,7 +286,7 @@ div{
   height:35px;
 }
 
-#left-sidebar .gen-anno-wrap div.anno, .sel-anno-wrap div.structure-anno{
+#left-sidebar .gen-anno-wrap div.anno, .sel-anno-wrap div.structure-anno, .mouse-over-wrap div.anno{
   border: 1px solid gray;
   border-radius: 5px;
   padding:15px;
@@ -307,7 +307,8 @@ svg .anno.current rect, svg .anno.struct-present rect{
 
 #left-sidebar .gen-anno-wrap .ref,
 .gen-anno-wrap .ref,
-#left-sidebar .structure-gen-anno-wrap .ref{
+#left-sidebar .structure-gen-anno-wrap .ref,
+.mouse-over-wrap div.anno .ref{
 display: block;
 color: gray;
 font-size: 12px;
@@ -317,7 +318,8 @@ font-style: italic;
 
 #left-sidebar .gen-anno-wrap .link, 
 #left-sidebar .sel-anno-wrap .link, 
-.gen-anno-wrap .link{
+.gen-anno-wrap .link,
+.mouse-over-wrap div.anno .link{
 display: block;
 font-size: 12px;
 margin-top:10px;

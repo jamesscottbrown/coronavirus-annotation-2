@@ -81,14 +81,15 @@ function renderAnnotationBoxes(divs){
 
 }
 
-export async function updateAnnotationSidebar(data, stackedData) {
+export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) {
   const annoType = annoTypes();
   /// start drawing annotation
-  const annoWrap = d3.select('#left-sidebar').select('#annotation-wrap');
-  console.log('annoWrap', annoWrap)
-  clearAnnotationSidebar();
+  const annoWrap = mouseoverBool ? d3.select('#left-sidebar').select('.mouse-over-wrap') : d3.select('#left-sidebar').select('#annotation-wrap');
+  console.log('annoWrap', annoWrap, data)
 
- 
+  if(!mouseoverBool){clearAnnotationSidebar()};
+
+
   let header = d3.select('#left-sidebar').select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
   header.text(d=> d);
 
@@ -100,7 +101,9 @@ export async function updateAnnotationSidebar(data, stackedData) {
     
   }
 
-  const annoDiv = annoWrap.select('.gen-anno-wrap').selectAll('div.anno').data(data).join('div')
+  let innerAnnoDiv = mouseoverBool ? annoWrap : annoWrap.select('.gen-anno-wrap');
+
+  const annoDiv = innerAnnoDiv.selectAll('div.anno').data(data).join('div')
     .classed('anno', true);
 
   renderAnnotationBoxes(annoDiv);

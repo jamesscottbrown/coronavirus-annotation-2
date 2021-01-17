@@ -70,7 +70,6 @@ export async function formatVidPlayer() {
     canPlay = true;
      
     resizeVideoElements();
-
     drawFrameOnPause(video);
 
     d3.select('#interaction')
@@ -380,7 +379,7 @@ export function updateWithSelectedStructure(snip, commentData){
   
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
-  updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, null);
+  updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, false);
 
   renderStructureKnowns(topCommentWrap);
 
@@ -561,7 +560,7 @@ export function videoUpdates(data, annoType) {
     /**
      * UPDATE AND HIGHLGIHT ANNOTATION BAR
      */
-    updateAnnotationSidebar(filteredAnnotations, null);
+    updateAnnotationSidebar(filteredAnnotations, null, false);
     highlightAnnotationbar(video.currentTime);
 
     /*

@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { annotationData } from '..';
 import { formatTime, getRightDimension } from '../dataManager';
+import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
 import {updateTimeElapsed} from './video';
 
@@ -172,6 +173,13 @@ export function timelineMouseover(event, d) {
      //filAnn.nodes()[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});//.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
      let scroll = filAnn.nodes()[0].offsetTop;
      d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = scroll;
+  }else{
+    updateAnnotationSidebar([d], null, true);
+    console.log('d', d3.select('#left-sidebar').select('.mouse-over-wrap').select('.anno').node().getBoundingClientRect().height);
+  
+    d3.select('#annotation-wrap')
+    .style('top', `${d3.select('#left-sidebar').select('.mouse-over-wrap').select('.anno').node().getBoundingClientRect().height + 100}px`);
+
   }
   
   const coord = d3.pointer(event);
@@ -184,4 +192,6 @@ export function timelineMouseout(event, d) {
   d3.select('#left-sidebar').selectAll('.anno').filter((f) => f.index === d.index).classed('selected', false);
 
   d3.select('#timeline-tooltip').style('opacity', 0).style('left', "-200px").style('top', "-200px").style('pointer-events', 'none');
+  d3.select('#left-sidebar').select('.mouse-over-wrap').selectAll('*').remove();
+  d3.select('#annotation-wrap').style('top', '50px');
 }
