@@ -129,8 +129,12 @@ export async function formatVidPlayer() {
   
     const svgTest = d3.select('#interaction').select('svg');
     const svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
-  
-    renderPushpinMarks(commentsInTimeframe, svg);
+
+    console.log('testsss', d3.select('#show-push').select('input').node().checked)
+
+    if(d3.select('#show-push').select('input').node().checked){
+      renderPushpinMarks(commentsInTimeframe, svg);
+    }
     
   });
 }
