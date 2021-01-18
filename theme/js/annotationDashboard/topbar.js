@@ -124,6 +124,7 @@ export function addCommentButton() {
     button.on('click', (event) => {
       //clearRightSidebar();
       d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
+      d3.select('#comment-wrap').style('margin-top', '0px');
       userLogin();
       goBackButton();
     });

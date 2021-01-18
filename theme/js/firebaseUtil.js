@@ -1,9 +1,8 @@
 import firebase from 'firebase/app';
 import { currentUser, dataKeeper } from './dataManager';
 import { fbConfig } from '.';
-import { addCommentButton } from './annotationDashboard/topbar';
-import { updateCommentSidebar } from './annotationDashboard/commentBar';
-import { renderTimeline } from './annotationDashboard/timeline';
+import * as d3 from 'd3';
+
 
 
 require('firebase/auth');
@@ -103,6 +102,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
       console.log('does this fire again?');
+      d3.select('#comment-wrap').style('margin-top', '0px');
       currentUser.push(user);
       addUser(user);
 

@@ -177,6 +177,7 @@ div{
   #right-wrap{
     left:1060px;
   }
+
   .add-comment{
     right: 5px;
     left: auto;
@@ -214,6 +215,7 @@ div{
     padding: 1rem 0 0 0;
     width:300px;
     overflow-y: scroll;
+    overflow-x:hidden;
     padding: 1rem 0 0 0;
   }
 
@@ -222,6 +224,7 @@ div{
     height:calc(100vh - 70px);
     width:330px;
     overflow-y: scroll;
+    overflow-x:hidden;
     padding: 1rem 0 0 0;
   }
 
