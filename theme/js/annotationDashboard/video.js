@@ -401,13 +401,45 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
 
   const nestReplies = formatCommentData({ ...commentData }, null);
 
+  let structureComments = nestReplies.filter((f) => {
+    if(snip  === 'orange'){
+      let reply = f.replyKeeper.filter(r=> {
+        return r.comment.toUpperCase().includes(structure.toUpperCase());
+      });
+      return f.comment.toUpperCase().includes(structure.toUpperCase()) || reply.length > 0;
+    }else{
+      let tags = f.tags.split(',').filter(m=> {
+        return colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase()) > -1;
+      });
+      let test = colorDictionary[snip].other_names.filter(n=> f.comment.toUpperCase().includes(n.toUpperCase()));
+        let reply = f.replyKeeper.filter(r=> {
+          let rTest = colorDictionary[snip].other_names.filter(n=> r.comment.toUpperCase().includes(n.toUpperCase()));
+          return rTest.length > 0;
+        });
+      return test.length > 0 || reply.length > 0 || tags.length > 0;
+    }
+  });
+
   let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
 
-  const structureComments = nestReplies.filter((f) => f.comment.toUpperCase().includes(structure));
+  //const structureComments = nestReplies.filter((f) => f.comment.toUpperCase().includes(structure));
 
   if (hoverBool) {
     const question = structureData.filter((f) => f.has_unkown === 'TRUE').length + structureComments.filter((f) => f.comment.includes('?')).length;
     const refs = structureData.filter((f) => f.url != '').length + structureComments.filter((f) => f.comment.includes('http')).length;
+
+  //   const questions = structureData.filter((f) => f.has_unkown === 'TRUE').length + structureComments.filter((f) => f.comment.includes('?')).length;
+  // const refs = structureSelected.annotations.filter((f) => f.url != '').length + structureSelected.comments.filter((f) => f.comment.includes('http')).length;
+
+  // let foundDiv = topCommentWrap.selectAll('div.found-info').data([structureSelected]).join('div').classed('found-info', true);
+  // foundDiv.html(`<h4>${structureSelected.structure}</h4>
+  //   <span class="badge badge-pill bg-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
+  //   <span class="badge badge-pill bg-dark">${structureSelected.comments.length}</span> comments for this structure. <br>
+  //   <span class="badge badge-pill bg-danger">${questions}</span> Questions. <br>
+  //   <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
+  //   <br>
+  //   `);
+
 
     d3.select('.tooltip')
       .style('position', 'absolute')
