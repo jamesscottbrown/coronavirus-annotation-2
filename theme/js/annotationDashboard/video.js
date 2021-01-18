@@ -373,7 +373,6 @@ export function updateWithSelectedStructure(snip, commentData){
   renderCommentDisplayStructure();
 
   const topCommentWrap = d3.select('#right-sidebar').select('.top');
-
   const genComWrap = d3.select('#comment-wrap').select('.general-comm-wrap');
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
   
@@ -400,7 +399,7 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
   const nestReplies = formatCommentData({ ...commentData }, null);
-
+  let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
   let structureComments = nestReplies.filter((f) => {
     if(snip  === 'orange'){
       let reply = f.replyKeeper.filter(r=> {
@@ -422,38 +421,22 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
 
   let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
 
-  //const structureComments = nestReplies.filter((f) => f.comment.toUpperCase().includes(structure));
-
   if (hoverBool) {
     const question = structureData.filter((f) => f.has_unkown === 'TRUE').length + structureComments.filter((f) => f.comment.includes('?')).length;
     const refs = structureData.filter((f) => f.url != '').length + structureComments.filter((f) => f.comment.includes('http')).length;
-
-  //   const questions = structureData.filter((f) => f.has_unkown === 'TRUE').length + structureComments.filter((f) => f.comment.includes('?')).length;
-  // const refs = structureSelected.annotations.filter((f) => f.url != '').length + structureSelected.comments.filter((f) => f.comment.includes('http')).length;
-
-  // let foundDiv = topCommentWrap.selectAll('div.found-info').data([structureSelected]).join('div').classed('found-info', true);
-  // foundDiv.html(`<h4>${structureSelected.structure}</h4>
-  //   <span class="badge badge-pill bg-dark">${structureSelected.annotations.length}</span> annotations for this structure. <br>
-  //   <span class="badge badge-pill bg-dark">${structureSelected.comments.length}</span> comments for this structure. <br>
-  //   <span class="badge badge-pill bg-danger">${questions}</span> Questions. <br>
-  //   <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
-  //   <br>
-  //   `);
-
 
     d3.select('.tooltip')
       .style('position', 'absolute')
       .style('opacity', 1)
       .html(`<h4>${structure}</h4>
-    <span class="badge badge-pill bg-dark">${structureData.length}</span> annotations for this structure. <br>
-    <span class="badge badge-pill bg-dark">${structureComments.length}</span> comments for this structure. <br>
-    <span class="badge badge-pill bg-danger">${question}</span> Questions. <br>
-    <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
-    <br>
-    <h7>Click Structure for more Info</h7>
-    `)
-      .style('left', `${coord[0]+5}px`)
-      .style('top', `${coord[1]+5}px`);
+      <span class="badge badge-pill bg-dark">${structureData.length}</span> annotations for this structure. <br>
+      <span class="badge badge-pill bg-dark">${structureComments.length}</span> comments for this structure. <br>
+      <span class="badge badge-pill bg-danger">${question}</span> Questions. <br>
+      <span class="badge badge-pill bg-primary">${refs}</span> Refs. <br>
+      <br>
+      <h7>Click Structure for more Info</h7>
+      `).style('left', `${coord[0]+5}px`)
+        .style('top', `${coord[1]+5}px`);
 
   } else {
     d3.select('.tooltip')

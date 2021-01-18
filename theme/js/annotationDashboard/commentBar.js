@@ -257,11 +257,10 @@ export function drawCommentBoxes(nestedData, wrap) {
         }else{
           renderPushpinMarks([d], d3.select('#vid-svg'));
         }
-
       }
-      //console.log('mouse over', d.videoTime, timeRange, d.doodle);
+   
       if(d.doodle === true){
-        console.log('is this reaching??');
+     
         if(d3.select('#show-doodle').select('input').node().checked){
           console.log('dood checked this is a dood');
         }else{
