@@ -295,18 +295,24 @@ export function drawCommentBoxes(nestedData, wrap) {
   const questionMemos = memoDivs.filter((f) => f.comment.includes('?'));
   questionMemos.classed('question', true);
   const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
+  qs.select('*').remove();
+
   qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
 
   const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
   qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
+  qreply.selectAll('div.question').selectAll('*').remove();
   d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
 
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
+
+  refMemos.selectAll('.fa-book-open').remove();
   refMemos.selectAll('i.fas.fa-book-open').data((d) => [d]).join('i').classed('fas fa-book-open', true);
   //<i class="fas fa-book-open"></i>
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
+  d3.select(refReply.node().parentNode).selectAll('i.fas.question').remove();
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
 
   
