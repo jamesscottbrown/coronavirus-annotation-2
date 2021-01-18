@@ -88,11 +88,22 @@ div{
  padding:0;
 }
 
+// #toggle-show-wrap{
+//   display:inline-block;
+//   width:360px;
+//   position:absolute;
+//   left:50%;
+//   top:10px;
+//   border:rgb(209, 208, 208) solid 1px;
+//   border-radius:25px;
+//   padding:3px;
+// }
+
 #toggle-show-wrap{
   display:inline-block;
   width:360px;
   position:absolute;
-  left:50%;
+  left:330px;
   top:10px;
   border:rgb(209, 208, 208) solid 1px;
   border-radius:25px;
@@ -103,7 +114,7 @@ div{
   display:inline-block;
   width: 90px;
   position: absolute;
-  left:45.5%;
+  left:250px;
   top:17px;
   font-size: 10px;
   background-color: #fff;
@@ -123,10 +134,59 @@ div{
   font-size:11px;
   width:150px;
 }
+
+@media only screen and (max-width:1230px){
+  #wrapper{
+    top:60px;
+    width: 1400px;
+    position: absolute;
+    overflow-x: scroll;
+    //height: calc(100vh - 60px);
+    bottom:0;
+   // overflow-y: hidden;
+  }
+  #main{
+    width:720px;
+    //height: calc(100vh - 60px);
+    bottom:0;
+    position: absolute;
+    left:300px;
+    top:0;
+    margin:20px;
+    //margin-top:20px;
+    display:inline;
+  }
+
+  #left-sidebar{
+    position:sticky;
+    height:calc(100vh - 70px);
+    padding: 1rem 0 0 0;
+    width:300px;
+    overflow-y: scroll;
+    padding: 1rem 0 0 0;
+  }
+
+  #right-sidebar{
+    position:sticky;
+    height:calc(100vh - 70px);
+    width:330px;
+    overflow-y: scroll;
+    padding: 1rem 0 0 0;
+  }
+
+  #right-wrap{
+    left:1060px;
+  }
+  .add-comment{
+    right: 5px;
+    left: auto;
+  }
+}
 // export const originalDimension = {width: 960, height:540, margin: 80};
 // export const middleDimension = {width: 800, height: 450, margin: 70};
 // export const smallerDimension = {width: 720, height: 405, margin: 70};
-@media only screen and (max-width: 1330px) {
+@media only screen  and (min-width:1231px) and (max-width: 1330px) {
+
   #wrapper{
     top:60px;
     width: 1400px;
@@ -171,6 +231,7 @@ div{
 
   .add-comment{
     left:1040px;
+    position: sticky;
   }
 
 }
@@ -215,6 +276,7 @@ div{
 
   .add-comment{
     left:1140px;
+    position: sticky;
   }
   
 
@@ -258,6 +320,7 @@ div{
 
   .add-comment{
     left:1300px;
+    position: sticky;
   }
 
 }
