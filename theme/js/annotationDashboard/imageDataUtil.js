@@ -110,9 +110,10 @@ export async function loadPngForFrame() {
   };
 }
 
-export function drawFrameOnPause(video) {
+export async function drawFrameOnPause(video) {
   if (video.currentTime < endDrawTime) {
     const imgObj = loadPngForFrame();
+
   } else {
     console.log('credits are playing');
   }

@@ -15,7 +15,7 @@ import 'firebase/storage';
 
 let canPlay;
 
-const currentColorCodes = [];
+export const currentColorCodes = [];
 
 const canvas = document.getElementById('canvas');
 canvas.setAttribute('pointer-events', 'none');
@@ -192,7 +192,11 @@ export function togglePlay() {
   playButtonChange();
   if (video.playing) {
     video.pause();
-    drawFrameOnPause(video);
+    console.log('video paused', structureSelected);
+    drawFrameOnPause(video).then(()=>{
+      if(structureSelected.selected) parseArray(currentColorCodes[currentColorCodes.length - 1]);
+    });
+    
   } else {
     clearCanvas();
     video.play();
