@@ -540,6 +540,7 @@ export function clearBoard() {
 
   const interactionDiv = d3.select('#interaction');
   interactionDiv.selectAll('*').remove();
+  d3.select('#add-mark').remove();
 }
 
 export function formatDoodleCanvas() {
