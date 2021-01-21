@@ -5,6 +5,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { annotationData } from '..';
+import { structureSelected } from './imageDataUtil';
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();
@@ -88,16 +89,20 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
 
   if(!mouseoverBool){clearAnnotationSidebar()};
 
-
   let header = d3.select('#left-sidebar').select('.top').selectAll('h6.comment-header').data(['Annotations ']).join('h6').classed('comment-header', true);
   header.text(d=> d);
 
   if (stackedData != null) {
+
+    d3.select('#left-sidebar').select('.top').select('.comment-header').text(`Annotations for ${structureSelected.structure}`)
+
     const structAnnoDivs = annoWrap.select('.sel-anno-wrap').selectAll('div.structure-anno').data(stackedData).join('div')
       .classed('structure-anno', true);
 
     renderAnnotationBoxes(structAnnoDivs);
     
+  }else{
+    d3.select('#left-sidebar').select('.top').select('.comment-header').text(`Annotations:`)
   }
 
   let innerAnnoDiv = mouseoverBool ? annoWrap : annoWrap.select('.gen-anno-wrap');

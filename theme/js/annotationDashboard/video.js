@@ -367,6 +367,14 @@ export function updateWithSelectedStructure(snip, commentData){
     return structsAnno.length > 0;
   });
 
+  let otherAnno = annotationData[annotationData.length - 1].filter((f) => {
+    let structsAnno = f.associated_structures.split(', ').filter((m) => {
+      let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
+      return otherNames > -1;
+    });
+    return structsAnno.length === 0;
+  });
+
   structureSelected.annotations = structureAnnotations.filter((f) => f.has_unkown === 'TRUE').concat(structureAnnotations.filter((f) => f.has_unkown === 'FALSE'));
 
   const annoWrap = d3.select('#left-sidebar');
@@ -380,7 +388,7 @@ export function updateWithSelectedStructure(snip, commentData){
   
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
   updateCommentSidebar(commentData, structureSelected.comments);
-  updateAnnotationSidebar(annotationData[annotationData.length - 1], structureSelected.annotations, false);
+  updateAnnotationSidebar(otherAnno, structureSelected.annotations, false);
 
   renderStructureKnowns(topCommentWrap);
 
