@@ -175,7 +175,6 @@ export function timelineMouseover(event, d) {
      d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = scroll;
   }else{
     updateAnnotationSidebar([d], null, true);
-    console.log('d', d3.select('#left-sidebar').select('.mouse-over-wrap').select('.anno').node().getBoundingClientRect().height);
   
     d3.select('#annotation-wrap')
     .style('top', `${d3.select('#left-sidebar').select('.mouse-over-wrap').select('.anno').node().getBoundingClientRect().height + 100}px`);

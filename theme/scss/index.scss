@@ -622,6 +622,21 @@ margin-top:10px;
   fill:#FE0900 !important;
 }
 
+.hover-queue{
+  position: absolute;
+  top:5px;
+  left:5px;
+  width:100px;
+  height:50px;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, .9);
+  padding:5px;
+  font-size: 11px;
+  border-radius: 10px;
+  text-align: center;
+  
+}
+
 .found-info{
   width:inherit;
   padding-left:30px;

@@ -52,7 +52,7 @@ async function init() {
 
   if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]); }
 
-  await checkUser([renderUser], [addCommentButton, updateCommentSidebar, renderTimeline]);
+  await checkUser([renderUser], [updateCommentSidebar, renderTimeline]);
 
   renderIssueButton(d3.select('#top-bar').select('#user'));
   updateAnnotationSidebar(anno, null, null);

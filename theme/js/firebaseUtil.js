@@ -2,6 +2,9 @@ import firebase from 'firebase/app';
 import { currentUser, dataKeeper } from './dataManager';
 import { fbConfig } from '.';
 import * as d3 from 'd3';
+import { structureSelected } from './annotationDashboard/imageDataUtil';
+import { renderStructureKnowns } from './annotationDashboard/commentBar';
+import { addCommentButton, goBackButton } from './annotationDashboard/topbar';
 
 
 
@@ -101,8 +104,15 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
 
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-      console.log('does this fire again?');
-      d3.select('#comment-wrap').style('margin-top', '0px');
+      if(structureSelected.selected){
+        d3.select('#comment-wrap').style('margin-top', '190px');
+        renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
+        goBackButton();
+      }else{
+        d3.select('#comment-wrap').style('margin-top', '0px');
+        addCommentButton();
+      }
+     
       currentUser.push(user);
       addUser(user);
 
@@ -114,6 +124,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
       // User is signed in.
     } else {
       console.log('NO USER', user);
+      addCommentButton();
       checkDatabase(callbackArrayNoArgs);
       // No user is signed in.
     }

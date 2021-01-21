@@ -4,7 +4,7 @@ import { annotationData } from '..';
 import { dataKeeper, formatAnnotationTime, formatTime, getRightDimension } from '../dataManager';
 import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
 import {
-  clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle,
+  clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle, toggleQueue,
 } from './imageDataUtil';
 import {
   drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar, highlightCommentBoxes, renderCommentDisplayStructure, renderStructureKnowns,
@@ -90,8 +90,17 @@ export async function formatVidPlayer() {
   
       drawFrameOnPause(video);
   
-      d3.select('#interaction').on('click', (event) => mouseClickVideo(d3.pointer(event), video))
-          .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video));
+      d3.select('#interaction')
+          .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
+          .on('mousemove', (event) => {
+            toggleQueue(false);
+            mouseMoveVideo(d3.pointer(event), video)});
+
+      d3.select('#interaction')
+          .on('mouseenter', ()=> {
+            toggleQueue(false);
+          })
+          .on('mouseout', ()=> toggleQueue(true));
   
       d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
       d3.select('.progress-bar').on('click', progressClicked);
@@ -142,7 +151,6 @@ function progressClicked(mouse) {
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
   updateTimeElapsed();
 }
-
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
   d3.select(event.target).classed('clicked', true);
@@ -390,7 +398,6 @@ export function updateWithSelectedStructure(snip, commentData){
   return structureAnnotations;
 }
 export function structureTooltip(structureData, coord, snip, hoverBool) {
-  console.log('structure toolllsss', structureData, coord, snip, hoverBool);
 
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 

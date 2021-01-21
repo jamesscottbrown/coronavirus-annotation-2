@@ -82,7 +82,6 @@ export function goBackButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
   button.text('Go back');
 
-  console.log('go back clicked!', d3.select('#right-sidebar').select('.top').select('.template-wrap'));
 
   if(d3.select('#right-sidebar').select('.top').select('.template-wrap').empty()){
     d3.select('#comment-wrap').style('margin-top', '170px');
@@ -99,7 +98,7 @@ export function goBackButton() {
     }else{//if user is logged in 
 
       if(!d3.select('#right-sidebar').select('.top').select('.template-wrap').empty()){//IS THE COMMENT BOX UP
-        console.log('comment box is up');
+       
         clearBoard();
 
         if(structureSelected.selected){//structure selected
@@ -138,24 +137,6 @@ export function goBackButton() {
 
 
       }
-
-      // if (structureSelected.structure != null && d3.select('#right-sidebar').select('.top').select('.found-info').empty()) {
-      //   d3.select('#right-sidebar').select('.top').selectAll('*').remove();
-      //   clearBoard();
-      //   renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
-      //   d3.select('#comment-wrap').style('margin-top', '170px');
-      // } else {
-      //   d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
-      //   d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
-      //   structureSelectedToggle(null);
-      //   clearRightSidebar();
-      //   renderCommentDisplayStructure();
-      //   updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
-      //   updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
-      //   addCommentButton();
-      //   clearCanvas();
-      //   d3.select('.tooltip').style('opacity', 0);
-      // }
     }
   });
 }

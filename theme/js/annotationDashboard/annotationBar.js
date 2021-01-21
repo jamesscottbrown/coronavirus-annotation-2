@@ -85,7 +85,6 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
   const annoType = annoTypes();
   /// start drawing annotation
   const annoWrap = mouseoverBool ? d3.select('#left-sidebar').select('.mouse-over-wrap') : d3.select('#left-sidebar').select('#annotation-wrap');
-  console.log('annoWrap', annoWrap, data)
 
   if(!mouseoverBool){clearAnnotationSidebar()};
 

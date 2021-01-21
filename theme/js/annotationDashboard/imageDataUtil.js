@@ -73,9 +73,7 @@ export function clearCanvas() {
 }
 export async function loadPngForFrame() {
   const video = document.getElementById('video');
-  const pullFrame = (Math.floor((video.currentTime) * 30.25))//(Math.floor((video.currentTime) * 29.8941176));
-
-  console.log('timessss',Math.floor((video.currentTime) * 29.8941176), Math.round((video.currentTime) * 29.8941176))
+  const pullFrame = (Math.floor((video.currentTime) * 30.25));
 
   const pathImg = '../static/assets/stills/120120_entry_flat/entry_flat';
   // The path to the image that we want to add
@@ -110,10 +108,21 @@ export async function loadPngForFrame() {
   };
 }
 
+export function toggleQueue(offVideo){
+  if(offVideo){
+    let hoverQ = d3.select('#interaction').selectAll('div.hover-queue').data(['Hover over video to interact']).join('div').classed('hover-queue', true);
+    hoverQ.selectAll('text').data(d=> [d]).join('text').text(d=> d);
+  }else{
+    d3.select('#interaction').selectAll('div.hover-queue').remove();
+  }
+  
+}
+
 export async function drawFrameOnPause(video) {
   if (video.currentTime < endDrawTime) {
     const imgObj = loadPngForFrame();
-
+    toggleQueue(true);
+    
   } else {
     console.log('credits are playing');
   }
@@ -153,7 +162,7 @@ export function colorChecker(code){
 
 export function parseArray(hoverColor) {
 
-  console.log('parse array firing', hoverColor);
+  
   const newData = { ...currentImageData };
   newData.data = Uint8ClampedArray.from([...currentImageData.data]);
 

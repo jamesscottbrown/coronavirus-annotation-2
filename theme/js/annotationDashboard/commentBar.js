@@ -6,6 +6,7 @@ import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataMan
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { colorDictionary, structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
+import { goBackButton } from './topbar';
 import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 
 require('firebase/auth');
@@ -93,7 +94,6 @@ export function formatCommentData(dbRef) {
 }
 
 export function highlightCommentBoxes(timeRange) {
-  console.log(d3.select('#right-sidebar').select('#comment-wrap').node())
   const memoDivs = structureSelected.selected ? d3.select('#right-sidebar').select('#comment-wrap').select('.selected-comm-wrap').selectAll('.memo') : d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
   memoDivs.classed('selected', false);
   const selectedMemoDivs = memoDivs.filter((f) => f.videoTime <= timeRange[1] && f.videoTime >= timeRange[0]).classed('selected', true);
@@ -262,9 +262,9 @@ export function drawCommentBoxes(nestedData, wrap) {
       if(d.doodle === true){
      
         if(d3.select('#show-doodle').select('input').node().checked){
-          console.log('dood checked this is a dood');
+      
         }else{
-          console.log('dood not checked this is a dood');
+        
           renderDoodles([d], d3.select('#interaction'));
         }
       }
@@ -370,9 +370,11 @@ export function renderStructureKnowns(topCommentWrap) {
   } else {
     infoButton.text('Log in to comment on this')
       .on('click', (event, d) => {
-        topCommentWrap.selectAll('*').remove();
-        const structArray = [structureSelected.structure.toString()];
-        formatToComment(topCommentWrap, structArray);
+        d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
+        d3.select('#comment-wrap').style('margin-top', '150px');
+        d3.select('#right-sidebar').select('.found-info').remove();
+        userLogin();
+        goBackButton();
       });
   }
 }
@@ -380,7 +382,6 @@ export function renderStructureKnowns(topCommentWrap) {
 export function defaultTemplate(div, tagArray) {
   let time = formatTime(document.getElementById('video').currentTime);
 
-  console.log('div in temp wrap', div);
 
   const inputDiv = div.select('.template-wrap');// .append('div');//.classed('text-input', true);
   // inputDiv.append('text').text(`${user.displayName}@ ${formatVideoTime(currentTime)} :`);
