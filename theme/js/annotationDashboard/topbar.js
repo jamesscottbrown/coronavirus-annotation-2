@@ -7,9 +7,10 @@ import {
   userLoggedIn, userLogin,
 } from '../firebaseUtil';
 import { dataKeeper } from '../dataManager';
-import { clearCanvas, structureSelected, structureSelectedToggle } from './imageDataUtil';
+import { clearCanvas, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { annotationData } from '..';
+import { structureTooltip } from './video';
 
 require('regenerator-runtime/runtime');
 require('firebase/auth');
@@ -105,6 +106,8 @@ export function goBackButton() {
           d3.select('#right-sidebar').select('.top').selectAll('*').remove();
           renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
           d3.select('#comment-wrap').style('margin-top', '170px');
+          parseArray(structureSelected.color);
+          structureTooltip(structureSelected.annotations, structureSelected.coord, structureSelected.color, false);
         }else{
 
         // d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');

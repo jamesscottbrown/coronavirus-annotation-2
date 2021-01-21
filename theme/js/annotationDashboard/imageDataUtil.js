@@ -32,19 +32,19 @@ export function structureSelectedToggle(datum, coords, color) {
 export const doodleKeeper = [];
 
 export const colorDictionary = {//(60,179,113)
-  blue: { code: [0, 0, 255], structure: ['Cell Membrane'], other_names:['Cell Membrane', 'plasma membrane'] },
-  purple: { code: [102, 0, 204], structure: ['ACE2'], other_names:['ACE2'] },
-  magenta: { code: [255, 0, 255], structure: ['ACE2'], other_names:['ACE2'] },
-  red: { code: [255, 0, 0], structure: ['Envelope protein'], other_names:['Envelope protein', 'e protein'] },
-  green: { code: [60, 179, 113], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
-  orange: { code: [255, 128, 0], structure: ['RNA', 'TMPRSS2'], other_names:[] },
-  yellow: { code: [255, 255, 0], structure: ['Membrane Protein'], other_names:['Membrane Protein','membrane'] },
-  aqua: { code: [255,215,0], structure: ['Furin'], other_names:['Furin'] },
-  teal: { code: [10, 160, 140], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
-  'light gray': { code: [200, 200, 200], structure: ['Sugars'], other_names:['Sugars'] },
-  white: { code: [250, 250, 250], structure: ['Virus Membrane'], other_names:['Virus Membrane']},
-  'dark gray': { code: [200, 200, 200], structure: ['Nucleocapsid Protein'], other_names:['Nucleocapsid Protein', 'n protein'] },
-  unknown: { code: [200, 200, 200], structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
+  blue: { code: [0, 0, 255], color: 'blue', structure: ['Cell Membrane'], other_names:['Cell Membrane', 'plasma membrane'] },
+  purple: { code: [102, 0, 204], color: 'purple', structure: ['ACE2'], other_names:['ACE2'] },
+  magenta: { code: [255, 0, 255], color: 'magenta', structure: ['ACE2'], other_names:['ACE2'] },
+  red: { code: [255, 0, 0], color: 'red', structure: ['Envelope protein'], other_names:['Envelope protein', 'e protein'] },
+  green: { code: [60, 179, 113], color: 'green', structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
+  orange: { code: [255, 128, 0], color: 'orange', structure: ['RNA', 'TMPRSS2'], other_names:[] },
+  yellow: { code: [255, 255, 0],color: 'yellow',  structure: ['Membrane Protein'], other_names:['Membrane Protein','membrane'] },
+  aqua: { code: [255,215,0], color: 'aqua', structure: ['Furin'], other_names:['Furin'] },
+  teal: { code: [10, 160, 140], color: 'teal', structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
+  'light gray': { code: [200, 200, 200], color: 'light gray', structure: ['Sugars'], other_names:['Sugars'] },
+  white: { code: [250, 250, 250], color: 'white', structure: ['Virus Membrane'], other_names:['Virus Membrane']},
+  'dark gray': { code: [200, 200, 200], color: 'dark gray', structure: ['Nucleocapsid Protein'], other_names:['Nucleocapsid Protein', 'n protein'] },
+  unknown: { code: [200, 200, 200], color: 'white', structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
 };
 
 export const getColorIndicesForCoord = (x, y, width) => {
@@ -152,6 +152,8 @@ export function colorChecker(code){
   }
 
 export function parseArray(hoverColor) {
+
+  console.log('parse array firing', hoverColor);
   const newData = { ...currentImageData };
   newData.data = Uint8ClampedArray.from([...currentImageData.data]);
 

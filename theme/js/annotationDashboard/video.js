@@ -27,9 +27,6 @@ function resizeVideoElements() {
 
   video.width = dimension.width;
   video.height = dimension.height;
-
-
-  console.log('resize elements firing', window.innerWidth, dimension);
   
   document.getElementById('interaction').style.width = `${Math.round(dimension.width)}px`;
   document.getElementById('interaction').style.height = `${dimension.height}px`;
@@ -41,14 +38,10 @@ function resizeVideoElements() {
 
   d3.select('.progress-bar').node().style.width = `${Math.round(dimension.width)}px`;
 
- // d3.select('#vid-svg').selectAll('*').remove();
-
-  //renderPushpinMarks(d3.select('#vid-svg'))
-
 }
 
 function initializeVideo() {
-  console.log('is this firing every time')
+
   const videoDuration = Math.round(document.getElementById('video').duration);
   const time = formatTime(videoDuration);
   const duration = document.getElementById('duration');
@@ -87,10 +80,9 @@ export async function formatVidPlayer() {
 
 
   }else{
-    console.log('ELSE FIRED canplay event added');
+    
 
     video.addEventListener('canplay', (event) => {
-      console.log('Video can start, but not sure it will play through.', event);
   
       canPlay = true;
        
@@ -128,8 +120,6 @@ export async function formatVidPlayer() {
   
     const svgTest = d3.select('#interaction').select('svg');
     const svg = svgTest.empty() ? d3.select('#interaction').append('svg') : svgTest;
-
-    console.log('testsss', d3.select('#show-push').select('input').node().checked)
 
     if(d3.select('#show-push').select('input').node().checked){
       renderPushpinMarks(commentsInTimeframe, svg);
@@ -192,7 +182,7 @@ export function togglePlay() {
   playButtonChange();
   if (video.playing) {
     video.pause();
-    console.log('video paused', structureSelected);
+ 
     drawFrameOnPause(video).then(()=>{
       if(structureSelected.selected) parseArray(currentColorCodes[currentColorCodes.length - 1]);
     });
@@ -400,6 +390,8 @@ export function updateWithSelectedStructure(snip, commentData){
   return structureAnnotations;
 }
 export function structureTooltip(structureData, coord, snip, hoverBool) {
+  console.log('structure toolllsss', structureData, coord, snip, hoverBool);
+
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
   const nestReplies = formatCommentData({ ...commentData }, null);
@@ -453,8 +445,6 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
   }
 }
 export function renderPushpinMarks(commentsInTimeframe, svg) {
-
-  console.log('comments in time frame',commentsInTimeframe);
   
   const pushes = commentsInTimeframe.filter((f) => f.commentMark === 'push');
   const pushedG = svg.selectAll('g.pushed').data(pushes).join('g').classed('pushed', true);
@@ -470,7 +460,7 @@ export function renderPushpinMarks(commentsInTimeframe, svg) {
   circ.on('mouseover', (d) => {
     const wrap = d3.select('#right-sidebar').select('#comment-wrap');
     const memoDivs = wrap.selectAll('.memo').filter((f) => {
-      console.log("test", f.key, d.key)
+  
       return f.key === d.key});
     memoDivs.classed('selected', true);
     d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = memoDivs.nodes()[0].offsetTop;
@@ -512,7 +502,7 @@ export async function renderDoodles(commentsInTimeframe, div) {
     return urlDood;
   });
   let dimension = getRightDimension();
-  const images = div.selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
+  const images = d3.select('#interaction').selectAll('img').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
   images.attr('src', (d) => d);
   images.attr('width', dimension.width);
   images.attr('height', dimension.height);
@@ -588,7 +578,7 @@ export function videoUpdates(data, annoType) {
 
     highlightCommentBoxes(timeRange);
 
-    console.log('dattaaa',dataKeeper[dataKeeper.length - 1].comments)
+    
 
     const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
 

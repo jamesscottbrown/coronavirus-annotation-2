@@ -274,7 +274,6 @@ export function drawCommentBoxes(nestedData, wrap) {
   
     d3.select(event.target).classed('hover', false);
     
-    
     if(d3.select('#show-push').select('input').node().checked){
       let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked);
       pushed.selectAll('circle').attr('opacity', .7);
@@ -282,6 +281,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       pushed.selectAll('text').attr('opacity', 1);
     }else{
       d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked).remove();
+      d3.select('#interaction').selectAll('.doodles').remove();
     }
     
   })
