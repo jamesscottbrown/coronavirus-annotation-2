@@ -419,6 +419,8 @@ export function updateWithSelectedStructure(snip, commentData){
   drawCommentBoxes(structureSelected.comments, selectedComWrap);
   drawCommentBoxes(nestReplies, genComWrap);
   genComWrap.selectAll('.memo').style('opacity', 0.3);
+
+  d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = 0;
   
   //MAKE THESE SCROLL TO TOP.
 
