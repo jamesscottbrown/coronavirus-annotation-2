@@ -360,19 +360,36 @@ export function updateWithSelectedStructure(snip, commentData){
   });
 
   const structureAnnotations = annotationData[annotationData.length - 1].filter((f) => {
-    let structsAnno = f.associated_structures.split(', ').filter((m) => {
-      let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
-      return otherNames > -1;
-    });
-    return structsAnno.length > 0;
+    let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
+    if(snip === "orange"){
+      let structsAnno = f.associated_structures.split(', ').filter((m) => {
+        return structure.toUpperCase() === m.toUpperCase();
+      });
+      return structsAnno.length > 0;
+    }else{
+      let structsAnno = f.associated_structures.split(', ').filter((m) => {
+        let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
+        return otherNames > -1;
+      });
+      return structsAnno.length > 0;
+    }
   });
 
   let otherAnno = annotationData[annotationData.length - 1].filter((f) => {
-    let structsAnno = f.associated_structures.split(', ').filter((m) => {
-      let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
-      return otherNames > -1;
-    });
-    return structsAnno.length === 0;
+    let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
+    if(snip === "orange"){
+      let structsAnno = f.associated_structures.split(', ').filter((m) => {
+        return structure.toUpperCase() === m.toUpperCase();
+      });
+      return structsAnno.length === 0;
+    }else{
+      let structsAnno = f.associated_structures.split(', ').filter((m) => {
+        let otherNames = colorDictionary[snip].other_names.map(on=> on.toUpperCase()).indexOf(m.toUpperCase());
+        return otherNames > -1;
+      });
+      return structsAnno.length === 0;
+    }
+    
   });
 
   structureSelected.annotations = structureAnnotations.filter((f) => f.has_unkown === 'TRUE').concat(structureAnnotations.filter((f) => f.has_unkown === 'FALSE'));
@@ -402,6 +419,8 @@ export function updateWithSelectedStructure(snip, commentData){
   drawCommentBoxes(structureSelected.comments, selectedComWrap);
   drawCommentBoxes(nestReplies, genComWrap);
   genComWrap.selectAll('.memo').style('opacity', 0.3);
+  
+  //MAKE THESE SCROLL TO TOP.
 
   return structureAnnotations;
 }
