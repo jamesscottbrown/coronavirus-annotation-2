@@ -198,6 +198,11 @@ export function togglePlay() {
   } else {
     clearCanvas();
     video.play();
+    structureSelectedToggle(null, null, null);
+    clearRightSidebar();
+    renderCommentDisplayStructure();
+    updateCommentSidebar({ ...dataKeeper[dataKeeper.length - 1] });
+    addCommentButton();
   }
 }
 

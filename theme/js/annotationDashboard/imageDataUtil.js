@@ -70,6 +70,7 @@ function check(pull) {
 export function clearCanvas() {
   const cxt = canvas.getContext('2d');
   cxt.clearRect(0, 0, canvas.width, canvas.height);
+  d3.select('#video-wrap').select('.tooltip').style('opacity', 0).style('position', '-300px')
 }
 export async function loadPngForFrame() {
   const video = document.getElementById('video');
