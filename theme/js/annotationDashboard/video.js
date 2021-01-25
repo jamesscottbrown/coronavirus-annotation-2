@@ -150,6 +150,19 @@ export function updateTimeElapsed() {
 }
 function progressClicked(mouse) {
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
+  structureSelectedToggle(null, null, null);
+  const commentData = { ...dataKeeper[dataKeeper.length - 1] };
+  addCommentButton();
+  clearRightSidebar();
+  renderCommentDisplayStructure();
+  updateCommentSidebar(commentData);
+  updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+
+  let tool = d3.select('.tooltip');
+  tool.style('opacity', 0);
+  tool.style('top', '-100px');
+  tool.style('left', '-100px');
+
   updateTimeElapsed();
 }
 export function commentClicked(event, d) {
