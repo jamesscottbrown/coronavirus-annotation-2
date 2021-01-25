@@ -39,7 +39,7 @@ function renderAnnotationBoxes(divs){
   annoHeadSpan.classed('badge badge-secondary', true);
 
   annoTypeHeader.filter((f) => f.has_unkown === 'TRUE').selectAll('i.question').data((d) => [d]).join('i')
-    .classed('fas fa-exclamation-circle question', true);
+    .classed('fas fa-question-circle question', true);
 
   annoTypeHeader.filter((f) => f.ref != '' && f.ref != 'na').selectAll('i.reference').data((d) => [d]).join('i')
     .classed('fas fa-book-open reference', true);

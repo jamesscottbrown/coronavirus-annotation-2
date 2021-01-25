@@ -297,12 +297,12 @@ export function drawCommentBoxes(nestedData, wrap) {
   const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qs.select('*').remove();
 
-  qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
+  qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
 
   const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
   qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qreply.selectAll('div.question').selectAll('*').remove();
-  d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-exclamation-circle', true);
+  d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
 
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
