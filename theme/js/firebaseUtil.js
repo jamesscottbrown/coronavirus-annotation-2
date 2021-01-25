@@ -47,6 +47,7 @@ function loginSuccess(user) {
 
 export function cancelLogin(){
   ui.delete();
+  d3.select('#sign-in-container').remove();
 }
 
 export function signOut(){
@@ -60,8 +61,9 @@ export function userLogin() {
   }
   
   ui = new firebaseui.auth.AuthUI(firebase.default.auth());
-
-  //let ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+  let signInTest = d3.select('#right-sidebar').select('#sign-in-wrap').select('#sign-in-container');
+  let signInDiv = signInTest.empty() ? d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container') : signInTest;
+  goBackButton();
 
   ui.start('#sign-in-container', {
     callbacks: {
@@ -118,6 +120,8 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
   firebase.auth().onAuthStateChanged(async (user) => {
     console.log('user??', user)
     if (user) {
+      currentUser.push(user);
+      addUser(user);
       if(!ui){
         ui = new firebaseui.auth.AuthUI(firebase.default.auth());
       }
@@ -138,8 +142,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
         addCommentButton();
       }
      
-      currentUser.push(user);
-      addUser(user);
+
 
       callbackArray.forEach((fun) => {
         fun(user);
@@ -149,7 +152,10 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
       // User is signed in.
     } else {
       console.log('NO USER', user);
-      d3.select('#sign-out').on('click', ()=> userLogin());
+      d3.select('#sign-out').on('click', ()=> {
+        d3.select('#comment-wrap').style('margin-top', '170px');
+        userLogin()});
+     
       addCommentButton();
       checkDatabase(callbackArrayNoArgs);
       // No user is signed in.

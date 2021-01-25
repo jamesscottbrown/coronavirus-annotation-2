@@ -146,15 +146,15 @@ export function goBackButton() {
 
 export function addCommentButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
- 
+  console.log(userLoggedIn)
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {
       //clearRightSidebar();
-      d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
+      //d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
       d3.select('#comment-wrap').style('margin-top', '0px');
       userLogin();
-      goBackButton();
+     // goBackButton();
     });
   } else {
     button.text('Add Comment');
