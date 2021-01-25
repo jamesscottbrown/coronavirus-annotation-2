@@ -12,6 +12,7 @@ import {
 import { highlightAnnotationbar, updateAnnotationSidebar } from './annotationBar';
 import { highlightTimelineBars, renderTimeline } from './timeline';
 import 'firebase/storage';
+import { cancelLogin, userLoggedIn, userLogin } from '../firebaseUtil';
 
 let canPlay;
 
@@ -332,6 +333,10 @@ export async function mouseClickVideo(coord, video) {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE
        */
+      if(userLoggedIn.loggedInBool === false){
+        d3.select('#sign-in-wrap').selectAll('*').remove();
+         cancelLogin();
+      }
     
       let structure = (snip === 'orange' && video.currentTime > 16) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
       

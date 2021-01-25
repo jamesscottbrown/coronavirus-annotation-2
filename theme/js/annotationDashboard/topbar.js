@@ -4,6 +4,7 @@ import {
   clearRightSidebar, formatToComment, renderCommentDisplayStructure, renderStructureKnowns, updateCommentSidebar,
 } from './commentBar';
 import {
+  cancelLogin,
   userLoggedIn, userLogin,
 } from '../firebaseUtil';
 import { dataKeeper } from '../dataManager';
@@ -93,6 +94,8 @@ export function goBackButton() {
     if(userLoggedIn.loggedInBool === false){ //if user is not logged in 
     
      d3.select('#right-sidebar').select('#sign-in-wrap').selectAll('*').remove();
+     d3.select('#comment-wrap').style('margin-top', '0px');
+     cancelLogin();
      addCommentButton();
     
     }else{//if user is logged in 

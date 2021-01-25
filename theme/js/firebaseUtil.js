@@ -12,6 +12,8 @@ require('firebase/auth');
 require('firebase/database');
 const firebaseui = require('firebaseui');
 
+let ui;
+
 export const userLoggedIn = {
   loggedInBool: false,
   uid: null,
@@ -43,12 +45,19 @@ function loginSuccess(user) {
   // updateCommentSidebar();
 }
 
+export function cancelLogin(){
+  ui.delete();
+}
+
 export function userLogin() {
+
   if (!firebase.apps.length) {
     firebase.initializeApp(fbConfig[0]);
   }
+  
+  ui = new firebaseui.auth.AuthUI(firebase.default.auth());
 
-  const ui = new firebaseui.auth.AuthUI(firebase.default.auth());
+  //let ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
 
   ui.start('#sign-in-container', {
     callbacks: {
@@ -89,7 +98,7 @@ export function userLogin() {
         clientId: '632575175956-49a1hie4ab4gr69vak5onr307fg67bb0.apps.googleusercontent.com',
       },
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+      // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
     ],
     // Other config options...
   });
