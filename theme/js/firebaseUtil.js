@@ -49,6 +49,10 @@ export function cancelLogin(){
   ui.delete();
 }
 
+export function signOut(){
+  ui.signOut();
+}
+
 export function userLogin() {
 
   if (!firebase.apps.length) {
@@ -112,7 +116,19 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
   }
 
   firebase.auth().onAuthStateChanged(async (user) => {
+    console.log('user??', user)
     if (user) {
+      if(!ui){
+        ui = new firebaseui.auth.AuthUI(firebase.default.auth());
+      }
+      d3.select('#sign-out').on('click', ()=> {
+        firebase.auth().signOut();
+        addUser(null);
+        ui.delete();
+        d3.select('#user').select('.user_name').remove();
+        
+        addCommentButton();
+      });
       if(structureSelected.selected){
         d3.select('#comment-wrap').style('margin-top', '190px');
         renderStructureKnowns(d3.select('#right-sidebar').select('.top'));
@@ -133,6 +149,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
       // User is signed in.
     } else {
       console.log('NO USER', user);
+      d3.select('#sign-out').on('click', ()=> userLogin());
       addCommentButton();
       checkDatabase(callbackArrayNoArgs);
       // No user is signed in.
