@@ -153,11 +153,14 @@ function progressClicked(mouse) {
 }
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
-  d3.select(event.target).classed('clicked', true);
+ // d3.select(event.target).classed('clicked', true);
 
   d.clicked = true;
-
-  renderPushpinMarks([d], d3.select('#vid-svg'));
+  
+  //renderPushpinMarks([d], d3.select('#vid-svg'));
+  if(d3.select('#show-push').select('input').node().checked){
+    renderPushpinMarks(commentsInTimeframe, svg);
+  }
 
   updateTimeElapsed();
 }
@@ -539,14 +542,19 @@ export async function renderDoodles(commentsInTimeframe, div) {
 
   const doods = await storageRef.child('images/').listAll();
 
+  d3.select('#interaction').selectAll('.doodles').remove();
+
   const doodles = commentsInTimeframe.filter((f) => f.commentMark === 'doodle');
 
   const doodFromStorage = doodles.map(async (dood) => {
     const urlDood = await doods.items.filter((f) => f._delegate._location.path_ === `images/${dood.doodleName}`)[0].getDownloadURL();
     return urlDood;
   });
+
+  console.log(doodles, doodFromStorage)
+
   let dimension = getRightDimension();
-  const images = d3.select('#interaction').selectAll('img').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
+  const images = d3.select('#interaction').selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);
   images.attr('src', (d) => d);
   images.attr('width', dimension.width);
   images.attr('height', dimension.height);

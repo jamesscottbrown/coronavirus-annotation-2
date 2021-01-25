@@ -5,7 +5,7 @@ import { annotationData } from '..';
 import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
-import { colorDictionary, structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
+import { structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
 import { goBackButton } from './topbar';
 import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 
@@ -234,7 +234,7 @@ export function drawCommentBoxes(nestedData, wrap) {
           || event.target.tagName.toLowerCase() === 'button'
           || event.target.tagName.toLowerCase() === 'a'
           || event.target.tagName.toLowerCase() === 'svg') {
-     
+     console.log('do nothing')
     } else {
       commentClicked(event, d);
     }
@@ -264,7 +264,7 @@ export function drawCommentBoxes(nestedData, wrap) {
         if(d3.select('#show-doodle').select('input').node().checked){
       
         }else{
-        
+          console.log(event.target, d)
           renderDoodles([d], d3.select('#interaction'));
         }
       }
