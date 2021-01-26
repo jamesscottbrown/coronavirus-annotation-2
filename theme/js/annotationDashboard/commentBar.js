@@ -210,19 +210,22 @@ export function drawCommentBoxes(nestedData, wrap) {
       .text('Reply ');
     reply.selectAll('.reply').data((d) => [d]).join('i').classed('fas fa-comment-dots fa-lg reply', true);// .style('float', 'right')//.text('Reply');
 
-    reply.on('click', function (event, d) {
+    memoDivs.selectAll('.reply-span').on('click', function (event, d) {
+
       event.stopPropagation();
       const e = reply.nodes();
       const i = e.indexOf(this);
 
+      console.log('is this ok?', event.target, event.target.parentNode.parentNode, 'this', this);
+
       if (d.replyBool === false) {
         d.replyBool = true;
 
-        replyInputBox(d, i, event.target, user);
+        replyInputBox(d, i, event.target.parentNode.parentNode, user);
 
       } else {
         d.replyBool = false;
-        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
       }
     });
   }
