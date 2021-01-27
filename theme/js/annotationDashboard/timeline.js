@@ -3,9 +3,54 @@ import { annotationData } from '..';
 import { formatTime, getRightDimension } from '../dataManager';
 import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
+import { colorDictionary } from './imageDataUtil';
 import {updateTimeElapsed} from './video';
 
 // const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
+
+
+export function colorTimeline(snip){
+
+  let video = document.getElementById('video');
+  d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+  d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+
+  if(snip != null){
+    if(snip === "orange"){
+      let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
+      let color = colorDictionary[snip].code;
+      let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
+        let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(structure));
+        return c.comment.toUpperCase().includes(structure) || rep.length > 0;
+      });
+      comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+  
+      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
+        return a.associated_structures.toUpperCase().includes(structure);
+      }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+  
+  
+    }else{
+  
+      colorDictionary[snip].other_names.map(f=> {
+        let name = f.toUpperCase();
+        let color = colorDictionary[snip].code;
+        let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
+          let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(name));
+          return c.comment.toUpperCase().includes(name) || rep.length > 0;
+        });
+        comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+    
+        d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
+          return a.associated_structures.toUpperCase().includes(name);
+        }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+    
+      });
+  
+    }
+  }
+
+}
 
 function structureTooltip(coord, d, type) {
   let dim = getRightDimension();

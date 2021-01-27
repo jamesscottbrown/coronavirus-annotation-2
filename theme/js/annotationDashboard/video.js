@@ -1,18 +1,18 @@
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
 import { annotationData } from '..';
-import { dataKeeper, formatAnnotationTime, formatTime, getRightDimension } from '../dataManager';
-import { addStructureLabelFromButton, addCommentButton, goBackButton } from './topbar';
+import { dataKeeper, formatTime, getRightDimension } from '../dataManager';
+import { addCommentButton, goBackButton } from './topbar';
 import {
-  clearCanvas, colorDictionary, currentImageData, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle, toggleQueue,
+  clearCanvas, colorDictionary, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle, toggleQueue,
 } from './imageDataUtil';
 import {
   drawCommentBoxes, formatCommentData, updateCommentSidebar, clearRightSidebar, highlightCommentBoxes, renderCommentDisplayStructure, renderStructureKnowns,
 } from './commentBar';
 import { highlightAnnotationbar, updateAnnotationSidebar } from './annotationBar';
-import { highlightTimelineBars, renderTimeline } from './timeline';
+import { highlightTimelineBars, renderTimeline, colorTimeline } from './timeline';
 import 'firebase/storage';
-import { cancelLogin, userLoggedIn, userLogin } from '../firebaseUtil';
+import { cancelLogin, userLoggedIn } from '../firebaseUtil';
 
 let canPlay;
 
@@ -149,9 +149,13 @@ export function updateTimeElapsed() {
   }
 }
 function progressClicked(mouse) {
+
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
   structureSelectedToggle(null, null, null);
+  colorTimeline(null);
+
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
+
   addCommentButton();
   clearRightSidebar();
   renderCommentDisplayStructure();
@@ -167,11 +171,9 @@ function progressClicked(mouse) {
 }
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
- // d3.select(event.target).classed('clicked', true);
 
   d.clicked = true;
-  
-  //renderPushpinMarks([d], d3.select('#vid-svg'));
+
   if(d3.select('#show-push').select('input').node().checked){
     renderPushpinMarks(commentsInTimeframe, svg);
   }
@@ -221,48 +223,6 @@ export function togglePlay() {
     updateCommentSidebar({ ...dataKeeper[dataKeeper.length - 1] });
     addCommentButton();
   }
-}
-
-export function colorTimeline(snip){
-
-  let video = document.getElementById('video');
-  d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
-  d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
-
-  if(snip === "orange"){
-
-    let structure = (snip === "orange" && video.currentTime > 16) ? colorDictionary[snip].structure[1].toUpperCase() : colorDictionary[snip].structure[0].toUpperCase();
-    let color = colorDictionary[snip].code;
-    let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
-      let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(structure));
-      return c.comment.toUpperCase().includes(structure) || rep.length > 0;
-    });
-    comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-
-    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
-      return a.associated_structures.toUpperCase().includes(structure);
-    }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-
-
-  }else{
-
-    colorDictionary[snip].other_names.map(f=> {
-      let name = f.toUpperCase();
-      let color = colorDictionary[snip].code;
-      let comm = d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(c=> {
-        let rep = c.replyKeeper.filter(r=> r.comment.toUpperCase().includes(name));
-        return c.comment.toUpperCase().includes(name) || rep.length > 0;
-      });
-      comm.classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-  
-      d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(a => {
-        return a.associated_structures.toUpperCase().includes(name);
-      }).classed('struct-present', true).select('rect').style('fill', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-  
-    });
-
-  }
-
 }
 
 export async function mouseMoveVideo(coord, video) {
@@ -568,8 +528,6 @@ export async function renderDoodles(commentsInTimeframe, div) {
     const urlDood = await doods.items.filter((f) => f._delegate._location.path_ === `images/${dood.doodleName}`)[0].getDownloadURL();
     return urlDood;
   });
-
-  console.log(doodles, doodFromStorage)
 
   let dimension = getRightDimension();
   const images = d3.select('#interaction').selectAll('.doodles').data(await Promise.all(doodFromStorage)).join('img').classed('doodles', true);

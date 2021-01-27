@@ -547,6 +547,15 @@ margin-top:10px;
    font-size: 11px;
  }
 
+ .votes{
+   display:inline;
+ }
+
+ .name svg {
+   margin-left: 10px;
+   margin-right:10px;
+ }
+
  svg.svg-inline--fa.fa-thumbs-up.fa-w-16.upvote.fa-sm path,
  svg.svg-inline--fa.fa-thumbs-down.fa-w-16.downvote.fa-sm path,
  .svg-inline--fa.fa-map-marker-alt.fa-w-12 path,
