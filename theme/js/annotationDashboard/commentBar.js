@@ -308,14 +308,14 @@ export function drawCommentBoxes(nestedData, wrap) {
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
 
-  refMemos.selectAll('.fa-book-open').remove();
+ // refMemos.selectAll('.fa-book-open').remove();
   refMemos.selectAll('.fa-book-open').data((d) => {
     console.log('d in textbook', d)
     return [d]}).join('i').classed('fas fa-book-open', true);
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
-  d3.select(refReply.node().parentNode).selectAll('i.fas.question').remove();
-  d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
+  //d3.select(refReply.node().parentNode).selectAll('.fas.question').remove();
+  d3.select(refReply.node().parentNode).selectAll('.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
 
   d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
     event.stopPropagation();
