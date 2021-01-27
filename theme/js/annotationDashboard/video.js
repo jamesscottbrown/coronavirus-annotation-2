@@ -172,7 +172,7 @@ function progressClicked(mouse) {
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
 
-  d.clicked = true;
+  // d.clicked = true;
 
   if(d3.select('#show-push').select('input').node().checked){
     renderPushpinMarks(commentsInTimeframe, svg);

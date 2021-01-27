@@ -6,6 +6,7 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { annotationData } from '..';
 import { structureSelected } from './imageDataUtil';
+import { hoverEmphasis } from './timeline';
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();
@@ -100,6 +101,9 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
       .classed('structure-anno', true);
 
     renderAnnotationBoxes(structAnnoDivs);
+
+    structAnnoDivs.on('mouseover', (event, d)=> hoverEmphasis(d, "annotation"));
+    structAnnoDivs.on('mouseout', ()=> d3.selectAll('.hover-em').classed('hover-em', false));
     
   }else{
     d3.select('#left-sidebar').select('.top').select('.comment-header').text(`Annotations:`)
@@ -111,6 +115,9 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
     .classed('anno', true);
 
   renderAnnotationBoxes(annoDiv);
+
+  annoDiv.on('mouseover', (event, d)=> hoverEmphasis(d, "annotation"));
+  annoDiv.on('mouseout', ()=> d3.selectAll('.hover-em').classed('hover-em', false));
 
   d3.select('.annotation-wrap').selectAll('rect').filter((f) => {
     const currentData = filteredAnno.map((m) => m.text_description);

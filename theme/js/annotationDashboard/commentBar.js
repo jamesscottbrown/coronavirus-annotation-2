@@ -6,6 +6,7 @@ import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataMan
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
+import { hoverEmphasis } from './timeline';
 import { goBackButton } from './topbar';
 import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 
@@ -174,13 +175,11 @@ export function drawCommentBoxes(nestedData, wrap) {
   ///COLORING BADGES BY STRUCTURE
   
   Object.entries(structureDictionary).forEach((d)=>{
-    console.log('test', d, tags.selectAll('.badge').data());
     tags.selectAll('.badge').filter(f=> {
       return f.toUpperCase() === d[0];
     }).style('background-color', `rgba(${d[1].code[0]}, ${d[1].code[1]}, ${d[1].code[2]}, .4)`);
   });
   
-
   let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').select('.name').selectAll('.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
   let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').select('.name').selectAll('.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
 
@@ -254,6 +253,7 @@ export function drawCommentBoxes(nestedData, wrap) {
   memoDivs.on('mouseover', (event, d)=>{
 
     d3.select(event.target).classed('hover', true);
+    hoverEmphasis(d, 'comment');
 
     let timeRange = [(video.currentTime < 1 ? 0 : video.currentTime - .2), (video.currentTime + .5)];
     
@@ -284,6 +284,7 @@ export function drawCommentBoxes(nestedData, wrap) {
   }).on('mouseout', (event, d)=>{
 
      d3.select(event.target).classed('hover', false);
+     d3.selectAll('.hover-em').classed('hover-em', false);
     
     if(d3.select('#show-push').select('input').node().checked){
       let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked);
@@ -320,7 +321,6 @@ export function drawCommentBoxes(nestedData, wrap) {
 
  // refMemos.selectAll('.fa-book-open').remove();
   refMemos.selectAll('.fa-book-open').data((d) => {
-    console.log('d in textbook', d)
     return [d]}).join('i').classed('fas fa-book-open', true);
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
@@ -334,9 +334,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
     if (d.replyBool === false) {
       d.replyBool = true;
-      //console.log(event.target.parentNode, 'is this in reply?', event.target.tagName, event.target.parentNode.parentNode, 'this', this);
       replyInputBox(d, i, event.target.parentNode);
-
     } else {
       d.replyBool = false;
       d3.select(event.target.parentNode).select('.reply-space').select('.text-input-sidebar').remove();

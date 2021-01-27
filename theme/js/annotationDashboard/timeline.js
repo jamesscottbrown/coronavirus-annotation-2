@@ -8,6 +8,13 @@ import {updateTimeElapsed} from './video';
 
 // const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
 
+export function hoverEmphasis(d, type){
+  if(type === "comment"){
+    d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(f=> f.key === d.key).classed('hover-em', true);
+  }else{
+    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(f=> f.key === d.key).classed('hover-em', true);
+  }
+}
 
 export function colorTimeline(snip){
 
