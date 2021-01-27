@@ -120,6 +120,7 @@ function updateTags(node, tagWrap, tagArray) {
 
 function upvoteIcon(div, db) {
   // UPVOTE
+  //div.selectAll('.upvote-span').remove();
   const upVote = div.selectAll('.upvote-span').data((d) => [d]).join('span').classed('upvote-span', true);
   upVote.selectAll('.upvote').data((d) => [d]).join('i').classed('upvote fas fa-thumbs-up fa-sm', true);
   upVote.selectAll('.up-text').data((d) => [d]).join('text').classed('up-text', true)
@@ -189,9 +190,9 @@ export function drawCommentBoxes(nestedData, wrap) {
     });
 
   memoDivs.style('border', (d) => '1px solid gray');
-
-  upvoteIcon(memoDivs, db);
-  downvoteIcon(memoDivs, db);
+  let voteDiv = memoDivs.selectAll('div.votes').data(d=> [d]).join('div').classed('votes', true);
+  upvoteIcon(voteDiv, db);
+  downvoteIcon(voteDiv, db);
 
   if (userLoggedIn.loggedInBool) {
     // RESOLVE
@@ -272,8 +273,7 @@ export function drawCommentBoxes(nestedData, wrap) {
     }
   }).on('mouseout', (event, d)=>{
 
-  
-    d3.select(event.target).classed('hover', false);
+     d3.select(event.target).classed('hover', false);
     
     if(d3.select('#show-push').select('input').node().checked){
       let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> !f.clicked);
@@ -309,15 +309,15 @@ export function drawCommentBoxes(nestedData, wrap) {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
 
   refMemos.selectAll('.fa-book-open').remove();
-  refMemos.selectAll('i.fas.fa-book-open').data((d) => [d]).join('i').classed('fas fa-book-open', true);
-  //<i class="fas fa-book-open"></i>
+  refMemos.selectAll('.fa-book-open').data((d) => {
+    console.log('d in textbook', d)
+    return [d]}).join('i').classed('fas fa-book-open', true);
   
   const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').remove();
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
 
   d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
-    //console.log(event, this);
     event.stopPropagation();
     const e = d3.selectAll('.reply-memo').nodes();
     const i = e.indexOf(this);
@@ -913,9 +913,9 @@ function replyRender(replyDivs) {
       const test = new Date(d.postTime);
       return `on ${test.toUTCString()}`;
     });
-
-  upvoteIcon(replyDivs, db);
-  downvoteIcon(replyDivs, db);
+  let voteDivR = replyDivs.selectAll('div.votes').data(d=> [d]).join('div').classed('votes', true);
+  upvoteIcon(voteDivR, db);
+  downvoteIcon(voteDivR, db);
 
   if (userLoggedIn.loggedInBool) {
     const reply = replyDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
