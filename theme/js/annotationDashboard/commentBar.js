@@ -68,7 +68,7 @@ function replyInputBox(d, i, n) {
 
     const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null);
     const ref = firebase.database().ref('comments');
-    d3.select(n.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+    d3.select(n).select('.reply-space').selectAll('*').remove();
     ref.push(dataPush);
   });
 }
@@ -266,7 +266,7 @@ export function drawCommentBoxes(nestedData, wrap) {
         if(d3.select('#show-doodle').select('input').node().checked){
       
         }else{
-          console.log(event.target, d)
+          
           renderDoodles([d], d3.select('#interaction'));
         }
       }
