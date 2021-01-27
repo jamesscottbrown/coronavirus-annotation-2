@@ -568,7 +568,7 @@ margin-top:10px;
    border-left: 1px solid gray;
    border-top: 1px solid gray;
    padding:5px;
-   margin-top:10px;
+   margin-top:20px;
    border-radius: 4px;
  }
  
@@ -624,6 +624,7 @@ margin-top:10px;
   margin-left:10px;
   float:right;
 }
+
 .fa-question-circle path{
   fill:#FE0900 !important;
 }
@@ -658,6 +659,15 @@ margin-top:10px;
 
 .add-comment-structure{
   margin:10px;
+}
+
+.reply-space{
+  height:fit-content;
+}
+
+.reply-space button{
+float:left;
+display: block;
 }
 
 
@@ -872,7 +882,7 @@ button.btn.dropbtn.dropdown-toggle:active{
 }
 
 .text-input textarea {
-  width:190px;
+  
   border-radius: 4px;
 }
 
@@ -880,10 +890,13 @@ button.btn.dropbtn.dropdown-toggle:active{
   border-left: 1px solid gray;
   padding:5px;
   font-size: 11px;
+  height:fit-content;
+  margin-bottom:50px;
 }
 
 .text-input-sidebar textarea{
-  width:200px;
+  // width:200px;
+  width:100%;
   border-radius: 4px;
 }
 

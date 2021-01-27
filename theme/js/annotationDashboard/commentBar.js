@@ -56,9 +56,9 @@ function recurse(parent, replyArray, level) {
   return parent;
 }
 
-function replyInputBox(d, i, n, user) {
+function replyInputBox(d, i, n) {
   
-  const inputDiv = d3.select(n.parentNode.parentNode).select('.reply-space').append('div').classed('text-input-sidebar', true);
+  const inputDiv = d3.select(n).select('.reply-space').append('div').classed('text-input-sidebar', true);
   inputDiv.append('text').text(`${userLoggedIn.displayName}:`);
   inputDiv.append('textarea').attr('id', 'text-area-id').attr('placeholder', 'Comment Here');
   const submit = inputDiv.append('button').text('Add Comment').classed('btn btn-secondary', true);
@@ -216,16 +216,14 @@ export function drawCommentBoxes(nestedData, wrap) {
       const e = reply.nodes();
       const i = e.indexOf(this);
 
-      console.log('is this ok?', event.target, event.target.parentNode.parentNode, 'this', this);
-
       if (d.replyBool === false) {
         d.replyBool = true;
 
-        replyInputBox(d, i, event.target.parentNode.parentNode, user);
+        replyInputBox(d, i, event.target.parentNode);
 
       } else {
         d.replyBool = false;
-        d3.select(event.target.parentNode.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
       }
     });
   }
@@ -237,7 +235,7 @@ export function drawCommentBoxes(nestedData, wrap) {
           || event.target.tagName.toLowerCase() === 'button'
           || event.target.tagName.toLowerCase() === 'a'
           || event.target.tagName.toLowerCase() === 'svg') {
-     console.log('do nothing')
+     
     } else {
       commentClicked(event, d);
     }
@@ -251,7 +249,7 @@ export function drawCommentBoxes(nestedData, wrap) {
     if(d.videoTime >= timeRange[0] && d.videoTime <= timeRange[1]){
       
       if(d.commentMark === "push"){
-        
+
         if(d3.select('#show-push').select('input').node().checked){
           let pushed = d3.select('#vid-svg').selectAll('.pushed').filter(f=> f.key != d.key && !f.clicked);
           pushed.selectAll('circle').attr('opacity', .1);
@@ -318,7 +316,22 @@ export function drawCommentBoxes(nestedData, wrap) {
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').remove();
   d3.select(refReply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas fa-book-open', true);
 
-  
+  d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
+    //console.log(event, this);
+    event.stopPropagation();
+    const e = d3.selectAll('.reply-memo').nodes();
+    const i = e.indexOf(this);
+
+    if (d.replyBool === false) {
+      d.replyBool = true;
+      //console.log(event.target.parentNode, 'is this in reply?', event.target.tagName, event.target.parentNode.parentNode, 'this', this);
+      replyInputBox(d, i, event.target.parentNode);
+
+    } else {
+      d.replyBool = false;
+      d3.select(event.target.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+    }
+  });
   
 }
 
@@ -878,6 +891,8 @@ export function formatTimeControl(div) {
 function replyRender(replyDivs) {
   const db = firebase.database();
 
+  
+
   replyDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
     .selectAll('text')
     .data((d) => [d])
@@ -921,24 +936,6 @@ function replyRender(replyDivs) {
       db.ref(`comments/${d.key}/resolved`).set('true');
     });
 
-    reply.on('click', function (event, d) {
-      event.stopPropagation();
-
-      const e = reply.nodes();
-      const i = e.indexOf(this);
-
-     
-
-      if (!d.replyBool) {
-        d.replyBool = true;
-        replyInputBox(d, i, event.target, user);
-
-  
-      } else {
-        d.replyBool = false;
-        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
-      }
-    });
   }
 }
 
