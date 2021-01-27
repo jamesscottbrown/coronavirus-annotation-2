@@ -171,8 +171,8 @@ export function drawCommentBoxes(nestedData, wrap) {
   tags.selectAll('.badge').data((d) => d.tags.split(',').filter((f) => f != 'none')).join('span').classed('badge badge-secondary', true)
     .text((d) => d);
 
-  let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').selectAll('i.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
-  let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').selectAll('i.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
+  let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').select('.name').selectAll('.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
+  let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').select('.name').selectAll('.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);
 
   memoDivs.selectAll('.comment').data((d) => [d]).join('span').classed('comment', true)
     .selectAll('text')
@@ -398,9 +398,7 @@ export function renderStructureKnowns(topCommentWrap) {
 export function defaultTemplate(div, tagArray) {
   let time = formatTime(document.getElementById('video').currentTime);
 
-
-  const inputDiv = div.select('.template-wrap');// .append('div');//.classed('text-input', true);
-  // inputDiv.append('text').text(`${user.displayName}@ ${formatVideoTime(currentTime)} :`);
+  const inputDiv = div.select('.template-wrap');
 
   const templatehtml = `
     <h6>Add a comment @ ${time.minutes} : ${time.seconds}</h6>
@@ -890,8 +888,6 @@ export function formatTimeControl(div) {
 
 function replyRender(replyDivs) {
   const db = firebase.database();
-
-  
 
   replyDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
     .selectAll('text')
