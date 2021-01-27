@@ -5,7 +5,7 @@ import { annotationData } from '..';
 import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
-import { structureSelected, doodleKeeper, structureSelectedToggle } from './imageDataUtil';
+import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
 import { goBackButton } from './topbar';
 import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 
@@ -170,6 +170,16 @@ export function drawCommentBoxes(nestedData, wrap) {
   const tags = memoDivs.selectAll('.tag-span').data((d) => [d]).join('span').classed('tag-span', true);
   tags.selectAll('.badge').data((d) => d.tags.split(',').filter((f) => f != 'none')).join('span').classed('badge badge-secondary', true)
     .text((d) => d);
+
+  ///COLORING BADGES BY STRUCTURE
+  
+  Object.entries(structureDictionary).forEach((d)=>{
+    console.log('test', d, tags.selectAll('.badge').data());
+    tags.selectAll('.badge').filter(f=> {
+      return f.toUpperCase() === d[0];
+    }).style('background-color', `rgba(${d[1].code[0]}, ${d[1].code[1]}, ${d[1].code[2]}, .4)`);
+  });
+  
 
   let pushDivs = memoDivs.filter(f=> f.commentMark === 'push').select('.name').selectAll('.fa-map-marker-alt').data(d=> [d]).join('i').classed('fas marks fa-map-marker-alt', true);
   let doodDivs = memoDivs.filter(f=> f.commentMark === 'doodle').select('.name').selectAll('.fa-paint-brush').data(d=> [d]).join('i').classed('fas marks fa-paint-brush', true);

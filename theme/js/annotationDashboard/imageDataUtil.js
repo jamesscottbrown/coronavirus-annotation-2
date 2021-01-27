@@ -47,6 +47,20 @@ export const colorDictionary = {//(60,179,113)
   unknown: { code: [200, 200, 200], color: 'white', structure: ['Spike Protein'], other_names:['Spike Protein', 's protein', 'spike', 'spikes'] },
 };
 
+export const structureDictionary = {
+  'CELL MEMBRANE': {code:[250, 250, 210]},
+  'ACE2': {code:[138, 43, 226]},
+  'ENVELOPE PROTEIN': {code:[255, 0, 0]},
+  'SPIKE PROTEIN': {code:[60, 175, 113]},
+  'RNA': {code:[255, 140, 0]},
+  'TMPRSS2': {code:[255, 140, 0]},
+  'MEMBRANE PROTEIN': {code:[255, 255, 0]},
+  'FURIN': {code:[255, 255, 0]},
+  'SUGARS': {code:[119, 136, 153]},
+  'VIRUS MEMBRANE': {code:[250, 250, 210]},
+  'NUCLEOCAPSID PROTEIN': {code:[119, 136, 153]},
+}
+
 export const getColorIndicesForCoord = (x, y, width) => {
   const red = y * (width * 4) + (x * 4);
   return [red, red + 1, red + 2, red + 3];
