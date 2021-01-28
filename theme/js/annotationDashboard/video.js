@@ -48,6 +48,32 @@ function initializeVideo() {
   duration.innerText = `${time.minutes}:${time.seconds}`;
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
 }
+
+function addMouseEvents2Video(){
+
+  d3.select('#interaction')
+  .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
+  .on('mousemove', (event) => {
+    toggleQueue(false);
+    mouseMoveVideo(d3.pointer(event), video)});
+
+  d3.select('#interaction')
+    .on('mouseenter', ()=> {
+      toggleQueue(false);
+    })
+    .on('mouseout', ()=> {
+      
+      let tool = d3.select('.tooltip');
+      tool.style('opacity', 0);
+      tool.style('top', '-100px');
+      tool.style('left', '-100px');
+      clearCanvas();
+      drawFrameOnPause(video);
+      toggleQueue(true);
+    });
+
+}
+
 export async function formatVidPlayer() {
   const video = document.getElementById('video');
   video.muted = true;
@@ -65,15 +91,7 @@ export async function formatVidPlayer() {
     resizeVideoElements();
     drawFrameOnPause(video);
 
-    d3.select('#interaction')
-        .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
-        .on('mousemove', (event) => mouseMoveVideo(d3.pointer(event), video))
-        .on('mouseout', ()=>{
-          let tool = d3.select('.tooltip');
-          tool.style('opacity', 0);
-          tool.style('top', '-100px');
-          tool.style('left', '-100px');
-    })
+    addMouseEvents2Video();
 
     d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
     d3.select('.progress-bar').on('click', progressClicked);
@@ -90,17 +108,7 @@ export async function formatVidPlayer() {
   
       drawFrameOnPause(video);
   
-      d3.select('#interaction')
-          .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
-          .on('mousemove', (event) => {
-            toggleQueue(false);
-            mouseMoveVideo(d3.pointer(event), video)});
-
-      d3.select('#interaction')
-          .on('mouseenter', ()=> {
-            toggleQueue(false);
-          })
-          .on('mouseout', ()=> toggleQueue(true));
+      addMouseEvents2Video();
   
       d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
       d3.select('.progress-bar').on('click', progressClicked);
@@ -594,7 +602,7 @@ export function videoUpdates(data, annoType) {
 
   video.ontimeupdate = async (event) => {
     const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
-    console.log('when is this happening time update called');
+   
     updateTimeElapsed();
     highlightTimelineBars(timeRange);
 

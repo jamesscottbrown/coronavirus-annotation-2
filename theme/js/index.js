@@ -27,6 +27,7 @@ dom.watch();
 
 d3.select('#wrapper').on('mousemove', (event, d)=>{
   let svg = document.getElementById('vid-svg');
+  
   if(event.target != svg && structureSelected.selected === false){
     let tool = d3.select('.tooltip');
     tool.style('opacity', 0);

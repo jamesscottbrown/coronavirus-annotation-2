@@ -63,7 +63,7 @@ export  async function loadConfig(){
 }
 
 export async function loadFirebaseApp(){
-  console.log('irebase loading?');
+  
   if (!firebase.apps.length) { 
     return firebase.initializeApp(fbConfig[0]); 
   }else{
@@ -78,7 +78,7 @@ export function loadFirebaseUI(callbackType){
       ui.start('#sign-in-wrap', uiConfig);
     }
   } else {
-    console.log('is this working??')
+
     const ui = new firebaseui.auth.AuthUI(firebase.auth());
     if(callbackType === 'sign-in'){
       ui.start('#sign-in-wrap', uiConfig);
@@ -137,14 +137,13 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
   loadFirebaseApp();
 
   firebase.auth().onAuthStateChanged(async (user) => {
-    console.log('user??', user)
   
     if (user) {
       currentUser.push(user);
       addUser(user);
    
       d3.select('#sign-out').on('click', ()=> {
-        console.log('signoutclicked');
+       
         firebase.auth().signOut();
         addUser(null);
         d3.select('#user').select('.user_name').remove();

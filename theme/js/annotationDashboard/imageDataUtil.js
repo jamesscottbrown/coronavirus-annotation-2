@@ -134,6 +134,7 @@ export function toggleQueue(offVideo){
 }
 
 export async function drawFrameOnPause(video) {
+
   if (video.currentTime < endDrawTime) {
     const imgObj = loadPngForFrame();
     toggleQueue(true);

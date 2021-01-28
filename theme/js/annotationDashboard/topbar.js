@@ -7,10 +7,9 @@ import {
   cancelLogin,
   userLoggedIn, userLogin,
 } from '../firebaseUtil';
-import { dataKeeper } from '../dataManager';
+import { annotationData, dataKeeper } from '../dataManager';
 import { clearCanvas, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
 import { updateAnnotationSidebar } from './annotationBar';
-import { annotationData } from '..';
 import { structureTooltip } from './video';
 
 require('regenerator-runtime/runtime');
