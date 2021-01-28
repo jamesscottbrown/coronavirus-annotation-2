@@ -120,7 +120,6 @@ function loginSuccess(user) {
 }
 
 export function cancelLogin(){
- firebaseui.auth.AuthUI.getInstance().delete()
  d3.select('#sign-in-wrap').selectAll('*').remove();
 }
 
