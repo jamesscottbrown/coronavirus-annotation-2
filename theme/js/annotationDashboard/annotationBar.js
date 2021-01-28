@@ -95,7 +95,19 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
 
   if (stackedData != null) {
 
-    d3.select('#left-sidebar').select('.top').select('.comment-header').text(`Annotations for ${structureSelected.structure}`)
+    let label = function(struct){
+      if(struct.toUpperCase() === "ENVELOPE PROTEIN"){ 
+        return "E protein";
+      }else if(struct.toUpperCase() === "MEMBRANE PROTEIN"){
+        return "M protein";
+      }else if(struct.toUpperCase() === "NUCLEOCAPSID PROTEIN"){
+        return "N protein"
+      }else{
+        return struct;
+      }
+    }
+      
+    d3.select('#left-sidebar').select('.top').select('.comment-header').text(`Annotations for ${label(structureSelected.structure)}`)
 
     const structAnnoDivs = annoWrap.select('.sel-anno-wrap').selectAll('div.structure-anno').data(stackedData).join('div')
       .classed('structure-anno', true);
