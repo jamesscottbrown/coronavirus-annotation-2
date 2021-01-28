@@ -1,6 +1,7 @@
+//import { get } from 'core-js/fn/reflect';
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
-import { annotationData, currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
+import { annotationData, currentUser, dataKeeper, formatTime, formatVideoTime, getRightDimension } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
@@ -570,11 +571,16 @@ export function formatDoodleCanvas() {
 
   clearBoard();
 
+  let oldX; let
+  oldY;
+  let draw = false; 
+
   // let interactionDiv = d3.select('#interaction');
   const interactionDiv = d3.select('#video-wrap').append('div').attr('id', 'add-mark');
   const video = document.getElementById('video');
-  interactionDiv.node().style.width = `${Math.round(video.videoWidth)}px`;
-  interactionDiv.node().style.height = `${video.videoHeight}px`;
+  let dim = getRightDimension();
+  interactionDiv.node().style.width = `${dim.width}px`;
+  interactionDiv.node().style.height = `${dim.height}px`;
 
   interactionDiv.on('mouseenter', (event) => {
     const coords = d3.pointer(event);
@@ -602,6 +608,7 @@ export function formatDoodleCanvas() {
 
   interactionDiv.on('mouseleave', () => {
     d3.select('#push-div').remove();
+    draw = false;
   });
 
   const canvas = d3.select(div).select('canvas').node();
@@ -609,15 +616,13 @@ export function formatDoodleCanvas() {
   const context = canvas.getContext('2d');
   const videoDim = document.getElementById(frame).getBoundingClientRect();
 
-  canvas.width = videoDim.width;
-  canvas.height = videoDim.height;
+  canvas.width = dim.width;
+  canvas.height = dim.height;
 
   context.strokeStyle = 'red';
   context.lineWidth = 5;
 
-  let oldX; let
-    oldY;
-  let draw = false;
+
 
   div.onmousedown = function (e) {
     const sideWidth = document.getElementById('right-sidebar').getBoundingClientRect();
@@ -667,8 +672,9 @@ export function formatPush() {
 
   const interactionDiv = d3.select('#video-wrap').append('div').attr('id', 'add-mark');
   const video = document.getElementById('video');
-  interactionDiv.node().style.width = `${Math.round(video.videoWidth)}px`;
-  interactionDiv.node().style.height = `${video.videoHeight}px`;
+  let dim = getRightDimension();
+  interactionDiv.node().style.width = `${dim.width}px`;
+  interactionDiv.node().style.height = `${dim.height}px`;
 
   let clickedBool = false;
 
@@ -709,10 +715,10 @@ export function formatPush() {
     event.stopPropagation();
 
     if (clickedBool === false && d3.select('.media-tabber').node().value === 't2') {
-      const inputDiv = d3.select('#push-div').append('div').classed('comment-initiated', true);
-      inputDiv.append('h6').text('Comment for this spot');
-      inputDiv.style('margin-left', '15px');
-      inputDiv.style('margin-top', '5px');
+      // const inputDiv = d3.select('#push-div').append('div').classed('comment-initiated', true);
+      // inputDiv.append('h6').text('Comment for this spot');
+      // inputDiv.style('margin-left', '15px');
+      // inputDiv.style('margin-top', '5px');
     } else {
       d3.select('#push-div').select('.comment-initiated').remove();
     }
@@ -726,8 +732,7 @@ export function noMarkFormat() {
 
   context.clearRect(0, 0, canvas.width, canvas.height);
 
-  const interactionDiv = d3.select('#interaction');
-  interactionDiv.selectAll('*').remove();
+  d3.select('#add-mark').remove();
 }
 
 export function renderCommentDisplayStructure() {
