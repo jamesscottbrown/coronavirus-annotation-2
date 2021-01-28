@@ -108,7 +108,7 @@ export async function formatVidPlayer() {
     });
   }
 
-  video.addEventListener('timeupdate', updateTimeElapsed);
+  //video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
   window.addEventListener('resize', ()=> {
  
@@ -137,12 +137,14 @@ export async function formatVidPlayer() {
   });
 }
 export function updateTimeElapsed() {
+
+  d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
   const time = formatTime(Math.round(document.getElementById('video').currentTime));
   const timeElapsed = document.getElementById('time-elapsed');
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
-  d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
-  loadPngForFrame();
+ 
+  
   if(!d3.select('.template-wrap').empty()){
     d3.select('.template-wrap').select('h6').text(`Add a comment @ ${time.minutes} : ${time.seconds}`);
   }
@@ -154,6 +156,8 @@ function progressClicked(mouse) {
 
   structureSelectedToggle(null, null, null);
   colorTimeline(null);
+
+  loadPngForFrame();
 
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
@@ -182,6 +186,7 @@ export function commentClicked(event, d) {
   }
 
   updateTimeElapsed();
+  loadPngForFrame();
 }
 function scaleVideoTime(currentTime, invert) {
   const { duration } = document.getElementById('video');
@@ -589,7 +594,8 @@ export function videoUpdates(data, annoType) {
 
   video.ontimeupdate = async (event) => {
     const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
-
+    console.log('when is this happening time update called');
+    updateTimeElapsed();
     highlightTimelineBars(timeRange);
 
     const filteredAnnotations = annotationData[annotationData.length - 1]

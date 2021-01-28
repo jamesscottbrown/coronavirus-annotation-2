@@ -165,12 +165,17 @@ export function renderTimeline(commentData) {
 }
 
 export function highlightTimelineBars(timeRange) {
+
+  let time = document.getElementById('video').currentTime;
+
   d3.select('.timeline-wrap').selectAll('.anno')
-    .filter((f) => (f.seconds[0] >= timeRange[0] && f.seconds[0] <= timeRange[1]) || (f.seconds[1] <= timeRange[1] && f.seconds[1] >= timeRange[0]))
+    .filter((f) => {
+      return time >= f.seconds[0] && time <= f.seconds[1];
+    })
     .classed('current', true);
 
   d3.select('.timeline-wrap').selectAll('.anno')
-    .filter((f) => f.seconds[1] < timeRange[0] || f.seconds[0] > timeRange[1])
+    .filter((f) => time < f.seconds[0] || time > f.seconds[1])
     .classed('current', false);
 }
 
