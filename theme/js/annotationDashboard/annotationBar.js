@@ -4,9 +4,9 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { annotationData } from '..';
 import { structureSelected } from './imageDataUtil';
 import { hoverEmphasis } from './timeline';
+import { annotationData } from '../dataManager';
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();

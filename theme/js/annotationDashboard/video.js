@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 import firebase from 'firebase/app';
-import { annotationData } from '..';
-import { dataKeeper, formatTime, getRightDimension } from '../dataManager';
+import { annotationData, dataKeeper, formatTime, getRightDimension } from '../dataManager';
 import { addCommentButton, goBackButton } from './topbar';
 import {
   clearCanvas, colorDictionary, drawFrameOnPause, endDrawTime, getCoordColor, loadPngForFrame, makeNewImageData, parseArray, structureSelected, structureSelectedToggle, toggleQueue,
@@ -14,9 +13,9 @@ import { highlightTimelineBars, renderTimeline, colorTimeline } from './timeline
 import 'firebase/storage';
 import { cancelLogin, userLoggedIn } from '../firebaseUtil';
 
-let canPlay;
-
 export const currentColorCodes = [];
+
+let canPlay;
 
 const canvas = document.getElementById('canvas');
 canvas.setAttribute('pointer-events', 'none');

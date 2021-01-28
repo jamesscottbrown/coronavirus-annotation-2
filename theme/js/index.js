@@ -16,19 +16,14 @@ import { structureSelected } from './annotationDashboard/imageDataUtil';
 const {
   renderUser, addCommentButton, toggleSort, renderIssueButton,
 } = require('./annotationDashboard/topbar');
-const { formatAnnotationTime } = require('./dataManager');
+const { formatAnnotationTime, annotationData } = require('./dataManager');
 const { checkUser, loadConfig, fbConfig, loadFirebaseApp } = require('./firebaseUtil');
-
 
 loadConfig();
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();
 dom.watch();
-
-// export const firebaseApp = loadFirebaseApp();
-
-export const annotationData = [];
 
 d3.select('#wrapper').on('mousemove', (event, d)=>{
   let svg = document.getElementById('vid-svg');
@@ -38,24 +33,19 @@ d3.select('#wrapper').on('mousemove', (event, d)=>{
     tool.style('top', '-100px');
     tool.style('left', '-100px');
   }
-  
 })
 
 init();
 
 async function init() {
-
-
   const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i) => {
     m.index = i;
     return m;
   });
+
   annotationData.push(anno);
 
-  //console.log('firebase app', firebaseApp)
-
- //if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]); }
- loadFirebaseApp();
+  loadFirebaseApp();
 
   await checkUser([renderUser], [updateCommentSidebar, renderTimeline]);
 

@@ -56,8 +56,6 @@ const uiConfig = {
   // Other config options...
 }
 
-//const ui = new firebaseui.auth.AuthUI(firebase.default.auth());
-
 export  async function loadConfig(){
   let config = await d3.json('../static/assets/firebase_data.json');
   fbConfig.push(config[0]);
@@ -114,9 +112,6 @@ export function addUser(user) {
 
 function loginSuccess(user) {
   addUser(user);
-  console.log('loggin success',userLoggedIn)
-  // addCommentButton();
-  // updateCommentSidebar();
 }
 
 export function cancelLogin(){
@@ -124,9 +119,7 @@ export function cancelLogin(){
 }
 
 export function signOut(){
- // ui.signOut();
  loadFirebaseUI(null);
- //ui.signOut();
 }
 
 export function userLogin() {

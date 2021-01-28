@@ -1,8 +1,6 @@
 import * as d3 from 'd3';
-import { select } from 'd3';
 import firebase from 'firebase/app';
-import { annotationData } from '..';
-import { currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
+import { annotationData, currentUser, dataKeeper, formatTime, formatVideoTime } from '../dataManager';
 import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
@@ -21,7 +19,6 @@ export function clearRightSidebar() {
 export function updateCommentSidebar(dbRef) {
 
   renderCommentDisplayStructure();
-
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
  
   if(structureSelected.selected === false){
@@ -32,12 +29,8 @@ export function updateCommentSidebar(dbRef) {
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
   }
-  
   const nestReplies = formatCommentData(dbRef);
-
   drawCommentBoxes(nestReplies, wrap);
-
-  // d3.select('#comment-wrap').style('margin-top', d3.select('.top').node().getBoundingClientRect().height+'px');
 
 }
 
@@ -217,23 +210,26 @@ export function drawCommentBoxes(nestedData, wrap) {
     });
     // REPLY
     const reply = memoDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
-      .text('Reply ');
+    let replyText = reply.selectAll('.replyText').data(d=> [d]).join('span').classed('replyText', true)
+    .text('Reply ').text('Reply ');
     reply.selectAll('.reply').data((d) => [d]).join('i').classed('fas fa-comment-dots fa-lg reply', true);// .style('float', 'right')//.text('Reply');
 
     memoDivs.selectAll('.reply-span').on('click', function (event, d) {
-
+    
       event.stopPropagation();
       const e = reply.nodes();
       const i = e.indexOf(this);
 
       if (d.replyBool === false) {
         d.replyBool = true;
+        d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');
 
-        replyInputBox(d, i, event.target.parentNode);
+        replyInputBox(d, i, event.target.parentNode.parentNode);
 
       } else {
         d.replyBool = false;
-        d3.select(event.target.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode).select('.replyText').text('Reply');
       }
     });
   }
@@ -334,10 +330,12 @@ export function drawCommentBoxes(nestedData, wrap) {
 
     if (d.replyBool === false) {
       d.replyBool = true;
-      replyInputBox(d, i, event.target.parentNode);
+      replyInputBox(d, i, event.target.parentNode.parentNode);
+      d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');
     } else {
       d.replyBool = false;
-      d3.select(event.target.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+      d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+      d3.select(event.target.parentNode).select('.replyText').text('Reply');
     }
   });
   
@@ -922,7 +920,8 @@ function replyRender(replyDivs) {
   downvoteIcon(voteDivR, db);
 
   if (userLoggedIn.loggedInBool) {
-    const reply = replyDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
+    const reply = replyDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true);
+    let replyText = reply.selectAll('.replyText').data(d=> [d]).join('span').classed('replyText', true)
       .text('Reply ');
 
     replyDivs.selectAll('div.reply-space').data(d => [d]).join('div').classed('reply-space', true);

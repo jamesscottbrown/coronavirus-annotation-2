@@ -1,5 +1,6 @@
 export const dataKeeper = [];
 export const currentUser = [];
+export const annotationData = [];
 
 export const originalDimension = {width: 960, height:540, margin: 80};
 export const middleDimension = {width: 800, height: 450, margin: 70};

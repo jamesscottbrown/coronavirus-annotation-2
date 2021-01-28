@@ -1,12 +1,9 @@
 import * as d3 from 'd3';
-import { annotationData } from '..';
-import { formatTime, getRightDimension } from '../dataManager';
+import { annotationData, formatTime, getRightDimension } from '../dataManager';
 import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
 import { colorDictionary } from './imageDataUtil';
 import {updateTimeElapsed} from './video';
-
-// const xScale = d3.scaleLinear().domain([0, 89]).range([0, dim.width]);
 
 export function hoverEmphasis(d, type){
   if(type === "comment"){
