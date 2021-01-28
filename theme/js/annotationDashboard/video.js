@@ -150,6 +150,8 @@ export function updateTimeElapsed() {
 function progressClicked(mouse) {
 
   document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
+  updateTimeElapsed();
+
   structureSelectedToggle(null, null, null);
   colorTimeline(null);
 
@@ -166,7 +168,9 @@ function progressClicked(mouse) {
   tool.style('top', '-100px');
   tool.style('left', '-100px');
 
-  updateTimeElapsed();
+  highlightAnnotationbar(document.getElementById('video').currentTime);
+
+ 
 }
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
@@ -541,8 +545,6 @@ export function videoUpdates(data, annoType) {
   svg.attr('id', 'vid-svg');
 
   const video = document.querySelector('video');
-
-  const vidDim = video.getBoundingClientRect();
 
   const interDIV = d3.select('#interaction');
 
