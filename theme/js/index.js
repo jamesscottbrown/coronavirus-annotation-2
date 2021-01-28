@@ -1,4 +1,3 @@
-import firebase from 'firebase/app';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import * as d3 from 'd3';
@@ -18,13 +17,17 @@ const {
   renderUser, addCommentButton, toggleSort, renderIssueButton,
 } = require('./annotationDashboard/topbar');
 const { formatAnnotationTime } = require('./dataManager');
-const { checkUser } = require('./firebaseUtil');
+const { checkUser, loadConfig, fbConfig, loadFirebaseApp } = require('./firebaseUtil');
+
+
+loadConfig();
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();
 dom.watch();
 
-export const fbConfig = [];
+// export const firebaseApp = loadFirebaseApp();
+
 export const annotationData = [];
 
 d3.select('#wrapper').on('mousemove', (event, d)=>{
@@ -42,15 +45,17 @@ init();
 
 async function init() {
 
-  const config = await d3.json('../static/assets/firebase_data.json');
-  fbConfig.push(config[0]);
+
   const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i) => {
     m.index = i;
     return m;
   });
   annotationData.push(anno);
 
-  if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]); }
+  //console.log('firebase app', firebaseApp)
+
+ //if (!firebase.apps.length) { firebase.initializeApp(fbConfig[0]); }
+ loadFirebaseApp();
 
   await checkUser([renderUser], [updateCommentSidebar, renderTimeline]);
 

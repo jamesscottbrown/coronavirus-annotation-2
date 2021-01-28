@@ -1,18 +1,92 @@
 import firebase from 'firebase/app';
 import { currentUser, dataKeeper } from './dataManager';
-import { fbConfig } from '.';
 import * as d3 from 'd3';
 import { structureSelected } from './annotationDashboard/imageDataUtil';
 import { renderStructureKnowns } from './annotationDashboard/commentBar';
 import { addCommentButton, goBackButton } from './annotationDashboard/topbar';
-
-
+//import { config } from '@fortawesome/fontawesome-svg-core';
 
 require('firebase/auth');
 require('firebase/database');
 const firebaseui = require('firebaseui');
 
-let ui;
+export const fbConfig = [];
+
+const uiConfig = {
+  callbacks: {
+    signInSuccessWithAuthResult(authResult) {
+      const { user } = authResult;
+      // const { credential } = authResult;
+      // const { isNewUser } = authResult.additionalUserInfo;
+      // const { providerId } = authResult.additionalUserInfo;
+      // const { operationType } = authResult;
+
+      // Do something with the returned AuthResult.
+      // Return type determines whether we continue the redirect
+      // automatically or whether we leave that to developer to handle.
+      // return true;
+      return loginSuccess(user);
+    },
+
+    signInFailure(error) {
+      // Some unrecoverable error occurred during sign-in.
+      // Return a promise when error handling is completed and FirebaseUI
+      // will reset, clearing any UI. This commonly occurs for error code
+      // 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
+      // occurs. Check below for more details on this.
+      //return handleUIError(error);
+      return window.alert(error);
+    },
+    uiShown() {
+      // The widget is rendered.
+      // Hide the loader.
+      // document.getElementById('loader').style.display = 'none';
+    },
+  },
+  signInFlow: 'popup',
+  // signInSuccessUrl:"{{url_for('dashboard.index', user=currentUser)}}",
+  signInOptions: [
+    {
+      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      clientId: '632575175956-49a1hie4ab4gr69vak5onr307fg67bb0.apps.googleusercontent.com',
+    },
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+  ],
+  // Other config options...
+}
+
+//const ui = new firebaseui.auth.AuthUI(firebase.default.auth());
+
+export  async function loadConfig(){
+  let config = await d3.json('../static/assets/firebase_data.json');
+  fbConfig.push(config[0]);
+  return config;
+}
+
+export async function loadFirebaseApp(){
+  console.log('irebase loading?');
+  if (!firebase.apps.length) { 
+    return firebase.initializeApp(fbConfig[0]); 
+  }else{
+    return firebase.apps[firebase.apps.length - 1];
+  }
+}
+
+export function loadFirebaseUI(callbackType){
+  if(firebaseui.auth.AuthUI.getInstance()) {
+    const ui = firebaseui.auth.AuthUI.getInstance();
+    if(callbackType === 'sign-in'){
+      ui.start('#sign-in-wrap', uiConfig);
+    }
+  } else {
+    console.log('is this working??')
+    const ui = new firebaseui.auth.AuthUI(firebase.auth());
+    if(callbackType === 'sign-in'){
+      ui.start('#sign-in-wrap', uiConfig);
+    }
+  }
+}
 
 export const userLoggedIn = {
   loggedInBool: false,
@@ -46,91 +120,42 @@ function loginSuccess(user) {
 }
 
 export function cancelLogin(){
-  ui.delete();
-  d3.select('#sign-in-container').remove();
+ firebaseui.auth.AuthUI.getInstance().delete()
+ d3.select('#sign-in-wrap').selectAll('*').remove();
 }
 
 export function signOut(){
-  ui.signOut();
+ // ui.signOut();
+ loadFirebaseUI(null);
+ //ui.signOut();
 }
 
 export function userLogin() {
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(fbConfig[0]);
-  }
-  
-  ui = new firebaseui.auth.AuthUI(firebase.default.auth());
-  let signInTest = d3.select('#right-sidebar').select('#sign-in-wrap').select('#sign-in-container');
-  let signInDiv = signInTest.empty() ? d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container') : signInTest;
+  loadFirebaseApp();
+  loadFirebaseUI('sign-in');
   goBackButton();
 
-  ui.start('#sign-in-container', {
-    callbacks: {
-      signInSuccessWithAuthResult(authResult) {
-        const { user } = authResult;
-        // const { credential } = authResult;
-        // const { isNewUser } = authResult.additionalUserInfo;
-        // const { providerId } = authResult.additionalUserInfo;
-        // const { operationType } = authResult;
-
-        // Do something with the returned AuthResult.
-        // Return type determines whether we continue the redirect
-        // automatically or whether we leave that to developer to handle.
-        // return true;
-        return loginSuccess(user);
-      },
-
-      signInFailure(error) {
-        // Some unrecoverable error occurred during sign-in.
-        // Return a promise when error handling is completed and FirebaseUI
-        // will reset, clearing any UI. This commonly occurs for error code
-        // 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
-        // occurs. Check below for more details on this.
-        //return handleUIError(error);
-        return window.alert(error);
-      },
-      uiShown() {
-        // The widget is rendered.
-        // Hide the loader.
-        // document.getElementById('loader').style.display = 'none';
-      },
-    },
-    signInFlow: 'popup',
-    // signInSuccessUrl:"{{url_for('dashboard.index', user=currentUser)}}",
-    signInOptions: [
-      {
-        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        clientId: '632575175956-49a1hie4ab4gr69vak5onr307fg67bb0.apps.googleusercontent.com',
-      },
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
-    ],
-    // Other config options...
-  });
 }
 
 
 
 export async function checkUser(callbackArray, callbackArrayNoArgs) {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(fbConfig[0]);
-  }
+ 
+  loadFirebaseApp();
 
   firebase.auth().onAuthStateChanged(async (user) => {
     console.log('user??', user)
+  
     if (user) {
       currentUser.push(user);
       addUser(user);
-      if(!ui){
-        ui = new firebaseui.auth.AuthUI(firebase.default.auth());
-      }
+   
       d3.select('#sign-out').on('click', ()=> {
+        console.log('signoutclicked');
         firebase.auth().signOut();
         addUser(null);
-        ui.delete();
         d3.select('#user').select('.user_name').remove();
-        
         addCommentButton();
       });
       if(structureSelected.selected){
