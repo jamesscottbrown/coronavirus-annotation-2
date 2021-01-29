@@ -61,7 +61,7 @@ function replyInputBox(d, i, n) {
   submit.on('click', (event) => {
     event.stopPropagation();// user, currentTime, mark, tag, coords, replyTo, quote
 
-    const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null);
+    const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null, text);
     const ref = firebase.database().ref('comments');
     d3.select(n).select('.reply-space').selectAll('*').remove();
     ref.push(dataPush);
@@ -531,10 +531,10 @@ export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
   return form;
 }
 
-export function doodleSubmit(commentType, user, tags, currentTime) {
+export function doodleSubmit(commentType, user, tags, currentTime, text) {
   const storage = firebase.storage();
   const storageRef = storage.ref();
-
+ console.log('ddddddddd',doodleKeeper[doodleKeeper.length - 1]);
   const message = doodleKeeper[doodleKeeper.length - 1].data;
 
   const imagesRef = storageRef.child(`images/im-${user.uid}-${doodleKeeper[doodleKeeper.length - 1].index}.png`);
@@ -542,7 +542,7 @@ export function doodleSubmit(commentType, user, tags, currentTime) {
   imagesRef.putString(message, 'data_url').then((snapshot) => {
     const coords = !d3.select('#push-div').empty() ? [d3.select('#push-div').style('left'), d3.select('#push-div').style('top')] : null;
 
-    const dataPush = formatComment2Send(user, currentTime, 'doodle', tags.data().toString(), coords, null, null);
+    const dataPush = formatComment2Send(user, currentTime, 'doodle', tags.data().toString(), coords, null, null, text);
     dataPush.doodle = true;
     dataPush.doodleName = snapshot.metadata.name;
 
@@ -741,7 +741,6 @@ export function renderCommentDisplayStructure() {
   let wrapTest = d3.select('#right-sidebar').select('#comment-wrap');
   const wrap = wrapTest.empty() ? d3.select('#right-sidebar').append('div').attr('id', 'comment-wrap') : wrapTest;
 
-
   wrap.select('.template-wrap').remove();
   const selTest = wrap.select('.selected-comm-wrap');
   const sel = selTest.empty() ? wrap.append('div').classed('selected-comm-wrap', true) : selTest;
@@ -754,8 +753,8 @@ export function renderCommentDisplayStructure() {
   // d3.select('#wrapper').scrollTop -= 50;
 }
 
-export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo, quote) {
- 
+export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo, quote, text) {
+
   return {
     uid: user.uid,
     displayName: user.displayName,
@@ -763,7 +762,7 @@ export function formatComment2Send(user, currentTime, mark, tag, coords, replyTo
     videoTime: currentTime,
     postTime: new Date().toString(),
 
-    comment: d3.select('#text-area-id').node().value,
+    comment: text,//d3.select('#text-area-id').node().value,
     commentMark: mark,
     tags: tag === '' ? 'none' : tag,
 
@@ -807,12 +806,14 @@ export function formatToComment(div, startingTags) {
       const tags = d3.select('.tag-wrap').selectAll('.badge');
       const { currentTime } = document.getElementById('video');
 
+      let commentText = d3.select('#text-area-id').node();
+
       if (form.node().value === 't2') {
         const vidWidth = +d3.select('#push-div').style('left').split('px')[0] / +d3.select('video').node().getBoundingClientRect().width;
         const vidHeight = +d3.select('#push-div').style('top').split('px')[0] / +d3.select('video').node().getBoundingClientRect().height;
 
         const coords = !d3.select('#push-div').empty() ? [vidWidth, vidHeight] : null;
-        const dataPush = formatComment2Send(user, currentTime, 'push', tags.data().toString(), coords, null, null);
+        const dataPush = formatComment2Send(user, currentTime, 'push', tags.data().toString(), coords, null, null, text);
         const refCom = firebase.database().ref(commentType);
         refCom.push(dataPush);
 
@@ -828,7 +829,7 @@ export function formatToComment(div, startingTags) {
         }
 
       } else if (form.node().value === 't3') {
-        doodleSubmit(commentType, user, tags, currentTime);
+        doodleSubmit(commentType, user, tags, currentTime, commentText);
         d3.select('#add-mark').remove();
 
         const canvas = d3.select('canvas').node();
@@ -837,10 +838,8 @@ export function formatToComment(div, startingTags) {
 
         if(structureSelected.selected){
 
-     
           structureSelectedToggle(null, null, null);
           checkDatabase([updateCommentSidebar]);
-          //updateWithSelectedStructure(structureSelected.color, dataKeeper[dataKeeper.length -  1]);
 
         }else{
           checkDatabase([updateCommentSidebar]);
@@ -848,7 +847,7 @@ export function formatToComment(div, startingTags) {
 
       } else {
         const coords = null; // user, currentTime, mark, tag, coords, replyTo, quote
-        const dataPush = formatComment2Send(user, currentTime, 'none', tags.data().toString(), coords, null, null);
+        const dataPush = formatComment2Send(user, currentTime, 'none', tags.data().toString(), coords, null, null, text);
         const refCom = firebase.database().ref(commentType);
         refCom.push(dataPush);
         checkDatabase([updateCommentSidebar]);
