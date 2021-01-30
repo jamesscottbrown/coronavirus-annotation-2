@@ -300,8 +300,10 @@ export function drawCommentBoxes(nestedData, wrap) {
       recurseDraw(d3.select(n[i]));
     }
   });
-
-  const questionMemos = memoDivs.filter((f) => f.comment.includes('?'));
+  console.log('memodivs',memoDivs);
+  const questionMemos = memoDivs.filter((f) => {
+    console.log('f', f, f.comment)
+    return f.comment.includes('?')});
   questionMemos.classed('question', true);
   const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qs.select('*').remove();
@@ -803,6 +805,8 @@ export function formatToComment(div, startingTags) {
     d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
 
     if (d3.select('#text-area-id').node().value != '') {
+
+      let text = d3.select('#text-area-id').node().value;
       const tags = d3.select('.tag-wrap').selectAll('.badge');
       const { currentTime } = document.getElementById('video');
 
@@ -829,7 +833,7 @@ export function formatToComment(div, startingTags) {
         }
 
       } else if (form.node().value === 't3') {
-        doodleSubmit(commentType, user, tags, currentTime, commentText);
+        doodleSubmit(commentType, user, tags, currentTime, text);
         d3.select('#add-mark').remove();
 
         const canvas = d3.select('canvas').node();
