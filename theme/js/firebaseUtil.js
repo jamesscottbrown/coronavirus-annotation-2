@@ -141,7 +141,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
     if (user) {
       currentUser.push(user);
       addUser(user);
-   
+      d3.select('#sign-out').select('.log-label').text('Log out');
       d3.select('#sign-out').on('click', ()=> {
        
         firebase.auth().signOut();
@@ -168,6 +168,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
       // User is signed in.
     } else {
       console.log('NO USER', user);
+      d3.select('#sign-out').select('.log-label').text('Log in');
       d3.select('#sign-out').on('click', ()=> {
         d3.select('#comment-wrap').style('margin-top', '170px');
         userLogin()});
