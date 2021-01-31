@@ -188,6 +188,8 @@ export function checkDatabase(callbackArray) {
   ref.on('value', (snapshot) => {
   
     dataKeeper.push({ ...snapshot.val() });
+
+    console.log('is tis firing')
    
     callbackArray.forEach((fun) => {
       fun(snapshot.val());

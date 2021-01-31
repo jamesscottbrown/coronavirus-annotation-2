@@ -145,7 +145,7 @@ export function goBackButton() {
 
 export function addCommentButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
-  console.log(userLoggedIn)
+
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {

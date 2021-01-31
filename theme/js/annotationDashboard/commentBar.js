@@ -18,7 +18,7 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
-
+  console.log('dbbbbb', dbRef);
   renderCommentDisplayStructure();
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
  
@@ -32,6 +32,13 @@ export function updateCommentSidebar(dbRef) {
   }
   const nestReplies = formatCommentData(dbRef);
   drawCommentBoxes(nestReplies, wrap);
+
+  let time = document.getElementById('video').currentTime;
+  if(!structureSelected.selected){
+    const timeRange = [time < .5 ? 0 : Math.floor(time - .2), time + .2];
+    highlightCommentBoxes(timeRange);
+  }
+
 
 }
 
@@ -300,9 +307,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       recurseDraw(d3.select(n[i]));
     }
   });
-  console.log('memodivs',memoDivs);
   const questionMemos = memoDivs.filter((f) => {
-    console.log('f', f, f.comment)
     return f.comment.includes('?')});
   questionMemos.classed('question', true);
   const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
@@ -536,7 +541,6 @@ export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
 export function doodleSubmit(commentType, user, tags, currentTime, text) {
   const storage = firebase.storage();
   const storageRef = storage.ref();
- console.log('ddddddddd',doodleKeeper[doodleKeeper.length - 1]);
   const message = doodleKeeper[doodleKeeper.length - 1].data;
 
   const imagesRef = storageRef.child(`images/im-${user.uid}-${doodleKeeper[doodleKeeper.length - 1].index}.png`);
