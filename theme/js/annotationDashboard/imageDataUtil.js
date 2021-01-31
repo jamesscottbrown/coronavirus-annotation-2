@@ -88,7 +88,8 @@ export function clearCanvas() {
 }
 export async function loadPngForFrame() {
   const video = document.getElementById('video');
-  const pullFrame = (Math.floor((video.currentTime) * 30.25));
+  //const pullFrame = (Math.floor((video.currentTime) * 30.25));
+  const pullFrame = (Math.floor((video.currentTime) * 30));
 
   const pathImg = '../static/assets/stills/120120_entry_flat/entry_flat';
   // The path to the image that we want to add
