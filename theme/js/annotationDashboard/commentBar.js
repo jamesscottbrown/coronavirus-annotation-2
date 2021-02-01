@@ -44,7 +44,10 @@ function recurse(parent, replyArray, level) {
   parent.level = level;
   parent.replyBool = false;
 
-  const replies = replyArray.filter((f) => f.replies.toString() === parent.key);
+  const replies = replyArray.filter((f) => f.replies.toString() === parent.key).map(r=> {
+    r.collapsed = true;
+    return r;
+  });
 
   if (replies.length > 0) {
     parent.replyKeeper = replies;
@@ -143,6 +146,22 @@ function downvoteIcon(div, db) {
     const newDown = ++d.downvote;
     db.ref(`comments/${d.key}/downvote`).set(`${newDown}`);
   });
+}
+
+function renderReplyDetails(){
+  const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
+  qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
+  qreply.selectAll('div.question').selectAll('*').remove();
+  if(!qreply.empty()){
+    d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
+  }
+
+  const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
+  //d3.select(refReply.node().parentNode).selectAll('.fas.question').remove();
+  if(!refReply.empty()){
+    d3.select(refReply.node().parentNode).selectAll('.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
+  }
+ 
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
@@ -300,11 +319,73 @@ export function drawCommentBoxes(nestedData, wrap) {
     
   })
 
-  memoDivs.each((d, i, n) => {
-    if (d.replyKeeper.length > 0) {
-      recurseDraw(d3.select(n[i]));
-    }
-  });
+  let replyWrap = memoDivs.selectAll('.reply-wrap').data(r => [r]).join('div').classed('reply-wrap', true);
+      let replyCount = replyWrap.selectAll('text').data(r=> [r]).join('text').text(r=> {
+        if(r.replyKeeper.length === 1){
+          return `${r.replyKeeper.length} Reply`;
+        }else{
+          return `${r.replyKeeper.length} Replies`;
+        }
+      });
+      let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('span', true);
+      expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
+        if(c.repliesCollapsed === true){
+          return "car fas fa-chevron-circle-up";
+        }else{
+          return "car fas fa-chevron-circle-down";
+        }
+      });
+
+      console.log('CARRR', replyWrap.selectAll('.car'));
+
+      expand.on('click', (event, d)=> {
+        console.log('reply clicked', d, event.target.parentNode.parentNode.parentNode)
+        if(d.repliesCollapsed === false){
+          d.repliesCollapsed = true;
+          console.log(event.target.parentNode.parentNode.parentNode)
+
+          d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
+        }else{
+          d.repliesCollapsed = false;
+          recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode));
+        }
+      });
+      //recurseDraw(d3.select(n[i]));
+  //  }
+
+  // memoDivs.each((d, i, n) => {
+  //   if (d.replyKeeper.length > 0) {
+  //     console.log('has reply', n[i]);
+  //     d.repliesCollapsed = true;
+  //     let replyWrap = d3.select(n[i]).selectAll('.reply-wrap').data(r => [r]).join('div').classed('reply-wrap', true);
+  //     let replyCount = replyWrap.selectAll('text').data(r=> [r]).join('text').text(r=> {
+  //       if(r.replyKeeper.length === 1){
+  //         return `${r.replyKeeper.length} Reply`;
+  //       }else{
+  //         return `${r.replyKeeper.length} Replies`;
+  //       }
+  //     });
+  //     let expand = replyWrap.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
+  //       if(c.repliesCollapsed === true){
+  //         return "fas fa-chevron-circle-up";
+  //       }else{
+  //         return "fas fa-chevron-circle-down";
+  //       }
+  //     });
+
+  //     expand.on('click', (r, j, m)=> {
+  //       if(r.repliesCollapsed === true){
+  //         r.repliesCollapsed = false;
+  //         recurseDraw(d3.select(m[j]));
+  //       }else{
+  //         r.repliesCollapsed = true;
+  //       }
+  //     });
+  //     //recurseDraw(d3.select(n[i]));
+  //   }
+  // });
+
+
   const questionMemos = memoDivs.filter((f) => {
     return f.comment.includes('?')});
   questionMemos.classed('question', true);
@@ -313,21 +394,16 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
 
-  const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
-  qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
-  qreply.selectAll('div.question').selectAll('*').remove();
-  d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
-
+ 
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
 
  // refMemos.selectAll('.fa-book-open').remove();
   refMemos.selectAll('.fa-book-open').data((d) => {
     return [d]}).join('i').classed('fas fa-book-open', true);
-  
-  const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
-  //d3.select(refReply.node().parentNode).selectAll('.fas.question').remove();
-  d3.select(refReply.node().parentNode).selectAll('.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
+
+    renderReplyDetails();
+
 
   d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
     event.stopPropagation();
@@ -935,6 +1011,7 @@ function replyRender(replyDivs) {
       .text('Reply ');
 
     replyDivs.selectAll('div.reply-space').data(d => [d]).join('div').classed('reply-space', true);
+
     reply.selectAll('.reply').data((d) => [d]).join('i').classed('far fa-comment-dots reply', true)
       .style('float', 'right');
 
