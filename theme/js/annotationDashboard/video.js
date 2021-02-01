@@ -346,7 +346,7 @@ export function updateWithSelectedStructure(snip, commentData){
   
   parseArray(snip);
 
-  const nestReplies = formatCommentData({ ...commentData }, null);
+  const nestReplies = formatCommentData({ ...commentData });
   let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
 
   structureSelected.comments = nestReplies.filter((f) => {
@@ -440,7 +440,7 @@ export function structureTooltip(structureData, coord, snip, hoverBool) {
 
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
-  const nestReplies = formatCommentData({ ...commentData }, null);
+  const nestReplies = formatCommentData({ ...commentData });
   let structure = (snip === "orange" && video.currentTime > 15) ? colorDictionary[snip].structure[1] : colorDictionary[snip].structure[0];
   let structureComments = nestReplies.filter((f) => {
     if(snip  === 'orange'){

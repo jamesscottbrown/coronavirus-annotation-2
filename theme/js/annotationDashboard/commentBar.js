@@ -69,6 +69,8 @@ function replyInputBox(d, i, n) {
   submit.on('click', (event) => {
     event.stopPropagation();// user, currentTime, mark, tag, coords, replyTo, quote
 
+    let text = d3.select('#text-area-id').node().value;
+
     const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null, text);
     const ref = firebase.database().ref('comments');
     d3.select(n).select('.reply-space').selectAll('*').remove();
