@@ -91,10 +91,18 @@ export function goBackButton() {
   
   button.on('click', (event) => {
     if(userLoggedIn.loggedInBool === false){ //if user is not logged in 
-    
+     if(!d3.select('#right-sidebar').select('.top').select('.found-info').empty()){
+      structureSelectedToggle(null, null, null);
+      //d3.select('#right-sidebar').select('.top').select('.found-info').remove();
+      clearRightSidebar();
+      renderCommentDisplayStructure();
+      updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
+     }else{
+      cancelLogin();
+     }
      d3.select('#right-sidebar').select('#sign-in-wrap').selectAll('*').remove();
      d3.select('#comment-wrap').style('margin-top', '0px');
-     cancelLogin();
+     
      addCommentButton();
     
     }else{//if user is logged in 

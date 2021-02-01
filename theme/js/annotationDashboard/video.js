@@ -62,14 +62,16 @@ function addMouseEvents2Video(){
       toggleQueue(false);
     })
     .on('mouseout', ()=> {
-      
-      let tool = d3.select('.tooltip');
-      tool.style('opacity', 0);
-      tool.style('top', '-100px');
-      tool.style('left', '-100px');
-      clearCanvas();
-      drawFrameOnPause(video);
-      toggleQueue(true);
+      if(!structureSelected.selected){
+        let tool = d3.select('.tooltip');
+        tool.style('opacity', 0);
+        tool.style('top', '-100px');
+        tool.style('left', '-100px');
+        clearCanvas();
+        drawFrameOnPause(video);
+        toggleQueue(true);
+      }
+     
     });
 
 }
@@ -267,14 +269,17 @@ export async function mouseMoveVideo(coord, video) {
       if(!structureSelected.selected){
         d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
         d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+      
+        let tool = d3.select('.tooltip');
+        tool.style('opacity', 0);
+        tool.style('top', '-100px');
+        tool.style('left', '-100px');
+  
+        makeNewImageData();
+      
       }
 
-      let tool = d3.select('.tooltip');
-      tool.style('opacity', 0);
-      tool.style('top', '-100px');
-      tool.style('left', '-100px');
 
-      makeNewImageData();
     }
   }
 }
@@ -620,8 +625,6 @@ export function videoUpdates(data, annoType) {
    */
 
     highlightCommentBoxes(timeRange);
-
-    
 
     const commentData = formatCommentData({...dataKeeper[dataKeeper.length - 1]});//Object.entries(dataKeeper[dataKeeper.length - 1].comments).map((m) => m[1]).filter((f) => f.replies === 'null');
 
