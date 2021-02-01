@@ -34,16 +34,11 @@
 
 #sign-in-wrap{
   width:100%;
-  //padding-bottom:20px;
-  // padding-right:30px;
 }
 
 div{
    // outline: black solid 1px;
 }
-
-
-
 
 #top-bar{
     position:fixed;
@@ -72,7 +67,6 @@ div{
 
 #toggle-sort-wrap{
   display:inline-block;
-  //width:300px;
   position:absolute;
   left:8%;
   top:10px;
@@ -151,7 +145,8 @@ div{
     height:calc(100vh - 70px);
     padding: 1rem 0 0 0;
     width:300px;
-    overflow-y: scroll;
+    //overflow-y: scroll;
+    overflow-y:hidden;
     padding: 1rem 0 0 0;
   }
 
@@ -159,7 +154,8 @@ div{
     position:sticky;
     height:calc(100vh - 70px);
     width:330px;
-    overflow-y: scroll;
+   // overflow-y: scroll;
+    overflow-y:hidden;
     padding: 1rem 0 0 0;
   }
 
