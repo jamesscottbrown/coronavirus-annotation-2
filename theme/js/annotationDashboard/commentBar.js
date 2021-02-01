@@ -18,7 +18,7 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
-  console.log('dbbbbb', dbRef);
+ 
   renderCommentDisplayStructure();
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
  
@@ -207,14 +207,26 @@ export function drawCommentBoxes(nestedData, wrap) {
     .join('text')
     .text((d) => d.comment);
 
-  memoDivs.selectAll('.post-time').data((d) => [d]).join('span').classed('post-time', true)
-    .selectAll('text')
-    .data((d) => [d])
-    .join('text')
-    .text((d) => {
-      const test = new Date(d.postTime);
-      return `on ${test.toUTCString()}`;
-    });
+  // memoDivs.selectAll('.post-time').data((d) => [d]).join('div').classed('post-time', true)
+  //   .selectAll('text')
+  //   .data((d) => [d])
+  //   .join('text')
+  //   .text((d) => {
+  //     const test = new Date(d.postTime);
+  //     return `on ${test.toUTCString()}`;
+  //   });
+
+    let infoWrap = memoDivs.selectAll('.info-wrap').data((d) => [d]).join('div').classed('info-wrap', true);
+
+    infoWrap.selectAll('.post-time').data((d) => [d]).join('div').classed('post-time', true)
+      .selectAll('text')
+      .data((d) => [d])
+      .join('text')
+      .text((d) => {
+        const test = new Date(d.postTime);
+        return `on ${test.toUTCString()}`;
+      });
+  
 
   memoDivs.style('border', (d) => '1px solid gray');
   let voteDiv = memoDivs.selectAll('div.votes').data(d=> [d]).join('div').classed('votes', true);
@@ -266,6 +278,8 @@ export function drawCommentBoxes(nestedData, wrap) {
           || event.target.tagName.toLowerCase() === 'button'
           || event.target.tagName.toLowerCase() === 'a'
           || event.target.tagName.toLowerCase() === 'svg') {
+
+            console.log(event.target)
      
     } else {
       commentClicked(event, d);
@@ -327,7 +341,7 @@ export function drawCommentBoxes(nestedData, wrap) {
           return `${r.replyKeeper.length} Replies`;
         }
       }).style('font-size', '12px');
-      let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('span', true);
+      let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('expand', true);
       expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
         if(c.repliesCollapsed === true){
           return "car fas fa-chevron-circle-down";
@@ -339,14 +353,10 @@ export function drawCommentBoxes(nestedData, wrap) {
 
       expand.style('float', 'right');
 
-      console.log('CARRR', replyWrap.selectAll('.car'));
-
       expand.on('click', (event, d)=> {
         console.log('reply clicked', d, event.target.parentNode.parentNode.parentNode)
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
-          console.log(event.target.parentNode.parentNode.parentNode)
-
           d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
         }else{
           d.repliesCollapsed = false;
@@ -359,7 +369,7 @@ export function drawCommentBoxes(nestedData, wrap) {
   const questionMemos = memoDivs.filter((f) => {
     return f.comment.includes('?')});
   questionMemos.classed('question', true);
-  const qs = questionMemos.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
+  const qs = questionMemos.select('.info-wrap').selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qs.select('*').remove();
 
   qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
@@ -369,7 +379,7 @@ export function drawCommentBoxes(nestedData, wrap) {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
 
  // refMemos.selectAll('.fa-book-open').remove();
-  refMemos.selectAll('.fa-book-open').data((d) => {
+  refMemos.select('.info-wrap').selectAll('.fa-book-open').data((d) => {
     return [d]}).join('i').classed('fas fa-book-open', true);
 
   
@@ -964,7 +974,9 @@ function replyRender(replyDivs) {
     .join('text')
     .text((d) => d.comment);
 
-  replyDivs.selectAll('.post-time').data((d) => [d]).join('span').classed('post-time', true)
+  let infoWrap = replyDivs.selectAll('.info-wrap').data((d) => [d]).join('div').classed('info-wrap', true);
+
+  infoWrap.selectAll('.post-time').data((d) => [d]).join('div').classed('post-time', true)
     .selectAll('text')
     .data((d) => [d])
     .join('text')
@@ -972,6 +984,7 @@ function replyRender(replyDivs) {
       const test = new Date(d.postTime);
       return `on ${test.toUTCString()}`;
     });
+
   let voteDivR = replyDivs.selectAll('div.votes').data(d=> [d]).join('div').classed('votes', true);
   upvoteIcon(voteDivR, db);
   downvoteIcon(voteDivR, db);

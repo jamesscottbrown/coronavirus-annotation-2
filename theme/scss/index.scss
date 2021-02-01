@@ -480,6 +480,12 @@ margin-top:10px;
   scroll-behavior: smooth;
 }
 
+.reply-wrap{
+  margin-top: 10px;
+  border-top: .5px solid #6e6a6a;
+  padding-top:5px;
+}
+
 .memo{
   width:calc(100% - 25px);
   min-height:50px;
@@ -487,7 +493,6 @@ margin-top:10px;
   border: 1px solid gray;
   padding:5px;
   cursor: pointer;
-  padding-bottom:20px;
   margin-bottom:10px;
   margin-right:15px;
   margin-left:10px;
@@ -558,6 +563,22 @@ margin-top:10px;
    display: block;
    padding-bottom:10px;
  }
+
+ .post-time{
+   float:left;
+   //display:inline-block;
+ }
+
+ .info-wrap{
+   display:block;
+   height:30px;
+   width:100%;
+ }
+
+ .info-wrap .question{
+   float:right;
+ }
+
  
  .memo .upvote-text, .memo .downvote-text{
    font-size: 11px;
