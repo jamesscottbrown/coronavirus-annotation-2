@@ -8,7 +8,7 @@ import {
   userLoggedIn, userLogin,
 } from '../firebaseUtil';
 import { annotationData, dataKeeper } from '../dataManager';
-import { clearCanvas, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
+import { clearCanvas, drawFrameOnPause, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureTooltip } from './video';
 
@@ -82,7 +82,6 @@ export function goBackButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
   button.text('Go back');
 
-
   if(d3.select('#right-sidebar').select('.top').select('.template-wrap').empty()){
     d3.select('#comment-wrap').style('margin-top', '170px');
   }else{
@@ -93,11 +92,18 @@ export function goBackButton() {
     if(userLoggedIn.loggedInBool === false){ //if user is not logged in 
      if(!d3.select('#right-sidebar').select('.top').select('.found-info').empty()){
       structureSelectedToggle(null, null, null);
-      //d3.select('#right-sidebar').select('.top').select('.found-info').remove();
       clearRightSidebar();
       renderCommentDisplayStructure();
       updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
       updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+      clearCanvas();
+      drawFrameOnPause(document.getElementById('video'));
+
+      let tool = d3.select('.tooltip');
+      tool.style('opacity', 0);
+      tool.style('top', '-100px');
+      tool.style('left', '-100px');
+      
      }else{
       cancelLogin();
      }
