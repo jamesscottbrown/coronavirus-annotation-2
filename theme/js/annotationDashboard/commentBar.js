@@ -148,15 +148,15 @@ function downvoteIcon(div, db) {
   });
 }
 
-function renderReplyDetails(){
-  const qreply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
+function renderReplyDetails(div){
+  const qreply = div.selectAll('.reply-memo').filter(f=> f.comment.includes('?')).classed('question', true);
   qreply.selectAll('div.question').data((d) => [d]).join('div').classed('question', true);
   qreply.selectAll('div.question').selectAll('*').remove();
   if(!qreply.empty()){
     d3.select(qreply.node().parentNode).selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
   }
 
-  const refReply = d3.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
+  const refReply = div.selectAll('.reply-memo').filter(f=> f.comment.includes('http') || f.comment.includes('et al')).classed('reference', true);
   //d3.select(refReply.node().parentNode).selectAll('.fas.question').remove();
   if(!refReply.empty()){
     d3.select(refReply.node().parentNode).selectAll('.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
@@ -326,15 +326,18 @@ export function drawCommentBoxes(nestedData, wrap) {
         }else{
           return `${r.replyKeeper.length} Replies`;
         }
-      });
+      }).style('font-size', '12px');
       let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('span', true);
       expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
         if(c.repliesCollapsed === true){
-          return "car fas fa-chevron-circle-up";
-        }else{
           return "car fas fa-chevron-circle-down";
+        }else{
+          return "car fas fa-chevron-circle-up";
+          
         }
       });
+
+      expand.style('float', 'right');
 
       console.log('CARRR', replyWrap.selectAll('.car'));
 
@@ -348,42 +351,9 @@ export function drawCommentBoxes(nestedData, wrap) {
         }else{
           d.repliesCollapsed = false;
           recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode));
+          renderReplyDetails(d3.select(event.target.parentNode.parentNode.parentNode));
         }
       });
-      //recurseDraw(d3.select(n[i]));
-  //  }
-
-  // memoDivs.each((d, i, n) => {
-  //   if (d.replyKeeper.length > 0) {
-  //     console.log('has reply', n[i]);
-  //     d.repliesCollapsed = true;
-  //     let replyWrap = d3.select(n[i]).selectAll('.reply-wrap').data(r => [r]).join('div').classed('reply-wrap', true);
-  //     let replyCount = replyWrap.selectAll('text').data(r=> [r]).join('text').text(r=> {
-  //       if(r.replyKeeper.length === 1){
-  //         return `${r.replyKeeper.length} Reply`;
-  //       }else{
-  //         return `${r.replyKeeper.length} Replies`;
-  //       }
-  //     });
-  //     let expand = replyWrap.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
-  //       if(c.repliesCollapsed === true){
-  //         return "fas fa-chevron-circle-up";
-  //       }else{
-  //         return "fas fa-chevron-circle-down";
-  //       }
-  //     });
-
-  //     expand.on('click', (r, j, m)=> {
-  //       if(r.repliesCollapsed === true){
-  //         r.repliesCollapsed = false;
-  //         recurseDraw(d3.select(m[j]));
-  //       }else{
-  //         r.repliesCollapsed = true;
-  //       }
-  //     });
-  //     //recurseDraw(d3.select(n[i]));
-  //   }
-  // });
 
 
   const questionMemos = memoDivs.filter((f) => {
@@ -402,7 +372,8 @@ export function drawCommentBoxes(nestedData, wrap) {
   refMemos.selectAll('.fa-book-open').data((d) => {
     return [d]}).join('i').classed('fas fa-book-open', true);
 
-    renderReplyDetails();
+  
+  renderReplyDetails(memoDivs);
 
 
   d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
