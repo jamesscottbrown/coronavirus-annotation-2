@@ -97,6 +97,7 @@ export function goBackButton() {
       clearRightSidebar();
       renderCommentDisplayStructure();
       updateCommentSidebar(dataKeeper[dataKeeper.length - 1]);
+      updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
      }else{
       cancelLogin();
      }

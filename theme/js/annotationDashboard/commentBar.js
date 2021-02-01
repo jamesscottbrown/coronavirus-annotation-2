@@ -30,7 +30,7 @@ export function updateCommentSidebar(dbRef) {
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
   }
-  const nestReplies = formatCommentData(dbRef);
+  const nestReplies = formatCommentData(Object.assign({}, dbRef));
   drawCommentBoxes(nestReplies, wrap);
 
   let time = document.getElementById('video').currentTime;
@@ -38,8 +38,6 @@ export function updateCommentSidebar(dbRef) {
     const timeRange = [time < .5 ? 0 : Math.floor(time - .2), time + .2];
     highlightCommentBoxes(timeRange);
   }
-
-
 }
 
 function recurse(parent, replyArray, level) {
