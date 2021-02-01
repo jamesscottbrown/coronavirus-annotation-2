@@ -354,7 +354,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       expand.style('float', 'right');
 
       expand.on('click', (event, d)=> {
-        console.log('reply clicked', d, event.target.parentNode.parentNode.parentNode)
+       
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
