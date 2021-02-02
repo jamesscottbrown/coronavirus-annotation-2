@@ -206,17 +206,19 @@ function scaleVideoTime(currentTime, invert) {
 export function playButtonChange() {
   const div = d3.select('#video-controls').select('.play-pause');
   if (div.classed('play')) {
+    div.select('.pause-span').style('opacity', 1);
+    div.select('.play-span').style('opacity', 0);
     div.classed('play', false);
     div.classed('pause', true);
-    div.selectAll('*').remove();
-    const button = div.append('span');
-    button.attr('class', 'fas fa-pause-circle fa-2x');
+   
+   
   } else {
+    div.select('.pause-span').style('opacity', 0);
+    div.select('.play-span').style('opacity', 1);
     div.classed('play', true);
     div.classed('pause', false);
-    div.selectAll('*').remove();
-    const button = div.append('span');
-    button.attr('class', 'fas fa-play-circle fa-2x');
+   
+    
   }
 }
 

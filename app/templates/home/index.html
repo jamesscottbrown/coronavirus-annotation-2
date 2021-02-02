@@ -21,6 +21,7 @@
       <div id="top-bar">
         <div id="user"></div> 
         <div id="sign-out"><i class="fas fa-sign-out-alt"></i><span class="log-label">Log In</span></div>
+
         <div id="toggle-show-wrap">
           <div>
             <label class="switch" id="show-doodle">
@@ -69,7 +70,13 @@
         <div id="video-wrap">
           <div id="video-controls">
             <div class="play-pause play">
-              <i class="far fa-play-circle fa-2x"></i>
+              <span class="play-span">
+                <i class="far fa-play-circle fa-2x"></i>
+              </span>
+              <span class="pause-span" style="opacity:0">
+                <i class="far fa-pause-circle fa-2x"></i>
+              </span>
+             
             </div>
             <div class="time">
               <time id="time-elapsed">00:00</time>
