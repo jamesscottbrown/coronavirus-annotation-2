@@ -327,8 +327,10 @@ export async function mouseClickVideo(coord, video) {
       tool.style('top', '-100px');
       tool.style('left', '-100px');
 
+      drawFrameOnPause(video);
+
     }else if(snip === structureSelected.color){
-      console.log('this is the same');
+    
       addCommentButton();
       clearRightSidebar();
 
@@ -343,6 +345,8 @@ export async function mouseClickVideo(coord, video) {
       tool.style('opacity', 0);
       tool.style('top', '-100px');
       tool.style('left', '-100px');
+
+      drawFrameOnPause(video);
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE

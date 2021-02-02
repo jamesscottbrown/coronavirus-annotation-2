@@ -132,7 +132,6 @@ function upvoteIcon(div, db) {
     .text((d) => `: ${d.upvote} `);
 
   upVote.on('click', (event, d) => {
-    console.log('upclicked');
     const newUp = ++d.upvote;
     db.ref(`comments/${d.key}/upvote`).set(`${newUp}`);
   });
@@ -169,7 +168,6 @@ function renderReplyDetails(div){
 
 export function drawCommentBoxes(nestedData, wrap) {
 
-  console.log('when does this draw')
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
@@ -351,7 +349,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       expand.style('float', 'right');
 
       expand.on('click', (event, d)=> {
-       console.log('clickkkkkkked', d)
+      
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
@@ -363,7 +361,6 @@ export function drawCommentBoxes(nestedData, wrap) {
       });
 
       let replyDrawn = expand.filter(f=> {
-        console.log('FFF',f);
         return f.repliesCollapsed === false;
       });
 
