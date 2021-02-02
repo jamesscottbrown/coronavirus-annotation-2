@@ -281,6 +281,26 @@ export async function mouseMoveVideo(coord, video) {
     }
   }
 }
+
+export function unselectStructure(commentData, video){
+  addCommentButton();
+  clearRightSidebar();
+
+  structureSelectedToggle(null);
+
+  renderCommentDisplayStructure();
+  
+  updateCommentSidebar(commentData);
+  updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+
+  let tool = d3.select('.tooltip');
+  tool.style('opacity', 0);
+  tool.style('top', '-100px');
+  tool.style('left', '-100px');
+
+  drawFrameOnPause(video);
+}
+
 export async function mouseClickVideo(coord, video) {
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
@@ -312,41 +332,12 @@ export async function mouseClickVideo(coord, video) {
         togglePlay();
       }
       
-      addCommentButton();
-      clearRightSidebar();
-
-      structureSelectedToggle(null);
-
-      renderCommentDisplayStructure();
-      
-      updateCommentSidebar(commentData);
-      updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
-
-      let tool = d3.select('.tooltip');
-      tool.style('opacity', 0);
-      tool.style('top', '-100px');
-      tool.style('left', '-100px');
-
-      drawFrameOnPause(video);
+     unselectStructure(commentData, video);
 
     }else if(snip === structureSelected.color){
     
-      addCommentButton();
-      clearRightSidebar();
+        unselectStructure(commentData, video);
 
-      structureSelectedToggle(null);
-
-      renderCommentDisplayStructure();
-      
-      updateCommentSidebar(commentData);
-      updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
-
-      let tool = d3.select('.tooltip');
-      tool.style('opacity', 0);
-      tool.style('top', '-100px');
-      tool.style('left', '-100px');
-
-      drawFrameOnPause(video);
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE
