@@ -8,8 +8,10 @@ import {updateTimeElapsed} from './video';
 export function hoverEmphasis(d, type){
   if(type === "comment"){
     d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').filter(f=> f.key === d.key).classed('hover-em', true);
+    
   }else{
     d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').filter(f=> f.key === d.key).classed('hover-em', true);
+    d3.selectAll('#annotation-wrap').selectAll('.anno').filter(f=> f.key === d.key).classed('hover-em', true);
   }
 }
 
@@ -155,9 +157,11 @@ export function renderTimeline(commentData) {
 
   annos.on('mouseover', (event, d) => {
     timelineMouseover(event, d);
+    hoverEmphasis(d, 'annotation');
   })
   .on('mouseout', (event, d) => {
     timelineMouseout(event, d);
+    d3.selectAll('.hover-em').classed('hover-em', false)
   });
   annos.on('click', (event, d)=> {
     document.getElementById('video').currentTime = d.seconds[0];
