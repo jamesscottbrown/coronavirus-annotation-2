@@ -278,8 +278,6 @@ export async function mouseMoveVideo(coord, video) {
         makeNewImageData();
       
       }
-
-
     }
   }
 }
@@ -302,17 +300,23 @@ export async function mouseClickVideo(coord, video) {
     const snip = getCoordColor(coord);
 
     if (snip === 'black' || snip === 'unknown') {
-      structureSelectedToggle(null);
+     
 
       d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
       d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
 
       const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
       highlightTimelineBars(timeRange);
-
-      togglePlay();
+     
+      if(!structureSelected.selected){
+        togglePlay();
+      }
+      
       addCommentButton();
       clearRightSidebar();
+
+      structureSelectedToggle(null);
+
       renderCommentDisplayStructure();
       
       updateCommentSidebar(commentData);
@@ -323,6 +327,22 @@ export async function mouseClickVideo(coord, video) {
       tool.style('top', '-100px');
       tool.style('left', '-100px');
 
+    }else if(snip === structureSelected.color){
+      console.log('this is the same');
+      addCommentButton();
+      clearRightSidebar();
+
+      structureSelectedToggle(null);
+
+      renderCommentDisplayStructure();
+      
+      updateCommentSidebar(commentData);
+      updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+
+      let tool = d3.select('.tooltip');
+      tool.style('opacity', 0);
+      tool.style('top', '-100px');
+      tool.style('left', '-100px');
     } else {
       /**
        * VIDEO PAUSED - CLICKED ON STRUCTURE

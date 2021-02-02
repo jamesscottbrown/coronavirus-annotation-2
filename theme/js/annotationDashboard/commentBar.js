@@ -132,6 +132,7 @@ function upvoteIcon(div, db) {
     .text((d) => `: ${d.upvote} `);
 
   upVote.on('click', (event, d) => {
+    console.log('upclicked');
     const newUp = ++d.upvote;
     db.ref(`comments/${d.key}/upvote`).set(`${newUp}`);
   });
@@ -167,6 +168,8 @@ function renderReplyDetails(div){
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
+
+  console.log('when does this draw')
  
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
@@ -208,15 +211,6 @@ export function drawCommentBoxes(nestedData, wrap) {
     .data((d) => [d])
     .join('text')
     .text((d) => d.comment);
-
-  // memoDivs.selectAll('.post-time').data((d) => [d]).join('div').classed('post-time', true)
-  //   .selectAll('text')
-  //   .data((d) => [d])
-  //   .join('text')
-  //   .text((d) => {
-  //     const test = new Date(d.postTime);
-  //     return `on ${test.toUTCString()}`;
-  //   });
 
     let infoWrap = memoDivs.selectAll('.info-wrap').data((d) => [d]).join('div').classed('info-wrap', true);
 
@@ -343,6 +337,7 @@ export function drawCommentBoxes(nestedData, wrap) {
           return `${r.replyKeeper.length} Replies`;
         }
       }).style('font-size', '12px');
+
       let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('expand', true);
       expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
         if(c.repliesCollapsed === true){
@@ -356,7 +351,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       expand.style('float', 'right');
 
       expand.on('click', (event, d)=> {
-       
+       console.log('clickkkkkkked', d)
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
@@ -367,6 +362,12 @@ export function drawCommentBoxes(nestedData, wrap) {
         }
       });
 
+      let replyDrawn = expand.filter(f=> {
+        console.log('FFF',f);
+        return f.repliesCollapsed === false;
+      });
+
+      
 
   const questionMemos = memoDivs.filter((f) => {
     return f.comment.includes('?')});
@@ -376,7 +377,6 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   qs.selectAll('i.fas.question').data((d) => [d]).join('i').classed('fas question fa-question-circle', true);
 
- 
   const refMemos = memoDivs.filter(f=> {
     return f.comment.includes('http') || f.comment.includes('et al')}).classed('reference', true);
 
