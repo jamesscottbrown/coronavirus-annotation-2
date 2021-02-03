@@ -95,7 +95,9 @@ export async function formatVidPlayer() {
 
     addMouseEvents2Video();
 
-    d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
+    d3.select('#video-controls').select('.play-pause').on('click', () => {
+      playButtonChange().then(()=> togglePlay());
+    });
     d3.select('.progress-bar').on('click', progressClicked);
 
 
@@ -112,7 +114,10 @@ export async function formatVidPlayer() {
   
       addMouseEvents2Video();
   
-      d3.select('#video-controls').select('.play-pause').on('click', () => togglePlay());
+      d3.select('#video-controls').select('.play-pause').on('click', () => {
+        playButtonChange().then(()=> {
+          togglePlay()});
+      });
       d3.select('.progress-bar').on('click', progressClicked);
   
     });
@@ -203,22 +208,22 @@ function scaleVideoTime(currentTime, invert) {
   const scale = d3.scaleLinear().range([0, video.videoWidth]).domain([0, duration]);
   return invert ? scale.invert(currentTime) : scale(currentTime);
 }
-export function playButtonChange() {
+export async function playButtonChange() {
   const div = d3.select('#video-controls').select('.play-pause');
-  if (div.classed('play')) {
-    div.select('.pause-span').style('opacity', 1);
-    div.select('.play-span').style('opacity', 0);
-    div.classed('play', false);
-    div.classed('pause', true);
+
+  if (video.playing) {
    
-   
-  } else {
     div.select('.pause-span').style('opacity', 0);
     div.select('.play-span').style('opacity', 1);
-    div.classed('play', true);
-    div.classed('pause', false);
+  //  div.classed('play', true);
+   // div.classed('pause', false);
    
-    
+  } else {
+    div.select('.pause-span').style('opacity', 1);
+    div.select('.play-span').style('opacity', 0);
+  //  div.classed('play', false);
+   // div.classed('pause', true);
+ 
   }
 }
 
@@ -226,17 +231,17 @@ export function playButtonChange() {
 // If the video playback is paused or ended, the video is played
 // otherwise, the video is paused
 export function togglePlay() {
-  playButtonChange();
+  console.log('firing toggle play')
   if (video.playing) {
     video.pause();
- 
-    drawFrameOnPause(video).then(()=>{
-      if(structureSelected.selected) parseArray(currentColorCodes[currentColorCodes.length - 1]);
-    });
+    drawFrameOnPause(video);
+    // drawFrameOnPause(video).then(()=>{
+    //   if(structureSelected.selected) parseArray(currentColorCodes[currentColorCodes.length - 1]);
+    // });
     
   } else {
-    clearCanvas();
     video.play();
+    clearCanvas();
     structureSelectedToggle(null, null, null);
     clearRightSidebar();
     renderCommentDisplayStructure();
