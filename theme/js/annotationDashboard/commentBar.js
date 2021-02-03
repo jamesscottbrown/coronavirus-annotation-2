@@ -12,6 +12,16 @@ import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
 require('firebase/auth');
 require('firebase/database');
 
+let openedReplies = []
+
+function addKey(key){
+ openedReplies.push(key);
+}
+
+function removeKey(key){
+  openedReplies = openedReplies.filter(f=> f != key);
+}
+
 export function clearRightSidebar() {
   d3.select('#right-sidebar').selectAll('*').remove();
   d3.select('#comment-wrap').selectAll('*').remove();
@@ -265,7 +275,9 @@ export function drawCommentBoxes(nestedData, wrap) {
     });
   }
 
-  memoDivs.selectAll('div.reply-space').data(d=> [d]).join('div').classed('reply-space', true);
+  let replySpace = memoDivs.selectAll('div.reply-space').data(d=> [d]).join('div').classed('reply-space', true);
+
+
 
   memoDivs.on('click', (event, d) => {
     if (event.target.tagName.toLowerCase() === 'textarea'
@@ -336,6 +348,12 @@ export function drawCommentBoxes(nestedData, wrap) {
         }
       }).style('font-size', '12px');
 
+    
+//THESE ARE THE REPLIES THAT ARE OPEN.
+      replyWrap.filter(f=> {
+        return openedReplies.indexOf(f.key) > -1;
+      });
+
       let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('expand', true);
       expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
         if(c.repliesCollapsed === true){
@@ -349,12 +367,14 @@ export function drawCommentBoxes(nestedData, wrap) {
       expand.style('float', 'right');
 
       expand.on('click', (event, d)=> {
-      
+        console.log('or ', openedReplies)
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
+          removeKey(d.key);
           d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
         }else{
           d.repliesCollapsed = false;
+          addKey(d.key);
           recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode));
           renderReplyDetails(d3.select(event.target.parentNode.parentNode.parentNode));
         }
