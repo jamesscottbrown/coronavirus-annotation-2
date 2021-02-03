@@ -55,7 +55,8 @@ function addMouseEvents2Video(){
   .on('click', (event) => mouseClickVideo(d3.pointer(event), video))
   .on('mousemove', (event) => {
     toggleQueue(false);
-    mouseMoveVideo(d3.pointer(event), video)});
+    mouseMoveVideo(d3.pointer(event), video);
+  });
 
   d3.select('#interaction')
     .on('mouseenter', ()=> {
@@ -109,9 +110,7 @@ export async function formatVidPlayer() {
       canPlay = true;
        
       resizeVideoElements();
-  
       drawFrameOnPause(video);
-  
       addMouseEvents2Video();
   
       d3.select('#video-controls').select('.play-pause').on('click', () => {
@@ -166,30 +165,17 @@ export function updateTimeElapsed() {
 }
 function progressClicked(mouse) {
 
-  document.getElementById('video').currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
-  updateTimeElapsed();
-
-  structureSelectedToggle(null, null, null);
-  colorTimeline(null);
-
-  loadPngForFrame();
-
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
 
-  addCommentButton();
-  clearRightSidebar();
-  renderCommentDisplayStructure();
-  updateCommentSidebar(commentData);
-  updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+  const video = document.getElementById('video');
+  
+  video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
+  updateTimeElapsed();
 
-  let tool = d3.select('.tooltip');
-  tool.style('opacity', 0);
-  tool.style('top', '-100px');
-  tool.style('left', '-100px');
+  unselectStructure(commentData, video);
 
   highlightAnnotationbar(document.getElementById('video').currentTime);
 
- 
 }
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
@@ -293,7 +279,8 @@ export function unselectStructure(commentData, video){
   addCommentButton();
   clearRightSidebar();
 
-  structureSelectedToggle(null);
+  structureSelectedToggle(null, null, null);
+  colorTimeline(null);
 
   renderCommentDisplayStructure();
   
