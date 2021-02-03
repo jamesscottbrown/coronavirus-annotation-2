@@ -217,7 +217,7 @@ export async function playButtonChange() {
 // If the video playback is paused or ended, the video is played
 // otherwise, the video is paused
 export function togglePlay() {
-  console.log('firing toggle play')
+ 
   if (video.playing) {
     video.pause();
     drawFrameOnPause(video);

@@ -277,8 +277,6 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   let replySpace = memoDivs.selectAll('div.reply-space').data(d=> [d]).join('div').classed('reply-space', true);
 
-
-
   memoDivs.on('click', (event, d) => {
     if (event.target.tagName.toLowerCase() === 'textarea'
           || event.target.tagName.toLowerCase() === 'button'
@@ -350,7 +348,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
     
 //THESE ARE THE REPLIES THAT ARE OPEN.
-      replyWrap.filter(f=> {
+      let replyDrawn = replyWrap.filter(f=> {
         return openedReplies.indexOf(f.key) > -1;
       });
 
@@ -367,7 +365,7 @@ export function drawCommentBoxes(nestedData, wrap) {
       expand.style('float', 'right');
 
       expand.on('click', (event, d)=> {
-        console.log('or ', openedReplies)
+       
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           removeKey(d.key);
@@ -380,11 +378,11 @@ export function drawCommentBoxes(nestedData, wrap) {
         }
       });
 
-      let replyDrawn = expand.filter(f=> {
-        return f.repliesCollapsed === false;
-      });
+      replyDrawn.each((rd, i, n)=> {
+        recurseDraw(d3.select(n[i]));
+          renderReplyDetails(d3.select(n[i]));
+      })
 
-      
 
   const questionMemos = memoDivs.filter((f) => {
     return f.comment.includes('?')});
@@ -403,7 +401,6 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   
   renderReplyDetails(memoDivs);
-
 
   d3.selectAll('.reply-memo').selectAll('.reply-span').on('click', function (event, d){
     event.stopPropagation();
