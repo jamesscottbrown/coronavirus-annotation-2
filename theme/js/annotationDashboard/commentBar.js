@@ -69,7 +69,7 @@ function recurse(parent, replyArray, level) {
   return parent;
 }
 
-function replyInputBox(d, i, n) {
+function replyInputBox(d, n) {
   
   const inputDiv = d3.select(n).select('.reply-space').append('div').classed('text-input-sidebar', true);
   inputDiv.append('text').text(`${userLoggedIn.displayName}:`);
@@ -265,7 +265,7 @@ export function drawCommentBoxes(nestedData, wrap) {
         d.replyBool = true;
         d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');
 
-        replyInputBox(d, i, event.target.parentNode.parentNode);
+        replyInputBox(d, event.target.parentNode.parentNode);
 
       } else {
         d.replyBool = false;
@@ -409,7 +409,7 @@ export function drawCommentBoxes(nestedData, wrap) {
 
     if (d.replyBool === false) {
       d.replyBool = true;
-      replyInputBox(d, i, event.target.parentNode.parentNode);
+      replyInputBox(d, event.target.parentNode.parentNode);
       d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');
     } else {
       d.replyBool = false;
@@ -1024,6 +1024,23 @@ function replyRender(replyDivs) {
 
     resolve.on('click', (event, d) => {
       db.ref(`comments/${d.key}/resolved`).set('true');
+    });
+
+    reply.on('click', (event, d)=> {
+      // console.log(event.target.parentNode.parentNode)});
+      // d3.select(event.target.parentNode.parentNode).select('.reply-space');
+
+      if (d.replyBool === false) {
+        d.replyBool = true;
+        d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');
+
+        replyInputBox(d, event.target.parentNode.parentNode);
+
+      } else {
+        d.replyBool = false;
+        d3.select(event.target.parentNode.parentNode).select('.reply-space').select('.text-input-sidebar').remove();
+        d3.select(event.target.parentNode).select('.replyText').text('Reply');
+      }
     });
 
   }

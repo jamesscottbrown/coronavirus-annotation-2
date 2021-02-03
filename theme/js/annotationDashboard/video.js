@@ -221,10 +221,7 @@ export function togglePlay() {
   if (video.playing) {
     video.pause();
     drawFrameOnPause(video);
-    // drawFrameOnPause(video).then(()=>{
-    //   if(structureSelected.selected) parseArray(currentColorCodes[currentColorCodes.length - 1]);
-    // });
-    
+
   } else {
     video.play();
     clearCanvas();
