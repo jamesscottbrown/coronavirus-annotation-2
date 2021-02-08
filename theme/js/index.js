@@ -40,7 +40,7 @@ let safariAgent = navigator.userAgent.indexOf("Safari") > -1;
 
 if(safariAgent){
   console.log("SAFAROOOOOO")
-  window.alert("You are using Safari and this video will not load correctly. Please use Firefox or Chrome.");
+  window.alert("You are using Safari or Edge and this video may not load correctly. Please use Firefox or Chrome for best performance.");
 }
   
 
