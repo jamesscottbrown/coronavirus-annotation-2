@@ -7,6 +7,10 @@
     --top-margin:50px;
     --sidbar-width:20%;
   }
+
+  video::-webkit-media-controls-timeline {
+    display: none;
+}
   
   body {
     height: 100%;   
