@@ -80,6 +80,7 @@ function addMouseEvents2Video(){
 export async function formatVidPlayer() {
   const video = document.getElementById('video');
   video.muted = true;
+  video.controls = false;
 
   Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
     get() {
@@ -90,6 +91,7 @@ export async function formatVidPlayer() {
   if(video.readyState >= 2) {
     
     canPlay = true;
+    
      
     resizeVideoElements();
     drawFrameOnPause(video);
@@ -108,6 +110,8 @@ export async function formatVidPlayer() {
     video.addEventListener('canplay', (event) => {
   
       canPlay = true;
+
+  
        
       resizeVideoElements();
       drawFrameOnPause(video);

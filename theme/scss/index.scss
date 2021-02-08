@@ -8,9 +8,13 @@
     --sidbar-width:20%;
   }
 
-  video::-webkit-media-controls-timeline {
-    display: none;
-}
+  // video::-webkit-media-controls {
+  //   display:none !important;
+  // }
+  // .media-controls-container{
+  //   display:none !important;
+  //   opacity:0;
+  // }
   
   body {
     height: 100%;   
