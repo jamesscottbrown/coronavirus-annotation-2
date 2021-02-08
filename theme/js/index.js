@@ -38,7 +38,11 @@ d3.select('#wrapper').on('mousemove', (event, d)=>{
 
 let safariAgent = navigator.userAgent.indexOf("Safari") > -1; 
 
-if(safariAgent){
+let chromeAgent = navigator.userAgent.indexOf("Chrome") === -1; 
+
+console.log('navvv',navigator.userAgent, navigator.userAgent[3]);
+
+if(safariAgent && chromeAgent){
   console.log("SAFAROOOOOO")
   window.alert("You are using Safari or Edge and this video may not load correctly. Please use Firefox or Chrome for best performance.");
 }
