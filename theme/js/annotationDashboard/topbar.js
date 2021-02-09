@@ -10,7 +10,7 @@ import {
 import { annotationData, dataKeeper } from '../dataManager';
 import { clearCanvas, drawFrameOnPause, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
 import { updateAnnotationSidebar } from './annotationBar';
-import { structureTooltip } from './video';
+import { structureTooltip, togglePlay, videoUpdates } from './video';
 
 require('regenerator-runtime/runtime');
 require('firebase/auth');
@@ -170,6 +170,9 @@ export function addCommentButton() {
   } else {
     button.text('Add Comment');
     button.on('click', (event) => {
+      if(document.getElementById('video').playing){
+        togglePlay();
+      }
       clearRightSidebar();
       renderCommentDisplayStructure();
       d3.select('#interaction').style('pointer-events', 'all');

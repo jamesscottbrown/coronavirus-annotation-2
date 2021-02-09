@@ -239,16 +239,16 @@ export function drawCommentBoxes(nestedData, wrap) {
 
   if (userLoggedIn.loggedInBool) {
     // RESOLVE
-    const resolve = memoDivs.filter((f) => f.uid === userLoggedIn.uid).selectAll('.resolve-span').data((d) => [d]).join('span')
-      .classed('resolve-span', true)
-      .text('Resolve ');
+    // const resolve = memoDivs.filter((f) => f.uid === userLoggedIn.uid).selectAll('.resolve-span').data((d) => [d]).join('span')
+    //   .classed('resolve-span', true)
+    //   .text('Resolve ');
 
-    resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
-      .classed('resolve fas fa-check', true);
+    // resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
+    //   .classed('resolve fas fa-check', true);
 
-    resolve.on('click', (d) => {
-      db.ref(`comments/${d.key}/resolved`).set('true');
-    });
+    // resolve.on('click', (d) => {
+    //   db.ref(`comments/${d.key}/resolved`).set('true');
+    // });
     // REPLY
     const reply = memoDivs.selectAll('.reply-span').data((d) => [d]).join('span').classed('reply-span', true)
     let replyText = reply.selectAll('.replyText').data(d=> [d]).join('span').classed('replyText', true)
@@ -537,7 +537,9 @@ export function addTagFunctionality(inputDiv, tagArray) {
   });
 
   const array = ({ ...dataKeeper[dataKeeper.length - 1] }).comments;
-  const test = Object.entries(array).map((m) => m[1]).flatMap((m) => m.tags.split(','));
+  const test = Object.entries(array).map((m) => m[1]).flatMap((m) => {
+    console.log("m", m);
+    m.tags.split(',')});
 
   autocomplete(node, Array.from(new Set(test)));
 }
@@ -1015,16 +1017,17 @@ function replyRender(replyDivs) {
     reply.selectAll('.reply').data((d) => [d]).join('i').classed('far fa-comment-dots reply', true)
       .style('float', 'right');
 
-    const resolve = replyDivs.filter(f =>{
-      return f.displayName === userLoggedIn.displayName;
-    }).selectAll('.resolve-span').data((d) => [d]).join('span').classed('resolve-span', true)
-      .text('Resolve ');
-    resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
-      .classed('resolve fas fa-check', true);// .text(d=> `${d.displayName}:`);
+    // const resolve = replyDivs.filter(f =>{
+    //   return f.displayName === userLoggedIn.displayName;
+    // }).selectAll('.resolve-span').data((d) => [d]).join('span').classed('resolve-span', true)
+    //   .text('Resolve ');
+    // resolve.selectAll('.resolve').data((d) => [d]).join('i').classed('resolve', true)
+    //   .classed('resolve fas fa-check', true);// .text(d=> `${d.displayName}:`);
 
-    resolve.on('click', (event, d) => {
-      db.ref(`comments/${d.key}/resolved`).set('true');
-    });
+    // resolve.on('click', (event, d) => {
+    //   console.log('d in key', d);
+    //   //db.ref(`comments/${d.key}/resolved`).set('true');
+    // });
 
     reply.on('click', (event, d)=> {
       // console.log(event.target.parentNode.parentNode)});
