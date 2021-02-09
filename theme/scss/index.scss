@@ -15,6 +15,15 @@
   //   display:none !important;
   //   opacity:0;
   // }
+
+  #vim-link{
+    display: inline;
+    font-size: 12px;
+    //float:left;
+    .log-label{
+      margin-left: 6px;
+    }
+  }
   
   body {
     height: 100%;   

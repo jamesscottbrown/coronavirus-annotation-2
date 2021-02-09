@@ -436,7 +436,7 @@ export function updateWithSelectedStructure(snip, commentData){
 
   // MIGHT BE REPEATING WORK - ALREADY HAVE UPDATE COMMENT SIDEBAR ABOVE
   drawCommentBoxes(structureSelected.comments, selectedComWrap);
-  drawCommentBoxes(nestReplies, genComWrap);
+  //drawCommentBoxes(nestReplies, genComWrap);
   genComWrap.selectAll('.memo').style('opacity', 0.3);
 
   d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = 0;

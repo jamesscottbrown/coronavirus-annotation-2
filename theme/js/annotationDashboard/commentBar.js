@@ -177,8 +177,8 @@ function renderReplyDetails(div){
 }
 
 export function drawCommentBoxes(nestedData, wrap) {
-
- 
+  
+  console.log('is this working', nestedData);
   const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = firebase.database();
   if(wrap.classed('selected-comm-wrap')){
