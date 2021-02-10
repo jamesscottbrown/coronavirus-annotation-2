@@ -338,7 +338,10 @@ export function drawCommentBoxes(nestedData, wrap) {
   })
 
   let replyWrap = memoDivs.selectAll('.reply-wrap').data(r => [r]).join('div').classed('reply-wrap', true);
-      let replyCount = replyWrap.selectAll('text').data(r=> [r]).join('text').text(r=> {
+
+  let replyExpandDiv = replyWrap.selectAll('div.expand-div').data(e => [e]).join('div').classed('expand-div', true);
+
+  let replyCount = replyExpandDiv.selectAll('text').data(r=> [r]).join('text').text(r=> {
         if(r.replyKeeper.length === 1){
           return `${r.replyKeeper.length} Reply`;
         }else{
@@ -352,7 +355,7 @@ export function drawCommentBoxes(nestedData, wrap) {
         return openedReplies.indexOf(f.key) > -1;
       });
 
-      let expand = replyWrap.selectAll('span.expand').data(d=> [d]).join('span').classed('expand', true);
+      let expand = replyExpandDiv.selectAll('span.expand').data(d=> [d]).join('span').classed('expand', true);
       expand.selectAll('.car').data(c=> [c]).join('i').attr('class', c=> {
         if(c.repliesCollapsed === true){
           return "car fas fa-chevron-circle-down";
@@ -363,18 +366,20 @@ export function drawCommentBoxes(nestedData, wrap) {
       });
 
       expand.style('float', 'right');
+      expand.style('padding-left', '100px')
 
       expand.on('click', (event, d)=> {
-       
+       console.log('clicked', event.target.tagName, d);
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           removeKey(d.key);
-          d3.select(event.target.parentNode.parentNode.parentNode).selectAll('.reply-memo').remove();
+          let target = event.target.tagName === "path" ? event.target.parentNode.parentNode.parentNode.parentNode : event.target.parentNode.parentNode.parentNode;
+          d3.select(target).selectAll('.reply-memo').remove();
         }else{
           d.repliesCollapsed = false;
           addKey(d.key);
-          recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode));
-          renderReplyDetails(d3.select(event.target.parentNode.parentNode.parentNode));
+          recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode.parentNode));
+          renderReplyDetails(d3.select(event.target.parentNode.parentNode.parentNode.parentNode));
         }
       });
 
@@ -538,7 +543,6 @@ export function addTagFunctionality(inputDiv, tagArray) {
 
   const array = ({ ...dataKeeper[dataKeeper.length - 1] }).comments;
   const test = Object.entries(array).map((m) => m[1]).flatMap((m) => {
-    console.log("m", m);
     m.tags.split(',')});
 
   autocomplete(node, Array.from(new Set(test)));
