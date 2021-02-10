@@ -24,12 +24,13 @@
     padding:10px;
   }
 
-  #vim-link{
+  #vim-link, #about{
     display: inline;
     font-size: 12px;
     //float:left;
     .log-label{
       margin-left: 6px;
+      margin-right:15px;
     }
   }
   

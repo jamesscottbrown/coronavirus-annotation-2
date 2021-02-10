@@ -155,19 +155,20 @@ export function goBackButton() {
   });
 }
 
+export function addInfoBlurb(){
+  
+}
+
 export function addCommentButton() {
   const button = d3.select('#top-bar').select('.add-comment').select('button');
 
   if (userLoggedIn.loggedInBool === false) {
     button.text('Log in to comment');
     button.on('click', (event) => {
-      //clearRightSidebar();
-      //d3.select('#right-sidebar').select('#sign-in-wrap').append('div').attr('id', 'sign-in-container');
-    
       userLogin();
-     // goBackButton();
      d3.select('#comment-wrap').style('margin-top', '230px');
     });
+
   } else {
     button.text('Add Comment');
     button.on('click', (event) => {

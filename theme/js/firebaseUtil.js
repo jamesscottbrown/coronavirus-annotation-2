@@ -147,6 +147,7 @@ export async function checkUser(callbackArray, callbackArrayNoArgs) {
   firebase.auth().onAuthStateChanged(async (user) => {
   
     if (user) {
+      d3.select('#sign-in-wrap').selectAll('*').remove();
       currentUser.push(user);
       addUser(user);
       d3.select('#sign-out').select('.log-label').text('Log out');
