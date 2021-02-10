@@ -366,20 +366,30 @@ export function drawCommentBoxes(nestedData, wrap) {
       });
 
       expand.style('float', 'right');
-      expand.style('padding-left', '100px')
+      expand.style('padding-left', '200px');
 
-      expand.on('click', (event, d)=> {
-       console.log('clicked', event.target.tagName, d);
+      function findTarget(event, tagName){
+        if(tagName === "DIV"){
+          return event.target.parentNode.parentNode;
+        }else if(tagName === "path"){
+          return event.target.parentNode.parentNode.parentNode.parentNode;
+        }else{
+          return event.target.parentNode.parentNode.parentNode;
+        }
+      }
+
+      replyExpandDiv.on('click', (event, d)=> {
         if(d.repliesCollapsed === false){
           d.repliesCollapsed = true;
           removeKey(d.key);
-          let target = event.target.tagName === "path" ? event.target.parentNode.parentNode.parentNode.parentNode : event.target.parentNode.parentNode.parentNode;
+          let target = findTarget(event, event.target.tagName);
           d3.select(target).selectAll('.reply-memo').remove();
         }else{
           d.repliesCollapsed = false;
           addKey(d.key);
-          recurseDraw(d3.select(event.target.parentNode.parentNode.parentNode.parentNode));
-          renderReplyDetails(d3.select(event.target.parentNode.parentNode.parentNode.parentNode));
+          let target = findTarget(event, event.target.tagName);
+          recurseDraw(d3.select(target));
+          renderReplyDetails(d3.select(target));
         }
       });
 
