@@ -156,7 +156,9 @@ export function goBackButton() {
 }
 
 export function addInfoBlurb(){
-  
+  let top = d3.select('#top-bar');
+  console.log(top);
+  top.append('div').classed('info-blurb', true);
 }
 
 export function addCommentButton() {

@@ -99,7 +99,8 @@ export async function formatVidPlayer() {
     addMouseEvents2Video();
 
     d3.select('#video-controls').select('.play-pause').on('click', () => {
-      playButtonChange().then(()=> togglePlay());
+      console.log('received click')
+      playButtonChange().then(()=> togglePlay()).then(() => console.log('playing'));
     });
     d3.select('.progress-bar').on('click', progressClicked);
 
@@ -115,8 +116,9 @@ export async function formatVidPlayer() {
       addMouseEvents2Video();
   
       d3.select('#video-controls').select('.play-pause').on('click', () => {
+        console.log('received click')
         playButtonChange().then(()=> {
-          togglePlay()});
+          togglePlay()}).then(() => console.log('playing'));
       });
       d3.select('.progress-bar').on('click', progressClicked);
   
@@ -228,11 +230,14 @@ export function togglePlay() {
     d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
     d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
     clearCanvas();
-    structureSelectedToggle(null, null, null);
-    clearRightSidebar();
-    renderCommentDisplayStructure();
-    updateCommentSidebar({ ...dataKeeper[dataKeeper.length - 1] });
-    addCommentButton();
+    if(structureSelected.selected){
+      structureSelectedToggle(null, null, null);
+      clearRightSidebar();
+      renderCommentDisplayStructure();
+      updateCommentSidebar({ ...dataKeeper[dataKeeper.length - 1] }); // problem
+      addCommentButton();
+    }
+    
   }
 }
 

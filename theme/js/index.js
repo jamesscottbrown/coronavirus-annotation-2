@@ -14,7 +14,7 @@ import { renderTimeline } from './annotationDashboard/timeline';
 import { structureSelected } from './annotationDashboard/imageDataUtil';
 
 const {
-  renderUser, addCommentButton, toggleSort, renderIssueButton,
+  renderUser, addCommentButton, toggleSort, renderIssueButton, addInfoBlurb,
 } = require('./annotationDashboard/topbar');
 const { formatAnnotationTime, annotationData } = require('./dataManager');
 const { checkUser, loadConfig, fbConfig, loadFirebaseApp } = require('./firebaseUtil');
@@ -37,10 +37,7 @@ d3.select('#wrapper').on('mousemove', (event, d)=>{
 })
 
 let safariAgent = navigator.userAgent.indexOf("Safari") > -1; 
-
 let chromeAgent = navigator.userAgent.indexOf("Chrome") === -1; 
-
-console.log('navvv',navigator.userAgent, navigator.userAgent[3]);
 
 if(safariAgent && chromeAgent){
   console.log("SAFAROOOOOO")
@@ -69,8 +66,16 @@ async function init() {
     d3.select('#loader').remove();
   });
 
- 
   videoUpdates();
+
+  d3.select('#about').on('click', (event, d)=> {
+    if(d3.select('#top-bar').select('.info-blurb').empty()){
+      addInfoBlurb();
+    }else{
+      d3.select('#top-bar').select('.info-blurb').remove();
+    }
+    
+  });
 
   // // create a tooltip
   const tooltipTest = d3.select('#main').select('div.tooltip');

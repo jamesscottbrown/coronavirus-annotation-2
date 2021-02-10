@@ -16,6 +16,18 @@
   //   opacity:0;
   // }
 
+  .info-blurb{
+    position: absolute;
+    top:50px;
+    left:100px;
+    width:400px;
+    height:200px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #737373;
+    box-shadow: 1px 3px 3px #ccc;
+  }
+
   .de-em{
     opacity: .2 !important;
   }
