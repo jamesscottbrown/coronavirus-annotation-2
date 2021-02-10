@@ -3,7 +3,7 @@ import { annotationData, dataKeeper, formatTime, getRightDimension } from '../da
 import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
 import { colorDictionary } from './imageDataUtil';
-import {unselectStructure, updateTimeElapsed} from './video';
+import {togglePlay, unselectStructure, updateTimeElapsed} from './video';
 
 export function hoverEmphasis(d, type){
   if(type === "comment"){
@@ -133,6 +133,9 @@ export function renderTimeline(commentData) {
   comBins.on('mouseover', (event, d) => commentBinTimelineMouseover(event, d));
   comBins.on('mouseout', (event, d) => commentBinTimelineMouseout(event, d));
   comBins.on('click', (event, d)=> {
+    if(document.getElementById('video').playing){
+      togglePlay();
+    }
     document.getElementById('video').currentTime = d.videoTime;
     updateTimeElapsed();
     unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
@@ -165,6 +168,9 @@ export function renderTimeline(commentData) {
     d3.selectAll('.hover-em').classed('hover-em', false);
   });
   annos.on('click', (event, d)=> { 
+    if(document.getElementById('video').playing){
+      togglePlay();
+    }
     document.getElementById('video').currentTime = d.seconds[0];
     unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
   })

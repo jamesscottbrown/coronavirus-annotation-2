@@ -7,6 +7,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { structureSelected } from './imageDataUtil';
 import { hoverEmphasis } from './timeline';
 import { annotationData } from '../dataManager';
+import { togglePlay } from './video';
 
 library.add(faCheck, fas, far, fab);
 dom.i2svg();
@@ -28,6 +29,13 @@ export function clearAnnotationSidebar() {
 }
 
 function renderAnnotationBoxes(divs){
+
+  console.log('divssss',divs)
+  divs.on('click', ()=> {
+    if(document.getElementById('video').playing){
+      togglePlay();
+    }
+  })
 
   divs.filter(f=> f.has_unkown === 'TRUE').classed('question', true);
 

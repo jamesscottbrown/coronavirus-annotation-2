@@ -7,7 +7,7 @@ import { updateAnnotationSidebar } from './annotationBar';
 import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
 import { hoverEmphasis } from './timeline';
 import { goBackButton } from './topbar';
-import { commentClicked, renderPushpinMarks, renderDoodles } from './video';
+import { commentClicked, renderPushpinMarks, renderDoodles, togglePlay } from './video';
 
 require('firebase/auth');
 require('firebase/database');
@@ -286,6 +286,9 @@ export function drawCommentBoxes(nestedData, wrap) {
             console.log(event.target)
      
     } else {
+      if(document.getElementById('video').playing){
+        togglePlay();
+      }
       commentClicked(event, d);
     }
   });
