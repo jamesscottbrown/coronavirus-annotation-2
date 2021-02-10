@@ -224,10 +224,13 @@ export function togglePlay() {
  
   if (video.playing) {
     video.pause();
+    d3.selectAll('.anno').classed('de-em', false);
+    d3.selectAll('.memo').classed('de-em', false);
     drawFrameOnPause(video);
 
   } else {
     video.play();
+    d3.selectAll('.anno').classed('de-em', true);
     clearCanvas();
     structureSelectedToggle(null, null, null);
     clearRightSidebar();
@@ -628,6 +631,11 @@ export function videoUpdates(data, annoType) {
      * UPDATE AND HIGHLGIHT ANNOTATION BAR
      */
     updateAnnotationSidebar(filteredAnnotations, null, false);
+    if(video.playing){
+      d3.selectAll('.anno').classed('de-em', true);
+      d3.selectAll('.memo').classed('de-em', true);
+    }
+   
     highlightAnnotationbar(video.currentTime);
 
     /*
