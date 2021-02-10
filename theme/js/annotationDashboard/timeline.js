@@ -141,7 +141,10 @@ export function renderTimeline(commentData) {
       const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
       const filComm = comments.filter((f) => d.key === f.key);
       filComm.classed('selected', true);
-      d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
+      if(filComm.nodes().length > 0){
+        d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
+      }
+      
     });
     unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
     
@@ -206,9 +209,10 @@ export function commentBinTimelineMouseover(event, d) {
     const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
     const filComm = comments.filter((f) => d.key === f.key);
     filComm.classed('selected', true);
-    d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;
- 
-
+    if(filComm.nodes().length > 0){
+      d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;
+    }
+    
     let rectNodes = d3.selectAll('.comm-bin').select('rect').nodes();
     let jump  = 960  / rectNodes.length;
 

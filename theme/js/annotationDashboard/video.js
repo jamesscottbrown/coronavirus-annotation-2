@@ -110,9 +110,6 @@ export async function formatVidPlayer() {
     video.addEventListener('canplay', (event) => {
   
       canPlay = true;
-
-  
-       
       resizeVideoElements();
       drawFrameOnPause(video);
       addMouseEvents2Video();
@@ -168,7 +165,6 @@ export async function updateTimeElapsed() {
 function progressClicked(mouse) {
 
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
-
   const video = document.getElementById('video');
   
   video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
@@ -229,6 +225,8 @@ export function togglePlay() {
   } else {
     video.play();
     d3.selectAll('.anno').classed('de-em', true);
+    d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+    d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
     clearCanvas();
     structureSelectedToggle(null, null, null);
     clearRightSidebar();
@@ -417,6 +415,7 @@ export function updateWithSelectedStructure(snip, commentData){
   const annoWrap = d3.select('#left-sidebar');
 
   goBackButton();
+  clearRightSidebar();
   renderCommentDisplayStructure();
 
   const topCommentWrap = d3.select('#right-sidebar').select('.top');
@@ -424,7 +423,7 @@ export function updateWithSelectedStructure(snip, commentData){
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
   
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
-  updateCommentSidebar(commentData, structureSelected.comments);
+ // updateCommentSidebar(commentData);
   updateAnnotationSidebar(otherAnno, structureSelected.annotations, false);
 
   renderStructureKnowns(topCommentWrap);
@@ -442,6 +441,7 @@ export function updateWithSelectedStructure(snip, commentData){
 
   d3.select('#left-sidebar').select('#annotation-wrap').node().scrollTop = 0;
   d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = 0;
+  d3.select('#right-sidebar').select('#comment-wrap').style('margin-top', '200px');
   
   //MAKE THESE SCROLL TO TOP.
 
