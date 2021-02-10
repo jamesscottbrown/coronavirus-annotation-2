@@ -7,7 +7,7 @@ import {
   cancelLogin,
   userLoggedIn, userLogin,
 } from '../firebaseUtil';
-import { annotationData, dataKeeper } from '../dataManager';
+import { annotationData, dataKeeper, getRightDimension } from '../dataManager';
 import { clearCanvas, drawFrameOnPause, parseArray, structureSelected, structureSelectedToggle } from './imageDataUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureTooltip, togglePlay, videoUpdates } from './video';
@@ -156,9 +156,24 @@ export function goBackButton() {
 }
 
 export function addInfoBlurb(){
-  let top = d3.select('#top-bar');
+  let top = d3.select('body');
   console.log(top);
-  top.append('div').classed('info-blurb', true);
+  let blurb = top.append('div').classed('info-blurb', true);
+
+  let dim = getRightDimension();
+
+  let questionDiv = blurb.append('div').classed('question', true);
+  questionDiv.append('span').append('i').classed('fas question fa-question-circle', true);
+  questionDiv.append('text').text('Indicates a question.');
+
+  let refDiv = blurb.append('div').classed('reference', true);
+  refDiv.append('span').append('i').classed('fas fa-book-open', true);
+  refDiv.append('text').text('Indicates a reference.');
+
+  let annoDiv = blurb.append('div').classed('anno-info', true);
+  annoDiv.style('height', `${window.innerHeight - 100}px`);
+
+
 }
 
 export function addCommentButton() {

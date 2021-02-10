@@ -104,10 +104,8 @@ export async function formatVidPlayer() {
     });
     d3.select('.progress-bar').on('click', progressClicked);
 
-
   }else{
     
-
     video.addEventListener('canplay', (event) => {
   
       canPlay = true;

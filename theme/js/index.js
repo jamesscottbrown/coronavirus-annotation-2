@@ -69,10 +69,10 @@ async function init() {
   videoUpdates();
 
   d3.select('#about').on('click', (event, d)=> {
-    if(d3.select('#top-bar').select('.info-blurb').empty()){
+    if(d3.select('body').select('.info-blurb').empty()){
       addInfoBlurb();
     }else{
-      d3.select('#top-bar').select('.info-blurb').remove();
+      d3.select('body').select('.info-blurb').remove();
     }
     
   });

@@ -19,13 +19,40 @@
   .info-blurb{
     position: absolute;
     top:50px;
-    left:100px;
-    width:400px;
-    height:200px;
-    background-color: #fff;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color: rgba($color: #fff, $alpha: .7);
     border-radius: 5px;
     border: 1px solid #737373;
     box-shadow: 1px 3px 3px #ccc;
+    font-size: 12px;
+    padding:10px;
+
+    span{
+      margin-right:10px;
+      margin-left:10px;
+    }
+
+    div.anno-info{
+      position:absolute;
+      top:70px;
+      left:7px;
+      width:280px;
+      border: 1px solid red;
+      border-radius: 5px;
+    }
+    div.comm-info{
+      position:absolute;
+      top:70px;
+      width:280px;
+      border: 1px solid red;
+      border-radius: 5px;
+    }
+
+    div{
+      display:inline;
+    }
   }
 
   .de-em{
