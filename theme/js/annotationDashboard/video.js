@@ -126,7 +126,6 @@ export async function formatVidPlayer() {
     });
   }
 
-  //video.addEventListener('timeupdate', updateTimeElapsed);
   video.addEventListener('loadedmetadata', initializeVideo);
   window.addEventListener('resize', ()=> {
  
@@ -154,7 +153,7 @@ export async function formatVidPlayer() {
     
   });
 }
-export function updateTimeElapsed() {
+export async function updateTimeElapsed() {
 
   d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
   const time = formatTime(Math.round(document.getElementById('video').currentTime));
@@ -162,7 +161,6 @@ export function updateTimeElapsed() {
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
  
-  
   if(!d3.select('.template-wrap').empty()){
     d3.select('.template-wrap').select('h6').text(`Add a comment @ ${time.minutes} : ${time.seconds}`);
   }

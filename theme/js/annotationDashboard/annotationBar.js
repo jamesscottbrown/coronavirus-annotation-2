@@ -30,7 +30,6 @@ export function clearAnnotationSidebar() {
 
 function renderAnnotationBoxes(divs){
 
-  console.log('divssss',divs)
   divs.on('click', ()=> {
     if(document.getElementById('video').playing){
       togglePlay();

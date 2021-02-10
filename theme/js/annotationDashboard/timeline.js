@@ -137,8 +137,14 @@ export function renderTimeline(commentData) {
       togglePlay();
     }
     document.getElementById('video').currentTime = d.videoTime;
-    updateTimeElapsed();
+    updateTimeElapsed().then(()=> {
+      const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
+      const filComm = comments.filter((f) => d.key === f.key);
+      filComm.classed('selected', true);
+      d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
+    });
     unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
+    
   })
 
 
