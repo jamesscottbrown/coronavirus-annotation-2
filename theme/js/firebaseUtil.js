@@ -51,6 +51,11 @@ const uiConfig = {
       clientId: '632575175956-49a1hie4ab4gr69vak5onr307fg67bb0.apps.googleusercontent.com',
     },
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    {
+      provider : firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      
+      //REDIRECT FOR GITHUB ___  https://coronavirus-anno-two.firebaseapp.com/__/auth/handler
+    },
     // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
   ],
   // Other config options...
@@ -81,7 +86,10 @@ export function loadFirebaseUI(callbackType){
 
     const ui = new firebaseui.auth.AuthUI(firebase.auth());
     if(callbackType === 'sign-in'){
+      let text = d3.select('#sign-in-wrap').append('div').classed('warning-label', true);
+      text.append('text').text('User accounts for this tool will not be used for any other purpose than identifying commentors.');
       ui.start('#sign-in-wrap', uiConfig);
+      d3.select('#comment-wrap').style('margin-top', '300px');
     }
   }
 }
