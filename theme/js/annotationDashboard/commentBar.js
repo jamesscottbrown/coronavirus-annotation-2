@@ -722,8 +722,8 @@ export function formatDoodleCanvas() {
   div.onmousedown = function (e) {
     const sideWidth = document.getElementById('right-sidebar').getBoundingClientRect();
 
-    oldX = (e.pageX - (sideWidth.width + 11));
-    oldY = (e.pageY - 40);
+    oldX = (e.pageX - (sideWidth.width));
+    oldY = (e.pageY - 55);
 
     draw = true;
   };
@@ -731,8 +731,8 @@ export function formatDoodleCanvas() {
     const sideWidth = document.getElementById('right-sidebar').getBoundingClientRect();
 
     // var mouseX = (e.pageX - sideWidth.width);
-    const mouseX = (e.pageX - (sideWidth.width + 11));
-    const mouseY = (e.pageY - 40);
+    const mouseX = (e.pageX - (sideWidth.width));
+    const mouseY = (e.pageY - 55);
 
     if (draw) {
       context.beginPath();
