@@ -169,9 +169,9 @@ function progressClicked(mouse) {
   
   video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
   updateTimeElapsed();
-
-  unselectStructure(commentData, video);
-
+  if(structureSelected.selected){
+    unselectStructure(commentData, video);
+  }
   highlightAnnotationbar(document.getElementById('video').currentTime);
 
 }

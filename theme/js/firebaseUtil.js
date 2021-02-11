@@ -79,12 +79,14 @@ export async function loadFirebaseApp(){
 export function loadFirebaseUI(callbackType){
   if(firebaseui.auth.AuthUI.getInstance()) {
     const ui = firebaseui.auth.AuthUI.getInstance();
+    console.log('ui exists', ui);
     if(callbackType === 'sign-in'){
       ui.start('#sign-in-wrap', uiConfig);
     }
   } else {
 
     const ui = new firebaseui.auth.AuthUI(firebase.auth());
+    console.log('new ui', ui);
     if(callbackType === 'sign-in'){
       let text = d3.select('#sign-in-wrap').append('div').classed('warning-label', true);
       text.append('text').text('User accounts for this tool will not be used for any other purpose than identifying commentors.');

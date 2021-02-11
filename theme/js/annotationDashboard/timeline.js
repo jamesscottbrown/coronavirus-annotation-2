@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import { annotationData, dataKeeper, formatTime, getRightDimension } from '../dataManager';
 import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
-import { colorDictionary } from './imageDataUtil';
+import { colorDictionary, structureSelected } from './imageDataUtil';
 import {togglePlay, unselectStructure, updateTimeElapsed} from './video';
 
 export function hoverEmphasis(d, type){
@@ -182,7 +182,11 @@ export function renderTimeline(commentData) {
       togglePlay();
     }
     document.getElementById('video').currentTime = d.seconds[0];
-    unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
+    updateTimeElapsed();
+    if(structureSelected.selected){
+      unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
+    }
+    
   })
 }
 
