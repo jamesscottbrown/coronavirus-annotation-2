@@ -45,6 +45,15 @@
       padding:10px;
       font-size: 16px;
       font-weight: 700;
+
+      div.reference, div.question{
+        display:block;
+      }
+
+      div.question{
+        margin-top:50px;
+      }
+
     }
     div.comm-info{
       position:absolute;
@@ -56,6 +65,14 @@
       padding:10px;
       font-size: 16px;
       font-weight: 700;
+
+      div.reference, div.question{
+        display:block;
+      }
+
+      div.question{
+        margin-top:50px;
+      }
     }
 
     .struct-info{
@@ -63,12 +80,25 @@
       top:50px;
       width:405px;
       //border: 1px solid red;
-      background-color: rgba($color: #de97e7, $alpha: .7);
+      background-color: rgba($color: #de97e7, $alpha: .9);
       border-radius: 5px;
       padding:10px;
       font-size: 16px;
       font-weight: 700;
     }
+
+    .marks-info{
+      position:absolute;
+      top:50px;
+      width:405px;
+      //border: 1px solid red;
+      background-color: rgba($color: #63cafa, $alpha: .7);
+      border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
     .comm-timeline-info{
       position:absolute;
       //top:50px;

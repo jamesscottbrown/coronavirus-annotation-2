@@ -138,7 +138,7 @@ export function goBackButton() {
 
       }else{
 
-         d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
+        d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
         d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
         structureSelectedToggle(null);
         clearRightSidebar();
@@ -162,36 +162,52 @@ export function addInfoBlurb(){
 
   let dim = getRightDimension();
 
-  let questionDiv = blurb.append('div').classed('question', true);
-  questionDiv.append('span').append('i').classed('fas question fa-question-circle', true);
-  questionDiv.append('text').text('Indicates a question.');
-
-  let refDiv = blurb.append('div').classed('reference', true);
-  refDiv.append('span').append('i').classed('fas fa-book-open', true);
-  refDiv.append('text').text('Indicates a reference.');
-
   let annoDiv = blurb.append('div').classed('anno-info', true);
   annoDiv.style('height', `${window.innerHeight - 100}px`);
   annoDiv.append('text').text('Annotations (citations, stuctures used, etc) are shown here.');
+
+  let questionDiv = annoDiv.append('div').classed('question', true);
+  questionDiv.append('span').append('i').classed('fas question fa-question-circle', true);
+  questionDiv.append('text').text('Indicates a question.');
+
+  let refDiv = annoDiv.append('div').classed('reference', true);
+  refDiv.append('span').append('i').classed('fas fa-book-open', true);
+  refDiv.append('text').text('Indicates a reference.');
 
   let commDiv = blurb.append('div').classed('comm-info', true);
   commDiv.style('height', `${window.innerHeight - 100}px`);
   commDiv.style('left', `${350 + dim.width}px`);
   commDiv.append('text').text('Comments and questions made by animators and the community are shown here.');
 
+  let questionDivC = commDiv.append('div').classed('question', true);
+  questionDivC.append('span').append('i').classed('fas question fa-question-circle', true);
+  questionDivC.append('text').text('Indicates a question.');
+
+  let refDivC = commDiv.append('div').classed('reference', true);
+  refDivC.append('span').append('i').classed('fas fa-book-open', true);
+  refDivC.append('text').text('Indicates a reference.');
+
   let structDiv = blurb.append('div').classed('struct-info', true);
   structDiv.style('left', `${340}px`);
   structDiv.append('text').text('Pause the video and interact with structures by hover or selection.');
 
   let comtimDiv = blurb.append('div').classed('comm-timeline-info', true);
-  comtimDiv.style('left', `${340}px`);
+  comtimDiv.style('left', `${323}px`);
   comtimDiv.style('top', `${dim.height + 100}px`);
+  comtimDiv.style('width', `${dim.width}px`);
   comtimDiv.append('text').text('Small verticle lines below the play bar show where comments are made.');
 
   let annotimDiv = blurb.append('div').classed('anno-timeline-info', true);
-  annotimDiv.style('left', `${340}px`);
+  annotimDiv.style('left', `${323}px`);
   annotimDiv.style('top', `${dim.height + 150}px`);
+  annotimDiv.style('width', `${dim.width}px`);
   annotimDiv.append('text').text('Horizontal bars indicate where different annotations appear in the annotation.');
+
+  let markDiv = blurb.append('div').classed('marks-info', true);
+  markDiv.style('left', `${dim.width - 115}px`);
+  markDiv.style('top', `-10px`);
+  markDiv.style('width', `${450}px`);
+  markDiv.append('text').text('To see drawings and marks made by others, turn these options on (they are off by default).');
 }
 
 export function addCommentButton() {

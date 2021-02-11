@@ -68,13 +68,19 @@ async function init() {
 
   videoUpdates();
 
-  d3.select('#about').on('click', (event, d)=> {
-    if(d3.select('body').select('.info-blurb').empty()){
-      addInfoBlurb();
-    }else{
-      d3.select('body').select('.info-blurb').remove();
-    }
+  // d3.select('#about').on('click', (event, d)=> {
+  //   if(d3.select('body').select('.info-blurb').empty()){
+  //     addInfoBlurb();
+  //   }else{
+  //     d3.select('body').select('.info-blurb').remove();
+  //   }
     
+  // });
+
+  d3.select('#about').on('mouseover', (event, d)=> {
+    addInfoBlurb();
+  }).on('mouseout', (event, d)=> {
+    d3.select('body').select('.info-blurb').remove();
   });
 
   // // create a tooltip
