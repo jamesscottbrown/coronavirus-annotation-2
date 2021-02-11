@@ -1,16 +1,14 @@
-//import { get } from 'core-js/fn/reflect';
 import * as d3 from 'd3';
-import firebase from 'firebase/app';
-import { annotationData, currentUser, dataKeeper, formatTime, formatVideoTime, getRightDimension } from '../dataManager';
-import { checkDatabase, userLoggedIn, userLogin } from '../firebaseUtil';
+import { annotationData, dataKeeper, formatTime, formatVideoTime, getRightDimension } from '../dataManager';
+import { checkDatabase, getDB, getStorage, userLoggedIn, userLogin } from '../firebaseUtil';
 import { updateAnnotationSidebar } from './annotationBar';
 import { structureSelected, doodleKeeper, structureSelectedToggle, structureDictionary } from './imageDataUtil';
 import { hoverEmphasis } from './timeline';
 import { goBackButton } from './topbar';
 import { commentClicked, renderPushpinMarks, renderDoodles, togglePlay } from './video';
 
-require('firebase/auth');
-require('firebase/database');
+// require('firebase/auth');
+// require('firebase/database');
 
 let openedReplies = []
 
@@ -30,24 +28,25 @@ export function clearRightSidebar() {
 export function updateCommentSidebar(dbRef) {
  
   renderCommentDisplayStructure();
+
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
- 
-  if(structureSelected.selected === false){
+  const nestReplies = formatCommentData(Object.assign({}, dbRef));
+  console.log('how fast is this')
+  drawCommentBoxes(nestReplies, wrap);
+
+  let time = document.getElementById('video').currentTime;
+
+  if(!structureSelected.selected){
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data(['Comments']).join('h6').classed('comment-header', true);
     header.text(d=> d);
-    
+    const timeRange = [time < .5 ? 0 : Math.floor(time - .2), time + .2];
+    highlightCommentBoxes(timeRange);
   }else{
     let header = d3.select('#right-sidebar').select('.top').selectAll('h6.comment-header').data([]).join('h6').classed('comment-header', true);
     header.text(d=> d);
   }
-  const nestReplies = formatCommentData(Object.assign({}, dbRef));
-  drawCommentBoxes(nestReplies, wrap);
 
-  let time = document.getElementById('video').currentTime;
-  if(!structureSelected.selected){
-    const timeRange = [time < .5 ? 0 : Math.floor(time - .2), time + .2];
-    highlightCommentBoxes(timeRange);
-  }
+
 }
 
 function recurse(parent, replyArray, level) {
@@ -82,7 +81,7 @@ function replyInputBox(d, n) {
     let text = d3.select('#text-area-id').node().value;
 
     const dataPush = formatComment2Send(userLoggedIn, d3.select('video').node().currentTime, 'none', 'none', null, d.key, null, text);
-    const ref = firebase.database().ref('comments');
+    const ref = getDB().ref('comments');
     d3.select(n).select('.reply-space').selectAll('*').remove();
     ref.push(dataPush);
   });
@@ -178,8 +177,11 @@ function renderReplyDetails(div){
 
 export function drawCommentBoxes(nestedData, wrap) {
   
-  const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
-  const db = firebase.database();
+//  const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
+  const db = getDB();
+
+  console.log(wrap);
+
   if(wrap.classed('selected-comm-wrap')){
     wrap.selectAll('h7').data(['Associated Comments ']).join('h7').text(d => d);
   }
@@ -628,7 +630,7 @@ export function radioBlob(div, t1Ob, t2Ob, t3Ob, className) {
 }
 
 export function doodleSubmit(commentType, user, tags, currentTime, text) {
-  const storage = firebase.storage();
+  const storage = getStorage();
   const storageRef = storage.ref();
   const message = doodleKeeper[doodleKeeper.length - 1].data;
 
@@ -640,8 +642,8 @@ export function doodleSubmit(commentType, user, tags, currentTime, text) {
     const dataPush = formatComment2Send(user, currentTime, 'doodle', tags.data().toString(), coords, null, null, text);
     dataPush.doodle = true;
     dataPush.doodleName = snapshot.metadata.name;
-
-    const refCom = firebase.database().ref(commentType);
+    const fdb = getDB();
+    const refCom = fdb.ref(commentType);
 
     refCom.push(dataPush);
 
@@ -746,11 +748,10 @@ export function formatDoodleCanvas() {
   };
   div.onmouseup = async function (e) {
     draw = false;
-    // shapeArray.push(context.save());
 
     const urlTest = canvas.toDataURL('image/png');
 
-    const storage = firebase.storage();
+    const storage = getStorage();
     const storageRef = storage.ref();
 
     const message = urlTest;
@@ -911,7 +912,8 @@ export function formatToComment(div, startingTags) {
 
         const coords = !d3.select('#push-div').empty() ? [vidWidth, vidHeight] : null;
         const dataPush = formatComment2Send(user, currentTime, 'push', tags.data().toString(), coords, null, null, text);
-        const refCom = firebase.database().ref(commentType);
+        const fdb = getDB();
+        const refCom = fdb.ref(commentType);
         refCom.push(dataPush);
 
         d3.select('#add-mark').remove();
@@ -945,7 +947,8 @@ export function formatToComment(div, startingTags) {
       } else {
         const coords = null; // user, currentTime, mark, tag, coords, replyTo, quote
         const dataPush = formatComment2Send(user, currentTime, 'none', tags.data().toString(), coords, null, null, text);
-        const refCom = firebase.database().ref(commentType);
+        const fdb = getDB();
+        const refCom = fdb.ref(commentType);
         refCom.push(dataPush);
         checkDatabase([updateCommentSidebar]);
         d3.select('#add-mark').remove();
@@ -994,7 +997,7 @@ export function formatTimeControl(div) {
 }
 
 function replyRender(replyDivs) {
-  const db = firebase.database();
+  const db = getDB();
 
   replyDivs.selectAll('.name').data((d) => [d]).join('span').classed('name', true)
     .selectAll('text')

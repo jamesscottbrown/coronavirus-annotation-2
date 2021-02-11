@@ -13,8 +13,8 @@ import { updateAnnotationSidebar } from './annotationBar';
 import { structureTooltip, togglePlay, videoUpdates } from './video';
 
 require('regenerator-runtime/runtime');
-require('firebase/auth');
-require('firebase/database');
+// require('firebase/auth');
+// require('firebase/database');
 
 export const showDoodle = false;
 export const showPush = false;

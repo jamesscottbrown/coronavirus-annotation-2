@@ -12,6 +12,14 @@ const firebaseui = require('firebaseui');
 
 export const fbConfig = [];
 
+export function getDB(){
+  return firebase.database();
+}
+
+export function getStorage(){
+  return firebase.storage();
+}
+
 const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult(authResult) {

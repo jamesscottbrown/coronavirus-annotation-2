@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import firebase from 'firebase/app';
 import { annotationData, dataKeeper, formatTime, getRightDimension } from '../dataManager';
 import { addCommentButton, goBackButton } from './topbar';
 import {
@@ -11,7 +10,7 @@ import {
 import { highlightAnnotationbar, updateAnnotationSidebar } from './annotationBar';
 import { highlightTimelineBars, renderTimeline, colorTimeline } from './timeline';
 import 'firebase/storage';
-import { cancelLogin, userLoggedIn } from '../firebaseUtil';
+import { cancelLogin, getStorage, userLoggedIn } from '../firebaseUtil';
 
 export const currentColorCodes = [];
 
@@ -92,10 +91,8 @@ export async function formatVidPlayer() {
     
     canPlay = true;
     
-     
     resizeVideoElements();
     drawFrameOnPause(video);
-
     addMouseEvents2Video();
 
     d3.select('#video-controls').select('.play-pause').on('click', () => {
@@ -166,12 +163,13 @@ export async function updateTimeElapsed(timeRange) {
 
 function progressClicked(mouse) {
   console.log('progressClicked');
-  const commentData = { ...dataKeeper[dataKeeper.length - 1] };
+ 
   const video = document.getElementById('video');
   
   video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
 
   if(structureSelected.selected){
+    const commentData = { ...dataKeeper[dataKeeper.length - 1] };
     unselectStructure(commentData, video);
   }
   
@@ -280,21 +278,22 @@ export function unselectStructure(commentData, video){
 
   addCommentButton();
   clearRightSidebar();
+  drawFrameOnPause(video);
 
   structureSelectedToggle(null, null, null);
   colorTimeline(null);
-
-  renderCommentDisplayStructure();
-  
-  updateCommentSidebar(commentData);
-  updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
 
   let tool = d3.select('.tooltip');
   tool.style('opacity', 0);
   tool.style('top', '-100px');
   tool.style('left', '-100px');
 
-  drawFrameOnPause(video);
+  
+  
+  updateCommentSidebar(commentData);
+  //updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
+
+
 }
 
 export async function mouseClickVideo(coord, video) {
@@ -425,7 +424,7 @@ export function updateWithSelectedStructure(snip, commentData){
   const selectedComWrap = d3.select('#comment-wrap').select('.selected-comm-wrap');
   
   // NEED TO CLEAR THIS UP - LOOKS LIKE YOU ARE REPEATING WORK IN UPDATE COMMENT SIDEBAR AND DRAW COMMETN BOXES
- // updateCommentSidebar(commentData);
+
   updateAnnotationSidebar(otherAnno, structureSelected.annotations, false);
 
   renderStructureKnowns(topCommentWrap);
@@ -550,7 +549,8 @@ export function renderPushpinMarks(commentsInTimeframe, svg) {
     .attr('y', (d) => 0);
 }
 export async function renderDoodles(commentsInTimeframe, div) {
-  const storageRef = firebase.storage().ref();
+  const storage = getStorage();
+  const storageRef = storage.ref();
 
   const doods = await storageRef.child('images/').listAll();
 
@@ -630,7 +630,10 @@ export function videoUpdates(data, annoType) {
     /**
      * UPDATE AND HIGHLGIHT ANNOTATION BAR
      */
+
     updateAnnotationSidebar(filteredAnnotations, null, false);
+   
+    
 
     if(video.playing){
       d3.selectAll('.anno').classed('de-em', true);

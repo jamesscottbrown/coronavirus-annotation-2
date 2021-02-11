@@ -91,6 +91,9 @@ function renderAnnotationBoxes(divs){
 }
 
 export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) {
+
+  console.log('this is running');
+  
   const annoType = annoTypes();
   /// start drawing annotation
   const annoWrap = mouseoverBool ? d3.select('#left-sidebar').select('.mouse-over-wrap') : d3.select('#left-sidebar').select('#annotation-wrap');
