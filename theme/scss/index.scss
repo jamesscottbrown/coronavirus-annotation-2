@@ -38,16 +38,59 @@
       position:absolute;
       top:70px;
       left:7px;
-      width:280px;
-      border: 1px solid red;
+      width:285px;
+      //border: 1px solid red;
+      background-color: rgba($color: #f5ed00, $alpha: .7);
       border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
     }
     div.comm-info{
       position:absolute;
       top:70px;
-      width:280px;
-      border: 1px solid red;
+      width:305px;
+      //border: 1px solid red;
+      background-color: rgba($color: #1dcf4c, $alpha: .7);
       border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .struct-info{
+      position:absolute;
+      top:50px;
+      width:405px;
+      //border: 1px solid red;
+      background-color: rgba($color: #de97e7, $alpha: .7);
+      border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .comm-timeline-info{
+      position:absolute;
+      //top:50px;
+      //width:405px;
+      //border: 1px solid red;
+      background-color: rgba($color: #67ba72, $alpha: .7);
+      border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .anno-timeline-info{
+      position:absolute;
+     // top:50px;
+      //width:405px;
+      //border: 1px solid red;
+      background-color: rgba($color: #ffff0f, $alpha: .7);
+      border-radius: 5px;
+      padding:10px;
+      font-size: 16px;
+      font-weight: 700;
     }
 
     div{

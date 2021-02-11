@@ -172,8 +172,26 @@ export function addInfoBlurb(){
 
   let annoDiv = blurb.append('div').classed('anno-info', true);
   annoDiv.style('height', `${window.innerHeight - 100}px`);
+  annoDiv.append('text').text('Annotations (citations, stuctures used, etc) are shown here.');
 
+  let commDiv = blurb.append('div').classed('comm-info', true);
+  commDiv.style('height', `${window.innerHeight - 100}px`);
+  commDiv.style('left', `${350 + dim.width}px`);
+  commDiv.append('text').text('Comments and questions made by animators and the community are shown here.');
 
+  let structDiv = blurb.append('div').classed('struct-info', true);
+  structDiv.style('left', `${340}px`);
+  structDiv.append('text').text('Pause the video and interact with structures by hover or selection.');
+
+  let comtimDiv = blurb.append('div').classed('comm-timeline-info', true);
+  comtimDiv.style('left', `${340}px`);
+  comtimDiv.style('top', `${dim.height + 100}px`);
+  comtimDiv.append('text').text('Small verticle lines below the play bar show where comments are made.');
+
+  let annotimDiv = blurb.append('div').classed('anno-timeline-info', true);
+  annotimDiv.style('left', `${340}px`);
+  annotimDiv.style('top', `${dim.height + 150}px`);
+  annotimDiv.append('text').text('Horizontal bars indicate where different annotations appear in the annotation.');
 }
 
 export function addCommentButton() {
