@@ -101,6 +101,7 @@ function structureTooltip(coord, d, type) {
       .style('top', `${coord[1]}px`);
   }
 }
+
 export function renderTimeline(commentData) {
 
   let dim = getRightDimension();
@@ -123,7 +124,7 @@ export function renderTimeline(commentData) {
 
   const commentGroup = timeSVG.selectAll('g.comm-group').data(d=> [d.comments]).join('g').classed('comm-group', true);
   commentGroup.attr('transform', 'translate(3, 0)')
-  commentGroup.selectAll('text').data(d => [d.label]).join('text').text(d=> d).style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(0, 10)');
+  commentGroup.selectAll('text').data(d => [d.label]).join('text').text(d=> d).style('font-size', '11px').style('fill', 'gray').attr('transform', 'translate(-2, 10)');
   const comBins = commentGroup.selectAll('g.comm-bin').data(d=> d.data).join('g').classed('comm-bin', true);
  comBins.attr('transform', (d, i) => `translate(${xScale(d.videoTime)} 15)`);
   const commentBinRect = comBins.selectAll('rect').data((d) => [d]).join('rect');
