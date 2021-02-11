@@ -153,8 +153,12 @@ export async function updateAnnotationSidebar(data, stackedData, mouseoverBool) 
 
 export function highlightAnnotationbar(currentTime) {
   const annos = d3.selectAll('#left-sidebar').select('.gen-anno-wrap').selectAll('div.anno');
-  const test = Array.from(new Set(annos.data().map((m) => m.seconds[0]))).filter((f) => f <= currentTime);
-
+  const ttest = Array.from(new Set(annos.data().map((m) => m.seconds[0])));
+  const test = ttest.filter((f) => f <= currentTime);
   const selectedAnno = annos.filter((f) => f.seconds[0] == test[test.length - 1]).classed('selected', true);
-  d3.selectAll('#left-sidebar').select('#annotation-wrap').node().scrollTop = selectedAnno.nodes()[0].offsetTop;
+
+  if(selectedAnno.nodes().length > 0){
+    d3.selectAll('#left-sidebar').select('#annotation-wrap').node().scrollTop = selectedAnno.nodes()[0].offsetTop;
+  }
+  
 }

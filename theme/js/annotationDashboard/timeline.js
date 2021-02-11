@@ -3,7 +3,7 @@ import { annotationData, dataKeeper, formatTime, getRightDimension } from '../da
 import { updateAnnotationSidebar } from './annotationBar';
 import { formatCommentData } from './commentBar';
 import { colorDictionary, structureSelected } from './imageDataUtil';
-import {togglePlay, unselectStructure, updateTimeElapsed} from './video';
+import {togglePlay, unselectStructure} from './video';
 
 export function hoverEmphasis(d, type){
   if(type === "comment"){
@@ -138,16 +138,19 @@ export function renderTimeline(commentData) {
       togglePlay();
     }
     document.getElementById('video').currentTime = d.videoTime;
-    updateTimeElapsed().then(()=> {
-      const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
-      const filComm = comments.filter((f) => d.key === f.key);
-      filComm.classed('selected', true);
-      if(filComm.nodes().length > 0){
-        d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
-      }
+ 
+    const comments = d3.select('#right-sidebar').select('#comment-wrap').selectAll('.memo');
+    const filComm = comments.filter((f) => d.key === f.key);
+    filComm.classed('selected', true);
+    if(filComm.nodes().length > 0){
+      d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
+    }
       
-    });
-    unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
+   // });
+    if(structureSelected.selected){
+      unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
+    }
+  
     
   })
 
@@ -182,7 +185,7 @@ export function renderTimeline(commentData) {
       togglePlay();
     }
     document.getElementById('video').currentTime = d.seconds[0];
-    updateTimeElapsed();
+
     if(structureSelected.selected){
       unselectStructure({ ...dataKeeper[dataKeeper.length - 1] }, document.getElementById('video'));
     }

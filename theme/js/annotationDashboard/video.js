@@ -99,7 +99,6 @@ export async function formatVidPlayer() {
     addMouseEvents2Video();
 
     d3.select('#video-controls').select('.play-pause').on('click', () => {
-      console.log('received click')
       playButtonChange().then(()=> togglePlay()).then(() => console.log('playing'));
     });
     d3.select('.progress-bar').on('click', progressClicked);
@@ -114,7 +113,6 @@ export async function formatVidPlayer() {
       addMouseEvents2Video();
   
       d3.select('#video-controls').select('.play-pause').on('click', () => {
-        console.log('received click')
         playButtonChange().then(()=> {
           togglePlay()}).then(() => console.log('playing'));
       });
@@ -150,43 +148,43 @@ export async function formatVidPlayer() {
     
   });
 }
-export async function updateTimeElapsed() {
+export async function updateTimeElapsed(timeRange) {
 
   d3.select('.progress-bar-fill').style('width', `${scaleVideoTime(document.getElementById('video').currentTime)}px`);
   const time = formatTime(Math.round(document.getElementById('video').currentTime));
   const timeElapsed = document.getElementById('time-elapsed');
   timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
   timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
- 
+
+  highlightAnnotationbar(timeRange);
+  highlightTimelineBars(timeRange);
+
   if(!d3.select('.template-wrap').empty()){
     d3.select('.template-wrap').select('h6').text(`Add a comment @ ${time.minutes} : ${time.seconds}`);
   }
 }
-function progressClicked(mouse) {
 
+function progressClicked(mouse) {
+  console.log('progressClicked');
   const commentData = { ...dataKeeper[dataKeeper.length - 1] };
   const video = document.getElementById('video');
   
   video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
-  updateTimeElapsed();
+
   if(structureSelected.selected){
     unselectStructure(commentData, video);
   }
-  highlightAnnotationbar(document.getElementById('video').currentTime);
-
+  
 }
 export function commentClicked(event, d) {
   document.getElementById('video').currentTime = d.videoTime;
 
-  // d.clicked = true;
-
   if(d3.select('#show-push').select('input').node().checked){
     renderPushpinMarks(commentsInTimeframe, svg);
   }
-
-  updateTimeElapsed();
   loadPngForFrame();
 }
+
 function scaleVideoTime(currentTime, invert) {
   const { duration } = document.getElementById('video');
   const scale = d3.scaleLinear().range([0, video.videoWidth]).domain([0, duration]);
@@ -279,6 +277,7 @@ export async function mouseMoveVideo(coord, video) {
 }
 
 export function unselectStructure(commentData, video){
+
   addCommentButton();
   clearRightSidebar();
 
@@ -620,11 +619,11 @@ export function videoUpdates(data, annoType) {
   });
 
   video.ontimeupdate = async (event) => {
+
     const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
    
-    updateTimeElapsed();
-    highlightTimelineBars(timeRange);
-
+    updateTimeElapsed(timeRange);
+  
     const filteredAnnotations = annotationData[annotationData.length - 1]
       .filter((f) => f.seconds[0] <= timeRange[0] && f.seconds[0] <= timeRange[1]) || (f.seconds[1] <= timeRange[1] && f.seconds[1] >= timeRange[0]);
 
@@ -632,12 +631,11 @@ export function videoUpdates(data, annoType) {
      * UPDATE AND HIGHLGIHT ANNOTATION BAR
      */
     updateAnnotationSidebar(filteredAnnotations, null, false);
+
     if(video.playing){
       d3.selectAll('.anno').classed('de-em', true);
       d3.selectAll('.memo').classed('de-em', true);
     }
-   
-    highlightAnnotationbar(video.currentTime);
 
     /*
     COMMENT MANIPULATION HERE
