@@ -78,7 +78,7 @@ function addMouseEvents2Video(){
 
 export async function formatVidPlayer() {
   const video = document.getElementById('video');
-  video.muted = true;
+ // video.muted = true;
   video.controls = false;
 
   Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
@@ -357,7 +357,7 @@ export async function mouseClickVideo(coord, video) {
         event.stopPropagation();
         x.remove();
         unselectStructure(commentData, video);
-      })
+      });
     }
   }
 }

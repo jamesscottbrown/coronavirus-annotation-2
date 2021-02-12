@@ -26,13 +26,20 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
+
+  console.log('start of updatecomment sidebar');
  
   renderCommentDisplayStructure();
 
   const wrap = d3.select('#right-sidebar').select('#comment-wrap').select('.general-comm-wrap');
+
   const nestReplies = formatCommentData(Object.assign({}, dbRef));
-  console.log('how fast is this')
+
+  console.log('how fast is this');
+
   drawCommentBoxes(nestReplies, wrap);
+
+ 
 
   let time = document.getElementById('video').currentTime;
 
