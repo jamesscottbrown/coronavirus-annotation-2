@@ -1,4 +1,4 @@
-export const endDrawTime = 84;
+export const endDrawTime = 87;
 import * as d3 from 'd3';
 import { getRightDimension } from '../dataManager';
 
