@@ -180,8 +180,6 @@ export function drawCommentBoxes(nestedData, wrap) {
 //  const testWrap = wrap.empty() ? d3.select('#right-sidebar').append('div') : wrap;
   const db = getDB();
 
-  console.log(wrap);
-
   if(wrap.classed('selected-comm-wrap')){
     wrap.selectAll('h7').data(['Associated Comments ']).join('h7').text(d => d);
   }
@@ -1044,7 +1042,6 @@ function replyRender(replyDivs) {
     //   .classed('resolve fas fa-check', true);// .text(d=> `${d.displayName}:`);
 
     // resolve.on('click', (event, d) => {
-    //   console.log('d in key', d);
     //   //db.ref(`comments/${d.key}/resolved`).set('true');
     // });
 

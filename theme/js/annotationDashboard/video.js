@@ -96,7 +96,7 @@ export async function formatVidPlayer() {
     addMouseEvents2Video();
 
     d3.select('#video-controls').select('.play-pause').on('click', () => {
-      playButtonChange().then(()=> togglePlay()).then(() => console.log('playing'));
+      playButtonChange().then(()=> togglePlay());
     });
     d3.select('.progress-bar').on('click', progressClicked);
 
@@ -111,7 +111,7 @@ export async function formatVidPlayer() {
   
       d3.select('#video-controls').select('.play-pause').on('click', () => {
         playButtonChange().then(()=> {
-          togglePlay()}).then(() => console.log('playing'));
+          togglePlay()});
       });
       d3.select('.progress-bar').on('click', progressClicked);
   
@@ -162,10 +162,8 @@ export async function updateTimeElapsed(timeRange) {
 }
 
 function progressClicked(mouse) {
-  console.log('progressClicked');
  
   const video = document.getElementById('video');
-  
   video.currentTime = Math.round(scaleVideoTime(mouse.offsetX, true));
 
   if(structureSelected.selected){
@@ -288,12 +286,7 @@ export function unselectStructure(commentData, video){
   tool.style('top', '-100px');
   tool.style('left', '-100px');
 
-  
-  
   updateCommentSidebar(commentData);
-  //updateAnnotationSidebar(annotationData[annotationData.length - 1], null, null);
-
-
 }
 
 export async function mouseClickVideo(coord, video) {
@@ -348,6 +341,23 @@ export async function mouseClickVideo(coord, video) {
       colorTimeline(snip);
       let structureAnnotations = updateWithSelectedStructure(snip, commentData);
       structureTooltip(structureAnnotations, coord, snip, false);
+      let dim = getRightDimension();
+
+      let x = d3.select('#interaction').append('div').classed('x-out', true);
+      x.style('height', '50px').style('width', '50px');
+
+      let span = x.append('span').classed('fas fa-times-circle fa-2x', true);
+      span.style('width', '35px');
+      span.style('height', '35px');
+      span.style('position', 'absolute');
+      span.style('left', `${dim.width - 45}px`);
+      span.style('top', `10px`);
+
+      x.on('click', (event, d)=>{
+        event.stopPropagation();
+        x.remove();
+        unselectStructure(commentData, video);
+      })
     }
   }
 }

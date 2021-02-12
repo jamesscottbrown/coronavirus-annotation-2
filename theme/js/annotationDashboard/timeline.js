@@ -143,6 +143,7 @@ export function renderTimeline(commentData) {
     const filComm = comments.filter((f) => d.key === f.key);
     filComm.classed('selected', true);
     if(filComm.nodes().length > 0){
+      console.log(filCom)
       d3.select('#right-sidebar').select('#comment-wrap').node().scrollTop = filComm.nodes()[0].offsetTop;  
     }
       
