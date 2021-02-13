@@ -39,6 +39,8 @@ function resizeVideoElements() {
 
 }
 
+
+
 function initializeVideo() {
 
   const videoDuration = Math.round(document.getElementById('video').duration);
@@ -46,7 +48,60 @@ function initializeVideo() {
   const duration = document.getElementById('duration');
   duration.innerText = `${time.minutes}:${time.seconds}`;
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
+
+  const volumeButton = document.getElementById('volume-button');
+  const volumeIcons = document.querySelectorAll('.volume-button use');
+  const volumeMute = document.querySelector('use[href="#volume-mute"]');
+  const volumeLow = document.querySelector('use[href="#volume-low"]');
+  const volumeHigh = document.querySelector('use[href="#volume-high"]');
+  const volume = document.getElementById('volume');
+  volume.addEventListener('input', updateVolume);
+  video.addEventListener('volumechange', updateVolumeIcon);
+  volumeButton.addEventListener('click', toggleMute);
 }
+
+// toggleMute mutes or unmutes the video when executed
+// When the video is unmuted, the volume is returned to the value
+// it was set to before the video was muted
+function toggleMute() {
+  video.muted = !video.muted;
+
+  if (video.muted) {
+    volume.setAttribute('data-volume', volume.value);
+    volume.value = 0;
+  } else {
+    volume.value = volume.dataset.volume;
+  }
+}
+// updateVolume updates the video's volume
+// and disables the muted state if active
+function updateVolume() {
+  if (video.muted) {
+    video.muted = false;
+  }
+
+  video.volume = volume.value;
+}
+
+// updateVolumeIcon updates the volume icon so that it correctly reflects
+// the volume of the video
+function updateVolumeIcon() {
+  volumeIcons.forEach(icon => {
+    icon.classList.add('hidden');
+  });
+
+  volumeButton.setAttribute('data-title', 'Mute (m)')
+
+  if (video.muted || video.volume === 0) {
+    volumeMute.classList.remove('hidden');
+    volumeButton.setAttribute('data-title', 'Unmute (m)')
+  } else if (video.volume > 0 && video.volume <= 0.5) {
+    volumeLow.classList.remove('hidden');
+  } else {
+    volumeHigh.classList.remove('hidden');
+  }
+}
+
 
 function addMouseEvents2Video(){
 
