@@ -50,22 +50,69 @@ function initializeVideo() {
   duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
 
   const volumeButton = document.getElementById('volume-button');
-  const volumeIcons = document.querySelectorAll('.volume-button use');
-  const volumeMute = document.querySelector('use[href="#volume-mute"]');
-  const volumeLow = document.querySelector('use[href="#volume-low"]');
-  const volumeHigh = document.querySelector('use[href="#volume-high"]');
+ // const volumeIcons = document.querySelectorAll('.volume-button use');
+ // const volumeMute = document.querySelector('use[href="#volume-mute"]');
+  // const volumeLow = document.querySelector('use[href="#volume-low"]');
+  // const volumeHigh = document.querySelector('use[href="#volume-high"]');
   const volume = document.getElementById('volume');
   volume.addEventListener('input', updateVolume);
   video.addEventListener('volumechange', updateVolumeIcon);
   volumeButton.addEventListener('click', toggleMute);
+  volumeButton.style.border = 'none';
+  volumeButton.style['background-color'] = 'transparent';
+
+ // updateVolumeIcon();
+}
+
+// updateVolume updates the video's volume
+// and disables the muted state if active
+function updateVolume() {
+  if (video.muted) {
+    video.muted = false;
+  }
+  video.volume = volume.value;
+}
+
+// updateVolumeIcon updates the volume icon so that it correctly reflects
+// the volume of the video
+function updateVolumeIcon() {
+  
+  console.log('update volume icon');
+  const volumeIcons = document.querySelectorAll('.volume-button g');
+  const volumeButton = document.getElementById('volume-button');
+
+  const video = document.getElementById('video');
+
+  const volumeLow = document.querySelector("#volume-low");
+  const volumeHigh = document.querySelector("#volume-high");
+
+  volumeIcons.forEach((icon) => {
+    icon.setAttribute('visibility', 'hidden');
+  });
+
+  volumeButton.setAttribute('data-title', 'Mute (m)');
+
+  const volumeMute = document.querySelector("#volume-mute");
+  if (video.muted || video.volume === 0) {
+    volumeMute.setAttribute('visibility',"visible"); //.classList.remove('hidden');
+    
+    volumeButton.setAttribute('data-title', 'Unmute (m)');
+
+  } else if (video.volume > 0 && video.volume <= 0.5) {
+    volumeLow.setAttribute('visibility',"visible"); //.classList.remove('hidden');
+  } else {
+    volumeHigh.setAttribute('visibility',"visible"); //.classList.remove('hidden');
+  }
 }
 
 // toggleMute mutes or unmutes the video when executed
 // When the video is unmuted, the volume is returned to the value
 // it was set to before the video was muted
 function toggleMute() {
+  
+  const volume = document.getElementById('volume');
+  const video = document.getElementById('video');
   video.muted = !video.muted;
-
   if (video.muted) {
     volume.setAttribute('data-volume', volume.value);
     volume.value = 0;
@@ -73,34 +120,7 @@ function toggleMute() {
     volume.value = volume.dataset.volume;
   }
 }
-// updateVolume updates the video's volume
-// and disables the muted state if active
-function updateVolume() {
-  if (video.muted) {
-    video.muted = false;
-  }
 
-  video.volume = volume.value;
-}
-
-// updateVolumeIcon updates the volume icon so that it correctly reflects
-// the volume of the video
-function updateVolumeIcon() {
-  volumeIcons.forEach(icon => {
-    icon.classList.add('hidden');
-  });
-
-  volumeButton.setAttribute('data-title', 'Mute (m)')
-
-  if (video.muted || video.volume === 0) {
-    volumeMute.classList.remove('hidden');
-    volumeButton.setAttribute('data-title', 'Unmute (m)')
-  } else if (video.volume > 0 && video.volume <= 0.5) {
-    volumeLow.classList.remove('hidden');
-  } else {
-    volumeHigh.classList.remove('hidden');
-  }
-}
 
 
 function addMouseEvents2Video(){
@@ -126,7 +146,6 @@ function addMouseEvents2Video(){
         drawFrameOnPause(video);
         toggleQueue(true);
       }
-     
     });
 
 }
@@ -234,6 +253,7 @@ export function commentClicked(event, d) {
     renderPushpinMarks(commentsInTimeframe, svg);
   }
   loadPngForFrame();
+  let test = d3.selectAll('.memo').filter(f=> f.key === d.key);
 }
 
 function scaleVideoTime(currentTime, invert) {
