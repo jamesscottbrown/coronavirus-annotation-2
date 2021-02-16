@@ -77,7 +77,6 @@ function updateVolume() {
 // the volume of the video
 function updateVolumeIcon() {
   
-  console.log('update volume icon');
   const volumeIcons = document.querySelectorAll('.volume-button g');
   const volumeButton = document.getElementById('volume-button');
 
@@ -243,6 +242,7 @@ function progressClicked(mouse) {
   if(structureSelected.selected){
     const commentData = { ...dataKeeper[dataKeeper.length - 1] };
     unselectStructure(commentData, video);
+    d3.select('.x-out').remove();
   }
   
 }
@@ -253,6 +253,11 @@ export function commentClicked(event, d) {
     renderPushpinMarks(commentsInTimeframe, svg);
   }
   loadPngForFrame();
+  if(structureSelected.selected){
+    const commentData = { ...dataKeeper[dataKeeper.length - 1] };
+    unselectStructure(commentData, video);
+    d3.select('.x-out').remove();
+  }
   let test = d3.selectAll('.memo').filter(f=> f.key === d.key);
 }
 
@@ -396,10 +401,12 @@ export async function mouseClickVideo(coord, video) {
       }
       
      unselectStructure(commentData, video);
+     d3.select('.x-out').remove();
 
     }else if(snip === structureSelected.color){
     
         unselectStructure(commentData, video);
+        d3.select('.x-out').remove();
 
     } else {
       /**
@@ -417,8 +424,8 @@ export async function mouseClickVideo(coord, video) {
       let structureAnnotations = updateWithSelectedStructure(snip, commentData);
       structureTooltip(structureAnnotations, coord, snip, false);
       let dim = getRightDimension();
-
-      let x = d3.select('#interaction').append('div').classed('x-out', true);
+      let xTest = d3.select('#interaction').select('x-out');
+      let x = xTest.empty() ? d3.select('#interaction').append('div').classed('x-out', true) : xTest;
       x.style('height', '50px').style('width', '50px');
 
       let span = x.append('span').classed('fas fa-times-circle fa-2x', true);

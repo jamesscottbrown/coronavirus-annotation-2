@@ -26,8 +26,6 @@ export function clearRightSidebar() {
 }
 
 export function updateCommentSidebar(dbRef) {
-
-  console.log('start of updatecomment sidebar');
  
   renderCommentDisplayStructure();
 
@@ -35,11 +33,7 @@ export function updateCommentSidebar(dbRef) {
 
   const nestReplies = formatCommentData(Object.assign({}, dbRef));
 
-  console.log('how fast is this');
-
   drawCommentBoxes(nestReplies, wrap);
-
- 
 
   let time = document.getElementById('video').currentTime;
 
@@ -1053,9 +1047,7 @@ function replyRender(replyDivs) {
     // });
 
     reply.on('click', (event, d)=> {
-      // console.log(event.target.parentNode.parentNode)});
-      // d3.select(event.target.parentNode.parentNode).select('.reply-space');
-
+ 
       if (d.replyBool === false) {
         d.replyBool = true;
         d3.select(event.target.parentNode).select('.replyText').text('Cancel Reply');

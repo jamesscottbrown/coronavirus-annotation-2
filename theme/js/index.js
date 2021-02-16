@@ -47,7 +47,7 @@ if(safariAgent && chromeAgent){
 init();
 
 async function init() {
-  const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_2.csv')).map((m, i) => {
+  const anno = formatAnnotationTime(await d3.csv('../static/assets/annotation_3.csv')).map((m, i) => {
     m.index = i;
     return m;
   });
