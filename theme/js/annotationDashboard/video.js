@@ -375,7 +375,6 @@ export async function mouseClickVideo(coord, video) {
   if (video.playing) {
     structureSelectedToggle(null);
     togglePlay();
-
     d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
     d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
     const timeRange = [video.currentTime < .5 ? 0 : Math.floor(video.currentTime - .2), video.currentTime + .2];
@@ -388,8 +387,7 @@ export async function mouseClickVideo(coord, video) {
     const snip = getCoordColor(coord);
 
     if (snip === 'black' || snip === 'unknown') {
-     
-
+    
       d3.select('.timeline-wrap').select('svg').select('.comm-group').selectAll('.comm-bin').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
       d3.select('.timeline-wrap').select('svg').select('.anno-group').selectAll('.anno').classed('struct-present', false).select('rect').style('fill', 'rgb(105, 105, 105)');
 

@@ -90,7 +90,13 @@
              
             </div>
 
-            <div class="volume-controls" style="display: relative; left: -10px;">
+            <div class="time" style="position:relative; left:-30px; top:-5px;">
+              <time id="time-elapsed">00:00</time>
+              <span> / </span>
+              <time id="duration">00:00</time>
+            </div>
+
+            <div class="volume-controls" style="position:relative; top:-5px">
               <button data-title="Mute (m)" class="volume-button" id="volume-button">
                 <svg width="25" height="25">
                   <g class="hidden" id="volume-mute" visibility="hidden">
@@ -108,14 +114,10 @@
                 </svg>
               </button>
             
-              <input class="volume" id="volume" value="1" type="range" max="1" min="0" step="0.01">
+              <input style="position:relative; top:3px" class="volume" id="volume" value="1" type="range" max="1" min="0" step="0.01">
             </div>
        
-            <div class="time">
-              <time id="time-elapsed">00:00</time>
-              <span> / </span>
-              <time id="duration">00:00</time>
-            </div>
+        
 
             <div class="progress-bar">
               <div class="progress-bar-fill"></div>
